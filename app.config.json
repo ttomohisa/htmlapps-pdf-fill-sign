@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/app-config.schema.json",
+  "name": "PDF Fill & Sign",
+  "nameJa": "PDF記入・署名",
+  "slug": "pdf-fill-sign",
+  "version": "1.0.0",
+  "description": "Fill in PDFs, add signatures and images, and save the completed PDF entirely in your browser.",
+  "descriptionJa": "PDFに文字・署名・画像などを書き込み、完成したPDFをブラウザ内だけで作成・保存します。",
+  "defaultLanguage": "auto",
+  "repository": {
+    "owner": "ttomohisa",
+    "name": "htmlapps-pdf-fill-sign"
+  },
+  "build": {
+    "output": "dist/index.html",
+    "blockRuntimeNetwork": true,
+    "selfExtract": {
+      "enabled": true,
+      "output": "dist/index.self-extract.html"
+    },
+    "sizeBudget": {
+      "readableWarningMb": 25,
+      "selfExtractWarningMb": 12
+    }
+  }
+}

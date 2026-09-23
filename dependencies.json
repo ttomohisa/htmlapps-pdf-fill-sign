@@ -1,0 +1,32 @@
+{
+  "$schema": "./schemas/dependencies.schema.json",
+  "dependencies": [
+    {
+      "id": "pdfjs-dist",
+      "package": "pdfjs-dist",
+      "version": "6.3.289",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/mozilla/pdf.js",
+      "assets": [
+        {
+          "key": "pdf",
+          "path": "build/pdf.mjs",
+          "mime": "text/javascript",
+          "stripSourceMapComment": true,
+          "compression": "auto"
+        },
+        {
+          "key": "worker",
+          "path": "build/pdf.worker.mjs",
+          "mime": "text/javascript",
+          "stripSourceMapComment": true,
+          "compression": "auto"
+        }
+      ],
+      "updates": {
+        "enabled": true,
+        "policy": "minor"
+      }
+    }
+  ]
+}
