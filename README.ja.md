@@ -14,6 +14,10 @@ PDFを外部へアップロードせず、既存の入力欄へ記入し、文�
 
 GitHub Pagesから最初のHTMLを読み込んだ後、PDFの解析、フォーム入力、追加要素の編集、署名、画像配置、PDF生成は端末内で処理します。選択したPDFをアプリがサーバーへアップロードすることはありません。
 
+[![PDF記入・署名のデスクトップ画面](assets/screenshot.png)](https://ttomohisa.github.io/htmlapps-pdf-fill-sign/)
+
+[英語画面](assets/screenshot-en.png) · [スマートフォン画面](assets/screenshot-mobile.png)
+
 ## 主な機能
 
 - **既存PDFフォームへ入力** — AcroFormの1行テキスト、複数行、チェックボックス、ラジオボタン、ドロップダウン、選択リストなどに対応します。

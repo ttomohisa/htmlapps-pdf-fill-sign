@@ -14,6 +14,10 @@ A local, single-HTML tool for filling PDFs, adding visual signatures and images,
 
 GitHub Pages delivers the initial HTML. After it loads, PDF parsing, form editing, overlay editing, signatures, image placement, and PDF export are processed locally on your device. The PDF you select is not uploaded by the app.
 
+[![PDF Fill & Sign desktop screenshot](assets/screenshot-en.png)](https://ttomohisa.github.io/htmlapps-pdf-fill-sign/)
+
+[日本語の画面](assets/screenshot.png) · [Mobile screenshot](assets/screenshot-mobile.png)
+
 ## Features
 
 - **Fill existing PDF forms** — Edit common AcroForm text fields, multiline fields, checkboxes, radio buttons, dropdowns, and choice lists.

@@ -7,6 +7,7 @@
 - Kept text/date export as PDF.js FreeText annotations, ✓ / × / ○ and newly drawn signatures/initials as vector Ink annotations, and uploaded image assets as raster annotations.
 - Kept the viewport-responsive desktop workspace introduced in v0.9.3 and the existing mobile layout.
 - Updated English/Japanese README documentation for the stable release.
+- Added actual v1.0.0 interface screenshots in Japanese, English, and mobile layouts, with links from both README files.
 - Removed the bundled `htmlapps-template.zip` from the release repository.
 - No runtime dependency or external network access was added; `connect-src 'none'` remains in force.
 
