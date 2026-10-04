@@ -25,6 +25,7 @@ GitHub Pages delivers the initial HTML. After it loads, PDF parsing, form editin
 - **Keep editable additions as vectors where practical** — Text/date additions are saved as PDF FreeText annotations; ✓ / × / ○ and newly drawn signatures/initials are saved as vector Ink annotations.
 - **Keep image assets as images** — Uploaded signature images, stamps, photos, logos, and other image-based assets remain raster annotations.
 - **Work comfortably on desktop and mobile** — Includes thumbnails, zoom, cursor-anchored `Ctrl/Cmd + wheel` zoom, touch panning, pinch zoom, and a phone bottom action bar.
+- **Duplicate additions** — Select an added item and choose **Duplicate selected item** to reuse its content and appearance on the same page. Undo/Redo restores both the edit and selection.
 - **Undo and redo editing** — Browser Kitty additions and supported form-value changes participate in editing history.
 - **Save a completed copy** — Export to a new `-filled.pdf` file without overwriting the source PDF.
 - **Private, single-HTML operation** — PDF.js and its Worker are embedded, runtime networking is blocked with `connect-src 'none'`, and no account is required.
@@ -46,7 +47,7 @@ Build the repository once, then copy `dist/index.html` or `dist/index.self-extra
 3. Use **Text**, **Date**, **✓**, **×**, or **○** to add content outside form fields.
 4. Use **Signature** or **Initials** to draw with a mouse, finger, or pen, or choose an image-based asset.
 5. Use **Image / Stamp** to place a PNG, JPEG, or WebP image.
-6. Select Browser Kitty-added items to move, resize, edit, or delete them. Text/date items use one consistent local sans-serif stack and allow font-size and color adjustment.
+6. Select Browser Kitty-added items to move, resize, edit, duplicate, or delete them. Text/date items use one consistent local sans-serif stack and allow font-size and color adjustment.
 7. Choose **Save PDF**. Leave **Flatten entered values** enabled for a visually fixed form result, or turn it off when supported form fields should remain interactive.
 8. Save the generated PDF. The original file is not overwritten.
 
@@ -58,6 +59,7 @@ Build the repository once, then copy `dist/index.html` or `dist/index.self-extra
 | `Ctrl` / `⌘` + `Z` | Undo when not typing in a field |
 | `Ctrl` / `⌘` + `Shift` + `Z` or `Ctrl` / `⌘` + `Y` | Redo |
 | `Ctrl` / `⌘` + wheel | Zoom around the cursor in the PDF preview |
+| `Ctrl` / `⌘` + `D` | Duplicate the selected addition on the same page when not typing |
 | `Delete` / `Backspace` | Delete the selected Browser Kitty item when not typing |
 | `Esc` | Clear the current selection/tool |
 | Arrow keys | Move the selected Browser Kitty item |
@@ -145,3 +147,9 @@ Bug reports and feature proposals are welcome through GitHub Issues. See [CONTRI
 Copyright © 2026 ttomohisa
 
 Licensed under the [MIT License](LICENSE).
+
+### Overlay duplication regression tests
+
+Run `node --test tests/*.test.cjs` (Node.js 18+). These dependency-free tests cover copy identity, appearance/stroke isolation, rotated page bounds, selection history, and shortcut guards.
+
+Optional PDF round-trip integration: after building, run `node tests/verify-duplicate-export.cjs` with `@napi-rs/canvas` available as development tooling. It uses the cached pinned PDF.js Node-compatible bundle to reopen exported text/date, marks, and vector signatures at all four rotations. It does not replace browser/image-export QA. Set `PDF_TEST_OUTPUT_DIR` to an existing directory to retain its PDFs.

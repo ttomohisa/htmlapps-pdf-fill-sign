@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added same-page duplication for selected text, dates, marks, images, signatures, and initials through the inspector and Ctrl/Cmd+D outside editable controls.
+- Preserve appearance and independent vector strokes; keep copies page-bounded with a slight offset and restore selection through Undo/Redo.
+- Added dependency-free regressions and synchronized English/Japanese help and usage documentation.
+
 ## v1.0.0
 
 - Released PDF Fill & Sign as the first stable version.

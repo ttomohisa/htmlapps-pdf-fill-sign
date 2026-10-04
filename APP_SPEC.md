@@ -279,6 +279,14 @@ Changing zoom must never change saved PDF-space geometry.
 - Initials
 - Image / stamp
 
+### Duplicate a selected addition
+
+- The inspector offers **Duplicate selected item / 選択項目を複製** for text, dates, marks, signatures, initials, and images.
+- Create a fresh ID on the same page, preserving content, dimensions, style, and image assets; deep-copy normalized signature strokes.
+- Offset the copy slightly in displayed page coordinates, keeping it within the page when the item fits. At the far edge, offset inward; page-sized items retain their size and may overlap.
+- Select the copy. One Undo removes it and restores the original selection; Redo restores the copy and its selection.
+- Ctrl/Cmd+D duplicates only with a selection, outside editable controls and dialogs; unavailable during export or dragging. Existing PDF form fields are not duplicated.
+
 ### Text
 
 - Japanese / English / numbers / common symbols.
@@ -350,6 +358,7 @@ Target v1.0:
 - `Ctrl/Cmd + Z`: Undo
 - `Ctrl/Cmd + Shift + Z`: Redo
 - `Ctrl/Cmd + Y`: Redo
+- `Ctrl/Cmd + D`: duplicate selected overlay on the same page when not typing
 - `Delete` / `Backspace`: delete selected overlay when not typing
 - `Escape`: cancel selection/dialog when appropriate
 - Arrow keys: fine move

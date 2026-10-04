@@ -1167,6 +1167,7 @@
                   </select>
                 </label>
               </div>
+              <button class="button" id="duplicateOverlayButton" type="button" data-i18n="duplicateItem">選択項目を複製</button>
               <button class="button pdf-delete-button" id="deleteOverlayButton" type="button" data-i18n="deleteItem">選択項目を削除</button>
             </div>
           </aside>
@@ -1279,7 +1280,7 @@
       <h3 data-i18n="helpBasicsTitle">基本操作</h3>
       <ol>
         <li data-i18n="helpStep1">「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。</li>
-        <li data-i18n="helpStep2">ページ一覧や前後ボタンで移動し、拡大・縮小や「幅に合わせる」で表示を調整します。</li>
+        <li data-i18n="helpStep2">編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。</li>
         <li data-i18n="helpStep3">既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。</li>
       </ol>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
@@ -1413,7 +1414,7 @@
           helpTitle: '使い方と注意事項', close: '閉じる',
           helpBasicsTitle: '基本操作',
           helpStep1: '「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。',
-          helpStep2: '編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。',
+          helpStep2: '編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。',
           helpStep3: '既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。',
           helpPrivacyTitle: 'プライバシー',
           helpPrivacyBody: 'PDFと入力内容はブラウザー内だけで処理され、Browser Kittyのサーバーや外部APIへ送信されません。実行時の外部通信も行いません。',
@@ -1438,7 +1439,7 @@
           formDetected: 'このPDFには入力できる欄があります。', formFieldsCount: '{count}個の入力欄', previousField: '前の入力欄', nextField: '次の入力欄', formField: '入力欄', formText: 'テキスト欄', formCheckbox: 'チェック欄', formRadio: '選択欄', formChoice: '選択リスト', formSignature: '署名欄', signatureFieldHint: '署名を追加', requiredField: '必須', requiredWarning: '未入力の必須項目が{count}件あります。保存は続行できます。', xfaUnsupported: 'このPDFはXFAフォームを使用しています。既存欄の編集には対応していませんが、文字や署名を上から追加できます。',
           editTools: '編集ツール', mobileActions: 'モバイル操作', mobileTools: 'ツール', mobilePages: 'ページ', mobileEdit: '選択項目', mobileSave: '保存', toolSelect: '選択', toolText: '文字', toolDate: '日付', toolCheck: 'チェック', toolCross: '×印', toolCircle: '○印', toolSignature: '署名', toolInitials: 'イニシャル', toolImage: '画像・印影',
           undo: '元に戻す', redo: 'やり直す', inspectorTitle: '選択項目', inspectorEmpty: 'PDF上の文字・マーク・署名・画像を選択すると、ここで内容やサイズを変更できます。',
-          contentLabel: '内容', fontSizeLabel: '文字サイズ', colorLabel: '色', colorBlack: '黒', colorBlue: '青', colorRed: '赤', deleteItem: '選択項目を削除',
+          contentLabel: '内容', fontSizeLabel: '文字サイズ', colorLabel: '色', colorBlack: '黒', colorBlue: '青', colorRed: '赤', duplicateItem: '選択項目を複製', deleteItem: '選択項目を削除',
           typeText: '文字', typeDate: '日付', typeMark: 'マーク', typeSignature: '署名', typeInitials: 'イニシャル', typeImage: '画像・印影', defaultText: 'テキスト', deleted: '選択項目を削除しました',
           signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', retry: 'もう一度試す',
           discardTitle: '編集内容を破棄しますか？', discardMessage: '現在の編集内容はまだ端末へ保存されていません。PDFを閉じるか別のPDFを開くと失われます。', discardCloseAction: '破棄して閉じる', discardReplaceAction: '破棄して開く',
@@ -1450,7 +1451,7 @@
           helpTitle: 'How to use & notes', close: 'Close',
           helpBasicsTitle: 'Basics',
           helpStep1: 'Choose a PDF from your device, or drop it into the file area.',
-          helpStep2: 'Choose an editing tool, then click the PDF to add text, a date, or a mark. Drag a selected item to move it and use its lower-right handle to resize it.',
+          helpStep2: 'Choose an editing tool, then click the PDF to add text, a date, or a mark. Drag a selected item to move it and use its lower-right handle to resize it. Choose Duplicate selected item (Ctrl/Cmd+D when not typing) to make a copy on the same page; Undo/Redo also covers duplication.',
           helpStep3: 'When a PDF already contains fillable fields, you can type directly into them. Save those values together with added text, signatures, and images from Save PDF.',
           helpPrivacyTitle: 'Privacy',
           helpPrivacyBody: 'PDFs and entered content are processed only in your browser and are not sent to Browser Kitty servers or external APIs. The app makes no runtime network requests.',
@@ -1475,7 +1476,7 @@
           formDetected: 'This PDF has fillable fields.', formFieldsCount: '{count} fillable fields', previousField: 'Previous field', nextField: 'Next field', formField: 'Form field', formText: 'Text field', formCheckbox: 'Checkbox', formRadio: 'Radio option', formChoice: 'Choice field', formSignature: 'Signature field', signatureFieldHint: 'Add signature', requiredField: 'Required', requiredWarning: '{count} required field(s) are still empty. You can continue saving.', xfaUnsupported: 'This PDF uses an XFA form. Existing fields cannot be edited here, but you can still add text or a signature on top.',
           editTools: 'Editing tools', mobileActions: 'Mobile actions', mobileTools: 'Tools', mobilePages: 'Pages', mobileEdit: 'Selected', mobileSave: 'Save', toolSelect: 'Select', toolText: 'Text', toolDate: 'Date', toolCheck: 'Check', toolCross: 'Cross', toolCircle: 'Circle', toolSignature: 'Signature', toolInitials: 'Initials', toolImage: 'Image / stamp',
           undo: 'Undo', redo: 'Redo', inspectorTitle: 'Selected item', inspectorEmpty: 'Select text, a mark, a signature, or an image on the PDF to adjust it here.',
-          contentLabel: 'Content', fontSizeLabel: 'Font size', colorLabel: 'Color', colorBlack: 'Black', colorBlue: 'Blue', colorRed: 'Red', deleteItem: 'Delete selected item',
+          contentLabel: 'Content', fontSizeLabel: 'Font size', colorLabel: 'Color', colorBlack: 'Black', colorBlue: 'Blue', colorRed: 'Red', duplicateItem: 'Duplicate selected item', deleteItem: 'Delete selected item',
           typeText: 'Text', typeDate: 'Date', typeMark: 'Mark', typeSignature: 'Signature', typeInitials: 'Initials', typeImage: 'Image / stamp', defaultText: 'Text', deleted: 'Item deleted',
           signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', retry: 'Try again',
           discardTitle: 'Discard your edits?', discardMessage: 'The current edits have not been saved to your device. Closing this PDF or opening another one will discard them.', discardCloseAction: 'Discard and close', discardReplaceAction: 'Discard and open',
@@ -3120,6 +3121,27 @@
         renderInspector();
         if (type === 'text' || type === 'date') requestAnimationFrame(() => { $('#contentInput').focus(); $('#contentInput').select(); });
       }
+      function duplicateSelected() {
+        const item = selectedOverlay();
+        if (!item || !state.viewport || state.exporting || state.drag || item.pageIndex !== state.page - 1) return;
+        const rect = viewportRectFromPdfRect(item);
+        // Offset in displayed page coordinates, including rotated/cropped pages.
+        // Near the far edge, move inward instead so the copy remains distinguishable.
+        const offset = (position, size, limit) => Math.max(0, Math.min(limit - size,
+          position + size + 12 <= limit ? position + 12 : position - 12));
+        const shifted = pdfRectFromViewportRect({
+          ...rect,
+          left: offset(rect.left, rect.width, state.viewport.width),
+          top: offset(rect.top, rect.height, state.viewport.height)
+        });
+        const copy = { ...cloneOverlayItem(item), id: newOverlayId(), x: shifted.x, y: shifted.y };
+        commitMutation(() => {
+          state.overlays.push(copy);
+          state.selectedId = copy.id;
+        });
+        setTool('select');
+        requestAnimationFrame(() => document.querySelector(`.pdf-overlay-item[data-id="${CSS.escape(copy.id)}"]`)?.focus({ preventScroll: true }));
+      }
       function deleteSelected({ toast = true } = {}) {
         const item = selectedOverlay();
         if (!item) return;
@@ -3300,6 +3322,7 @@
       document.querySelectorAll('.pdf-tool-button[data-tool]').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
       $('#undoButton').addEventListener('click', undoEdit);
       $('#redoButton').addEventListener('click', redoEdit);
+      $('#duplicateOverlayButton').addEventListener('click', duplicateSelected);
       $('#deleteOverlayButton').addEventListener('click', () => deleteSelected());
       const overlayLayer = $('#overlayLayer');
       overlayLayer.addEventListener('pointerdown', event => {
@@ -3397,7 +3420,13 @@
 
       window.addEventListener('keydown', event => {
         if (!state.pdf || helpDialog.open || signatureDialog.open || exportDialog.open) return;
-        const editingField = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement;
+        const editingField = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement || event.target.isContentEditable;
+        if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && !editingField && event.key.toLowerCase() === 'd' && selectedOverlay()) {
+          if (state.exporting || state.drag || document.querySelector('dialog[open]')) return;
+          event.preventDefault();
+          duplicateSelected();
+          return;
+        }
         if ((event.ctrlKey || event.metaKey) && !editingField && event.key.toLowerCase() === 'z') {
           event.preventDefault();
           if (event.shiftKey) redoEdit(); else undoEdit();
