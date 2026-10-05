@@ -65,6 +65,12 @@ Build the repository once, then copy `dist/index.html` or `dist/index.self-extra
 | Arrow keys | Move the selected Browser Kitty item |
 | `Shift` + Arrow | Move it by a larger amount |
 
+### Centering additions
+
+Select an added item, then choose **Center horizontally** or **Center vertically** in the inspector. Centering follows the displayed page, including rotated/cropped pages, without changing size or content. Undo/Redo covers each move; pressing an already-centered action again adds no history. An oversized direction is disabled, as are both controls while the page loads, an export runs, or an item is dragged.
+
+Undo/Redo can change content on another page, but does not select hidden items or switch pages. Arrow navigation in the toolbar stays within the toolbar, and open dialogs block editor shortcuts.
+
 ## PDF forms and flattening
 
 Supported form types include single-line text, multiline text, checkbox, radio button, dropdown/choice list, read-only display fields, and signature fields used as visual placement guidance.
@@ -153,3 +159,5 @@ Licensed under the [MIT License](LICENSE).
 Run `node --test tests/*.test.cjs` (Node.js 18+). These dependency-free tests cover copy identity, appearance/stroke isolation, rotated page bounds, selection history, and shortcut guards.
 
 Optional PDF round-trip integration: after building, run `node tests/verify-duplicate-export.cjs` with `@napi-rs/canvas` available as development tooling. It uses the cached pinned PDF.js Node-compatible bundle to reopen exported text/date, marks, and vector signatures at all four rotations. It does not replace browser/image-export QA. Set `PDF_TEST_OUTPUT_DIR` to an existing directory to retain its PDFs.
+
+For source-level regressions, run `node --test tests/*.test.cjs`. The repository check runs these tests and repeats them against the readable, root, and decoded self-extract artifacts, rejecting a stale root standalone. After rebuilding, refresh the root distribution with `Copy-Item dist/index.html pdf-fill-sign.html` before the repository check. These checks use simulated DOM/viewport boundaries; they do not replace real-PDF rendering/export or browser/device testing.

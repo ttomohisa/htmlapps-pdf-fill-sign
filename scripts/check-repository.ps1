@@ -229,9 +229,17 @@ if ([string]::IsNullOrWhiteSpace([string]$app.name)) { throw "app.config.json: n
 if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: slug is required" }
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 
+# Run actual source functions/handlers before building; no browser or PDF parser is used.
+$positionTests = @("tests/duplicate-overlays.test.cjs", "tests/position-actions.test.cjs")
+& node --test @($positionTests | ForEach-Object { Join-Path $Root $_ })
+if ($LASTEXITCODE -ne 0) { throw "PDF overlay regression tests failed." }
+
 $buildArguments = @{}
 if ($ForceDownload) { $buildArguments.ForceDownload = $true }
 & (Join-Path $Root "build-standalone.ps1") @buildArguments
+
+& node (Join-Path $Root "tests/verify-position-artifacts.cjs")
+if ($LASTEXITCODE -ne 0) { throw "PDF standalone artifact regressions failed." }
 
 Write-Host "[OK] Repository check passed." -ForegroundColor Green
 

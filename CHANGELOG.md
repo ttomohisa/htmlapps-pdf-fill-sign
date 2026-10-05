@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added horizontal/vertical page centering for selected additions, using displayed-page transforms while preserving exact dimensions, content, assets, and signature strokes.
+- Clear off-page selection after Undo/Redo and reject movement with mismatched page geometry. Ignore stale page-render requests so overlapping page/zoom changes cannot enable centering with another page's viewport.
+- Keep toolbar focus arrows and ordinary interactive-control keys from moving overlays or navigating pages; respect any open dialog and already-handled keyboard events.
+- Added centering/selection/shortcut boundary regressions and checks for readable, root, and self-extract release parity. Browser and real-PDF validation of these changes remains pending.
+
 - Added same-page duplication for selected text, dates, marks, images, signatures, and initials through the inspector and Ctrl/Cmd+D outside editable controls.
 - Preserve appearance and independent vector strokes; keep copies page-bounded with a slight offset and restore selection through Undo/Redo.
 - Added dependency-free regressions and synchronized English/Japanese help and usage documentation.

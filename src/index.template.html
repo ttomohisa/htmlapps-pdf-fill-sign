@@ -1167,6 +1167,10 @@
                   </select>
                 </label>
               </div>
+              <div class="button-row">
+                <button class="button" id="centerHorizontalButton" type="button" data-i18n="centerHorizontal" disabled>左右中央に配置</button>
+                <button class="button" id="centerVerticalButton" type="button" data-i18n="centerVertical" disabled>上下中央に配置</button>
+              </div>
               <button class="button" id="duplicateOverlayButton" type="button" data-i18n="duplicateItem">選択項目を複製</button>
               <button class="button pdf-delete-button" id="deleteOverlayButton" type="button" data-i18n="deleteItem">選択項目を削除</button>
             </div>
@@ -1283,6 +1287,7 @@
         <li data-i18n="helpStep2">編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。</li>
         <li data-i18n="helpStep3">既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。</li>
       </ol>
+      <p data-i18n="helpCentering">選択項目の「左右中央に配置」「上下中央に配置」で、表示中のページの中央に移動できます。大きさや内容は変わらず、元に戻す・やり直す操作に対応します。ページに収まらない方向の中央配置は使えません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">PDFはブラウザー内だけで処理され、Browser Kittyのサーバーや外部APIへ送信されません。実行時の外部通信も行いません。</p>
       <h3 data-i18n="helpNotesTitle">注意事項</h3>
@@ -1416,6 +1421,8 @@
           helpStep1: '「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。',
           helpStep2: '編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。',
           helpStep3: '既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。',
+          helpCentering: '選択項目の「左右中央に配置」「上下中央に配置」で、表示中のページの中央に移動できます。大きさや内容は変わらず、元に戻す・やり直す操作に対応します。ページに収まらない方向の中央配置は使えません。',
+          centerHorizontal: '左右中央に配置', centerVertical: '上下中央に配置',
           helpPrivacyTitle: 'プライバシー',
           helpPrivacyBody: 'PDFと入力内容はブラウザー内だけで処理され、Browser Kittyのサーバーや外部APIへ送信されません。実行時の外部通信も行いません。',
           helpNotesTitle: '注意事項',
@@ -1453,6 +1460,8 @@
           helpStep1: 'Choose a PDF from your device, or drop it into the file area.',
           helpStep2: 'Choose an editing tool, then click the PDF to add text, a date, or a mark. Drag a selected item to move it and use its lower-right handle to resize it. Choose Duplicate selected item (Ctrl/Cmd+D when not typing) to make a copy on the same page; Undo/Redo also covers duplication.',
           helpStep3: 'When a PDF already contains fillable fields, you can type directly into them. Save those values together with added text, signatures, and images from Save PDF.',
+          helpCentering: 'Use Center horizontally or Center vertically in Selected item to center an addition on the displayed page. Size and content stay unchanged, and Undo/Redo is supported. An axis is unavailable when the item does not fit the page in that direction.',
+          centerHorizontal: 'Center horizontally', centerVertical: 'Center vertically',
           helpPrivacyTitle: 'Privacy',
           helpPrivacyBody: 'PDFs and entered content are processed only in your browser and are not sent to Browser Kitty servers or external APIs. The app makes no runtime network requests.',
           helpNotesTitle: 'Notes',
@@ -1606,6 +1615,9 @@
         fit: true,
         generation: 0,
         renderTask: null,
+        renderRequestId: 0,
+        pageBusy: false,
+        opening: false,
         pdfjs: null,
         workerUrl: null,
         thumbObserver: null,
@@ -1639,12 +1651,18 @@
       const outputFilename = `${APP_CONFIG.slug}-filled.pdf`;
 
       function showStage(message, { error = false } = {}) {
+        state.pageBusy = true;
+        updatePositionButtons();
         $('#statusText').textContent = message;
         $('#statusText').classList.toggle('error', error);
         $('#spinner').hidden = error;
         $('#stageMessage').classList.add('show');
       }
-      function hideStage() { $('#stageMessage').classList.remove('show'); }
+      function hideStage() {
+        $('#stageMessage').classList.remove('show');
+        state.pageBusy = false;
+        updatePositionButtons();
+      }
       function formatBytes(bytes) {
         if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
         return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
@@ -1714,6 +1732,7 @@
         state.pdf = null;
         state.file = null;
         state.viewport = null;
+        state.opening = false;
         state.overlays = [];
         state.formFieldsByPage = new Map();
         state.formFieldsById = new Map();
@@ -1757,6 +1776,7 @@
         }
         const confirmedSignature = previousPdf ? editStateSignature() : null;
         const requestId = ++state.openRequestId;
+        state.opening = true;
         if (!previousPdf) {
           $('#emptyView').hidden = true;
           $('#viewer').hidden = false;
@@ -1826,6 +1846,11 @@
           $('#sidebar').textContent = '';
           hideStage();
           AppToast.show({ message: translate(classifyOpenError(error)), duration: 6000, tone: 'warning' });
+        } finally {
+          if (requestId === state.openRequestId) {
+            state.opening = false;
+            updatePositionButtons();
+          }
         }
       }
       function buildThumbnails(generation) {
@@ -2273,13 +2298,18 @@
       }
       async function renderCurrentPage(generation = state.generation) {
         if (!state.pdf || generation !== state.generation) return;
+        const requestId = ++state.renderRequestId;
+        const pageNumber = state.page;
+        const isCurrent = () => generation === state.generation && requestId === state.renderRequestId && pageNumber === state.page;
         state.renderTask?.cancel?.();
         showStage(translate('rendering'));
         try {
-          const page = await state.pdf.getPage(state.page);
-          if (generation !== state.generation) return;
-          if (state.fit) state.scale = await computeFitScale(page);
-          const viewport = page.getViewport({ scale: state.scale });
+          const page = await state.pdf.getPage(pageNumber);
+          if (!isCurrent()) return;
+          const scale = state.fit ? await computeFitScale(page) : state.scale;
+          if (!isCurrent()) return;
+          state.scale = scale;
+          const viewport = page.getViewport({ scale });
           state.viewport = viewport;
           const canvas = $('#pdfCanvas');
           const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -2292,18 +2322,19 @@
           const renderTask = page.render({ canvasContext: canvas.getContext('2d', { alpha: false }), viewport, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null });
           state.renderTask = renderTask;
           await renderTask.promise;
-          if (generation !== state.generation) return;
+          if (!isCurrent()) return;
           state.renderTask = null;
-          hideStage();
           updateMeta();
           updateThumbnailSelection();
-          await ensurePageFormFields(state.page - 1, generation);
+          await ensurePageFormFields(pageNumber - 1, generation);
+          if (!isCurrent()) return;
+          hideStage();
           renderOverlays();
           renderFormLayer();
           renderInspector();
           focusPendingFormField();
         } catch (error) {
-          if (error?.name === 'RenderingCancelledException') return;
+          if (!isCurrent() || error?.name === 'RenderingCancelledException') return;
           console.error(error);
           if (generation === state.generation) showStage(translate(classifyOpenError(error)), { error: true });
         }
@@ -2797,6 +2828,7 @@
         }
       }
       function setExportView(view) {
+        updatePositionButtons();
         $('#exportSetup').hidden = view !== 'setup';
         $('#exportProgress').hidden = view !== 'progress';
         $('#exportResult').hidden = view !== 'result';
@@ -2850,6 +2882,7 @@
           setExportView('error');
         } finally {
           state.exporting = false;
+          updatePositionButtons();
           updateMobileUi();
         }
       }
@@ -2906,7 +2939,7 @@
           if (!Object.prototype.hasOwnProperty.call(restored, id)) restored[id] = cloneFormValue(initial);
         }
         state.formValues = restored;
-        state.selectedId = snapshot.selectedId && state.overlays.some(item => item.id === snapshot.selectedId) ? snapshot.selectedId : null;
+        state.selectedId = snapshot.selectedId && state.overlays.some(item => item.id === snapshot.selectedId && item.pageIndex === state.page - 1) ? snapshot.selectedId : null;
         syncAllFormStorage();
         renderOverlays();
         renderFormLayer();
@@ -3063,7 +3096,9 @@
         }
       }
       function renderInspector() {
-        const item = selectedOverlay();
+        const selection = selectedOverlay();
+        const item = selection?.pageIndex === state.page - 1 ? selection : null;
+        updatePositionButtons();
         $('#inspector').classList.toggle('is-empty', !item);
         $('#inspectorEmpty').hidden = Boolean(item);
         $('#inspectorSelection').hidden = !item;
@@ -3121,6 +3156,36 @@
         renderInspector();
         if (type === 'text' || type === 'date') requestAnimationFrame(() => { $('#contentInput').focus(); $('#contentInput').select(); });
       }
+      function positionableSelection() {
+        const item = selectedOverlay();
+        return item && state.pdf && state.viewport && !state.pageBusy && !state.opening && !state.renderTask && !state.exporting && !state.drag && item.pageIndex === state.page - 1 ? item : null;
+      }
+      function updatePositionButtons() {
+        const item = positionableSelection();
+        const rect = item ? viewportRectFromPdfRect(item) : null;
+        $('#centerHorizontalButton').disabled = !rect || rect.width > state.viewport.width + 1e-7;
+        $('#centerVerticalButton').disabled = !rect || rect.height > state.viewport.height + 1e-7;
+      }
+      function centerSelected(axis) {
+        const item = positionableSelection();
+        if (!item || !['horizontal', 'vertical'].includes(axis)) return;
+        const rect = viewportRectFromPdfRect(item);
+        const horizontal = axis === 'horizontal';
+        const size = horizontal ? rect.width : rect.height;
+        const limit = horizontal ? state.viewport.width : state.viewport.height;
+        if (size > limit + 1e-7) return;
+        const delta = (limit - size) / 2 - (horizontal ? rect.left : rect.top);
+        // Ignore floating-point round-trip noise without creating an empty Undo step.
+        if (Math.abs(delta) < 1e-7) return;
+        // Transform a translation, not a resized rectangle: preserve exact dimensions
+        // and the untouched display axis at any PDF page rotation/crop origin/zoom.
+        const origin = state.viewport.convertToPdfPoint(0, 0);
+        const shifted = state.viewport.convertToPdfPoint(horizontal ? delta : 0, horizontal ? 0 : delta);
+        commitMutation(() => {
+          item.x += shifted[0] - origin[0];
+          item.y += shifted[1] - origin[1];
+        });
+      }
       function duplicateSelected() {
         const item = selectedOverlay();
         if (!item || !state.viewport || state.exporting || state.drag || item.pageIndex !== state.page - 1) return;
@@ -3152,8 +3217,8 @@
         if (toast) AppToast.show({ message: translate('deleted'), actionLabel: translate('undo'), onAction: undoEdit });
       }
       function moveSelectedBy(dxPixels, dyPixels) {
-        const item = selectedOverlay();
-        if (!item || !state.viewport) return;
+        const item = positionableSelection();
+        if (!item) return;
         const start = viewportRectFromPdfRect(item);
         const pageWidth = state.viewport.width, pageHeight = state.viewport.height;
         const next = {
@@ -3183,6 +3248,7 @@
           startRect,
           snapshot: cloneEditState()
         };
+        updatePositionButtons();
         element.setPointerCapture?.(event.pointerId);
         element.classList.add('selected');
       }
@@ -3287,6 +3353,7 @@
         const index = buttons.indexOf(document.activeElement);
         if (index < 0) return;
         event.preventDefault();
+        event.stopPropagation();
         let next = index;
         if (event.key === 'ArrowLeft') next = Math.max(0, index - 1);
         else if (event.key === 'ArrowRight') next = Math.min(buttons.length - 1, index + 1);
@@ -3323,6 +3390,8 @@
       $('#undoButton').addEventListener('click', undoEdit);
       $('#redoButton').addEventListener('click', redoEdit);
       $('#duplicateOverlayButton').addEventListener('click', duplicateSelected);
+      $('#centerHorizontalButton').addEventListener('click', () => centerSelected('horizontal'));
+      $('#centerVerticalButton').addEventListener('click', () => centerSelected('vertical'));
       $('#deleteOverlayButton').addEventListener('click', () => deleteSelected());
       const overlayLayer = $('#overlayLayer');
       overlayLayer.addEventListener('pointerdown', event => {
@@ -3419,7 +3488,7 @@
       dropZone.addEventListener('drop', event => openFile(event.dataTransfer?.files?.[0]));
 
       window.addEventListener('keydown', event => {
-        if (!state.pdf || helpDialog.open || signatureDialog.open || exportDialog.open) return;
+        if (event.defaultPrevented || !state.pdf || helpDialog.open || signatureDialog.open || exportDialog.open || document.querySelector('dialog[open]')) return;
         const editingField = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLSelectElement || event.target.isContentEditable;
         if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && !editingField && event.key.toLowerCase() === 'd' && selectedOverlay()) {
           if (state.exporting || state.drag || document.querySelector('dialog[open]')) return;
@@ -3435,7 +3504,7 @@
         if ((event.ctrlKey || event.metaKey) && !editingField && event.key.toLowerCase() === 'y') { event.preventDefault(); redoEdit(); return; }
         if ((event.ctrlKey || event.metaKey) && (event.key === '+' || event.key === '=')) { event.preventDefault(); setScale(state.scale * 1.2); return; }
         if ((event.ctrlKey || event.metaKey) && event.key === '-') { event.preventDefault(); setScale(state.scale / 1.2); return; }
-        if (editingField) return;
+        if (editingField || event.target.closest?.('button, a, summary, [role="button"], [role="link"], [role="tab"]')) return;
         if (event.key === 'Escape') { event.preventDefault(); state.selectedId = null; setTool('select'); renderOverlays(); renderInspector(); return; }
         if ((event.key === 'Delete' || event.key === 'Backspace') && state.selectedId) { event.preventDefault(); deleteSelected(); return; }
         if (state.selectedId && ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) {
