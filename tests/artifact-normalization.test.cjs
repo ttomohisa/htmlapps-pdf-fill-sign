@@ -29,3 +29,20 @@ test('gzip trailing bytes and extra members rejected just like browser Decompres
     await assert.rejects(new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
   }
 });
+
+function assertPinnedTestRuntime(workflow) {
+  const check=workflow.search(/run:\s*\.\/scripts\/check-repository\.ps1/);
+  assert.ok(check>=0,'Repository test step exists');
+  const setup=workflow.match(/uses:\s*actions\/setup-node@v6\s+with:\s+node-version:\s*['"]?24['"]?(?=\s|$)/);
+  assert.ok(setup,'Repository tests require the tested Node 24 runtime');
+  assert.ok(setup.index<check,'Set up Node before running repository tests');
+}
+for(const workflow of ['build-standalone.yml','preview.yml','deploy-pages.yml'])test(`${workflow} pins Node 24 before repository tests`,()=>{
+  assertPinnedTestRuntime(fs.readFileSync(require('node:path').join(__dirname,'../.github/workflows',workflow),'utf8'));
+});
+test('runtime contract rejects missing, wrong, and late Node setup',()=>{
+  const setup='uses: actions/setup-node@v6\nwith:\n  node-version: 24\n';
+  const check='run: ./scripts/check-repository.ps1\n';
+  assert.doesNotThrow(()=>assertPinnedTestRuntime(setup+check));
+  for(const bad of [check,setup.replace('24','22')+check,check+setup])assert.throws(()=>assertPinnedTestRuntime(bad));
+});
