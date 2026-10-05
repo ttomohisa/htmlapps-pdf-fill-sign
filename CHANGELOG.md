@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align the Pages test runtime with PR validation and previews by explicitly selecting Node 24. This fixes a build-only failure in the host `DecompressionStream` behavior assertion on the runner's default Node 22; PDF behavior and strict gzip integrity checks are unchanged.
+
 - Added horizontal/vertical page centering for selected additions, using displayed-page transforms while preserving exact dimensions, content, assets, and signature strokes.
 - Clear off-page selection after Undo/Redo and reject movement with mismatched page geometry. Ignore stale page-render requests so overlapping page/zoom changes cannot enable centering with another page's viewport.
 - Keep toolbar focus arrows and ordinary interactive-control keys from moving overlays or navigating pages; respect any open dialog and already-handled keyboard events.

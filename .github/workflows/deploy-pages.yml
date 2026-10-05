@@ -25,6 +25,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Set up Node for dependency-free regression tests
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Report Node test runtime
+        run: node --version
+
       - name: Validate PowerShell syntax and encoding
         shell: powershell
         run: .\scripts\check-powershell-syntax.ps1
