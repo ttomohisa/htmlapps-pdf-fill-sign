@@ -287,6 +287,16 @@ Changing zoom must never change saved PDF-space geometry.
 - Select the copy. One Undo removes it and restores the original selection; Redo restores the copy and its selection.
 - Ctrl/Cmd+D duplicates only with a selection, outside editable controls and dialogs; unavailable during export or dragging. Existing PDF form fields are not duplicated.
 
+### Center a selected addition
+
+- The inspector offers **Center horizontally / 左右中央に配置** and **Center vertically / 上下中央に配置** for a selected addition on the current, ready page. Existing PDF form fields are excluded.
+- Center along the displayed page axis through the existing PDF.js viewport transforms, including cropped page origins, all four page rotations, and fractional zoom.
+- Change position only; retain exact dimensions, ID, page, content, style, image assets, signature strokes, and form values.
+- Each actual movement is one Undo operation. Repeated already-centered actions do not add history or discard Redo.
+- Disable unavailable axes when an item is larger than the displayed page along that axis; never resize it to fit. Both actions are disabled without a current-page selection and during loading/rendering, export, or dragging.
+- Undo/Redo remains document-wide, but restoring an off-page item clears its selection without navigating. Movement rejects off-page selections.
+- Toolbar focus navigation and ordinary keys inside interactive controls must not move an overlay or navigate the PDF. All open dialogs and already-handled events block global shortcuts; explicit editor shortcuts and native editable-field history remain available in their normal contexts.
+
 ### Text
 
 - Japanese / English / numbers / common symbols.

@@ -2,7 +2,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync(require('node:path').join(__dirname, '../src/index.template.html'), 'utf8');
+const source = fs.readFileSync(process.env.PDF_APP_SOURCE || require('node:path').join(__dirname, '../src/index.template.html'), 'utf8');
 function setup(item, rotation = 0) {
   const state = { pdf: {}, page: 1, scale: 1, overlays: item ? [item] : [], selectedId: item?.id, formValues: {}, formInitialValues: {}, history: [], future: [] };
   // Affine PDF viewports include non-zero crop origins and the four page rotations.
