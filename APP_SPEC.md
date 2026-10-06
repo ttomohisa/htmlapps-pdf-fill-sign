@@ -8,8 +8,8 @@ This file is the product contract for PDF Fill & Sign. Implementation decisions 
 - **Japanese name:** PDF記入・署名
 - **Slug:** `pdf-fill-sign`
 - **Repository:** `ttomohisa/htmlapps-pdf-fill-sign`
-- **Target release:** v1.0.0
-- **Current milestone:** v1.0.0 — Formal Release
+- **Target release:** v1.0.1
+- **Current milestone:** v1.0.1 — Form viewport compatibility patch
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
 - **Primary color:** Browser Kitty `#16624F` for application UI accents. The supplied canonical app icon in `assets/favicon.svg` is used unchanged.
 
@@ -340,6 +340,8 @@ Use plain language such as:
 
 > このPDFには入力できる欄があります。
 
+Position supported field controls with the bundled PDF.js point-transform API, shared with added overlays. Preserve PDF-space rectangles at all four page rotations, cropped origins, fractional zoom, and non-default user units. Opening a form and switching language must not throw or change field values.
+
 Provide natural HTML controls where practical and allow Tab navigation.
 
 Existing signature fields are visual guidance only. Do not pretend a visual Browser Kitty signature becomes a cryptographic signed field.
@@ -485,6 +487,8 @@ Japanese and English live in the same HTML.
 Switching language does not reload the PDF or page.
 
 User PDF contents and user-entered text are never translated automatically.
+
+The language button displays the destination language code: **EN** in Japanese mode and **JA** in English mode, with a descriptive accessible name. Keep the accurate **完全ローカル処理 / Completely local processing** badge and display `vMAJOR.MINOR.PATCH` from canonical app metadata.
 
 ## 24. Help dialog
 

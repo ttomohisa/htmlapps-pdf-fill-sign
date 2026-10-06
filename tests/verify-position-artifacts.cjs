@@ -68,7 +68,7 @@ const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'pdf-position-artifacts-'));
 try {
   const unpacked = path.join(temp, 'unpacked.html');fs.writeFileSync(unpacked, restored);
   for(const source of [path.join(root, 'dist/index.html'),path.join(root, 'pdf-fill-sign.html'),unpacked]) {
-    const result = spawnSync(process.execPath, ['--test', path.join(__dirname, 'duplicate-overlays.test.cjs'), path.join(__dirname, 'position-actions.test.cjs')], {env:{...process.env, PDF_APP_SOURCE:source},encoding:'utf8'});
+    const result = spawnSync(process.execPath, ['--test', path.join(__dirname, 'duplicate-overlays.test.cjs'), path.join(__dirname, 'position-actions.test.cjs'), path.join(__dirname, 'form-controls.test.cjs')], {env:{...process.env, PDF_APP_SOURCE:source},encoding:'utf8'});
     process.stdout.write(result.stdout || '');process.stderr.write(result.stderr || '');
     assert.equal(result.status, 0, `Behavior tests failed: ${source}`);
   }

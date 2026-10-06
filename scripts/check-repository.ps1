@@ -230,7 +230,7 @@ if ([string]::IsNullOrWhiteSpace([string]$app.slug)) { throw "app.config.json: s
 if ([string]::IsNullOrWhiteSpace([string]$app.version)) { throw "app.config.json: version is required" }
 
 # Run actual source functions/handlers before building; no browser or PDF parser is used.
-$positionTests = @("tests/duplicate-overlays.test.cjs", "tests/position-actions.test.cjs", "tests/artifact-normalization.test.cjs")
+$positionTests = @("tests/duplicate-overlays.test.cjs", "tests/position-actions.test.cjs", "tests/form-controls.test.cjs", "tests/artifact-normalization.test.cjs")
 & node --test @($positionTests | ForEach-Object { Join-Path $Root $_ })
 if ($LASTEXITCODE -ne 0) { throw "PDF overlay regression tests failed." }
 

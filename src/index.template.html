@@ -999,7 +999,7 @@
           <img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt="">
         </div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.0</span></p>
+          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.1</span></p>
           <p class="brand-meta" data-i18n="brandMeta">PDFに記入・署名して保存</p>
         </div>
       </div>
@@ -1287,6 +1287,7 @@
         <li data-i18n="helpStep2">編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。</li>
         <li data-i18n="helpStep3">既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。</li>
       </ol>
+      <p data-i18n="helpFormView">既存の入力欄はページの回転や拡大率に合わせて表示されます。EN / JAで表示言語を切り替えても、入力した内容は変わりません。</p>
       <p data-i18n="helpCentering">選択項目の「左右中央に配置」「上下中央に配置」で、表示中のページの中央に移動できます。大きさや内容は変わらず、元に戻す・やり直す操作に対応します。ページに収まらない方向の中央配置は使えません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">PDFはブラウザー内だけで処理され、Browser Kittyのサーバーや外部APIへ送信されません。実行時の外部通信も行いません。</p>
@@ -1416,6 +1417,7 @@
       const translations = {
         ja: {
           brandMeta: 'PDFに記入・署名して保存',
+          helpFormView: '既存の入力欄はページの回転や拡大率に合わせて表示されます。EN / JAで表示言語を切り替えても、入力した内容は変わりません。',
           helpTitle: '使い方と注意事項', close: '閉じる',
           helpBasicsTitle: '基本操作',
           helpStep1: '「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。',
@@ -1455,6 +1457,7 @@
         },
         en: {
           brandMeta: 'Fill, sign & save PDFs',
+          helpFormView: 'Existing fields follow the page rotation and zoom. Switching the interface language with EN / JA does not change your entered values.',
           helpTitle: 'How to use & notes', close: 'Close',
           helpBasicsTitle: 'Basics',
           helpStep1: 'Choose a PDF from your device, or drop it into the file area.',
@@ -1581,7 +1584,7 @@
         document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = translate(element.dataset.i18n); });
         document.querySelectorAll('[data-i18n-title]').forEach(element => { element.title = translate(element.dataset.i18nTitle); });
         document.querySelectorAll('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label', translate(element.dataset.i18nAriaLabel)); });
-        $('#languageButton').textContent = language === 'ja' ? 'EN' : '日本語';
+        $('#languageButton').textContent = language === 'ja' ? 'EN' : 'JA';
         $('#languageButton').setAttribute('aria-label', language === 'ja' ? '英語に切り替え' : 'Switch to Japanese');
         document.title = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#brandName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
@@ -2113,9 +2116,9 @@
       }
       function formRectInViewport(field) {
         if (!state.viewport || !field?.rect) return null;
-        const [x1, y1, x2, y2] = state.viewport.convertToViewportRectangle(field.rect);
-        const left = Math.min(x1, x2), top = Math.min(y1, y2);
-        return { left, top, width: Math.max(1, Math.abs(x2 - x1)), height: Math.max(1, Math.abs(y2 - y1)) };
+        const [x1, y1, x2, y2] = field.rect;
+        // PDF.js 6 uses point transforms; share the editor's rotated/cropped-page geometry.
+        return viewportRectFromPdfRect({ x: x1, y: y1, width: x2 - x1, height: y2 - y1 });
       }
       function formFieldLabel(field) {
         const kind = formFieldKind(field);

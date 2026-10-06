@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.1
+
+- Fix opening PDFs with fillable fields under the bundled PDF.js 6 viewport API. Field positioning now shares the editor's supported point transforms, including rotation, crop origins, zoom, and user units.
+- Keep entered form values when switching languages; show EN / JA as the destination-language button labels with descriptive accessible names. Retain the local-processing badge.
+- Add regressions against the exact embedded PDF.js viewport implementation and run them for source, root, readable, and self-extract artifacts.
+
 ## Unreleased
 
 - Align the Pages test runtime with PR validation and previews by explicitly selecting Node 24. This fixes a build-only failure in the host `DecompressionStream` behavior assertion on the runner's default Node 22; PDF behavior and strict gzip integrity checks are unchanged.
