@@ -75,6 +75,8 @@ Undo/Redo can change content on another page, but does not select hidden items o
 
 Supported form types include single-line text, multiline text, checkbox, radio button, dropdown/choice list, read-only display fields, and signature fields used as visual placement guidance.
 
+Field controls follow page rotation and zoom. Use **EN / JA** in the header to switch the interface language without changing entered values.
+
 **Flatten entered values** is enabled by default. Browser Kitty writes the current field appearance into the PDF and hides the original widget from viewing and printing. This is a visual/non-interactive flattening strategy; it does not physically remove the underlying AcroForm field dictionaries.
 
 When flattening is disabled, supported form fields remain editable where the source PDF and PDF.js save path allow it.
