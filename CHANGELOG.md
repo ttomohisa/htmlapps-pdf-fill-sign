@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2] - 2026-10-09
+
+### Fixed
+- Normalize the canonical app icon to `#16624f` with exact 25% background corner radii, preserving existing artwork and padding.
+- Keep the app header, favicon, and generated standalone variants synchronized.
+
 ## v1.0.1
 
 - Fix opening PDFs with fillable fields under the bundled PDF.js 6 viewport API. Field positioning now shares the editor's supported point transforms, including rotation, crop origins, zoom, and user units.
