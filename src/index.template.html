@@ -9,6 +9,7 @@
   <title>PDF記入・署名</title>
   <link rel="icon" href="__APP_ICON_DATA_URI__">
   <style>
+    html:has(dialog[open]) { overflow: hidden; }
     :root {
       color-scheme: light;
       --bg: #f5f5f2;
@@ -1000,7 +1001,7 @@
           <img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt="">
         </div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.3</span></p>
+          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.4</span></p>
           <p class="brand-meta" data-i18n="brandMeta">PDFに記入・署名して保存</p>
         </div>
       </div>
@@ -1303,7 +1304,7 @@
         <li data-i18n="helpNoteMobile">スマートフォンでは下部のツール・ページ・選択項目・保存から主要操作へ移動できます。PDF表示は1本指で移動し、2本指で拡大・縮小できます。</li>
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">必要なPDF処理コードは配布HTMLへ内包され、ローカルで直接開いた場合も利用できます。</p>
-      <p data-i18n="helpDialogScroll">画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。</p>
+      <p data-i18n="helpDialogScroll">画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。ダイアログを開いている間は背景ページをスクロールしません。</p>
       <!-- APP:HELP:END -->
     </div>
   </dialog>
@@ -1420,7 +1421,7 @@
         ja: {
           brandMeta: 'PDFに記入・署名して保存',
           helpFormView: '既存の入力欄はページの回転や拡大率に合わせて表示されます。EN / JAで表示言語を切り替えても、入力した内容は変わりません。',
-          helpDialogScroll: '画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。',
+          helpDialogScroll: '画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。ダイアログを開いている間は背景ページをスクロールしません。',
           helpTitle: '使い方と注意事項', close: '閉じる',
           helpBasicsTitle: '基本操作',
           helpStep1: '「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。',
@@ -1461,7 +1462,7 @@
         en: {
           brandMeta: 'Fill, sign & save PDFs',
           helpFormView: 'Existing fields follow the page rotation and zoom. Switching the interface language with EN / JA does not change your entered values.',
-          helpDialogScroll: 'In a short window, scroll inside the signature or save dialog to reach its actions. The close button stays at the top.',
+          helpDialogScroll: 'In a short window, scroll inside the signature or save dialog to reach its actions. The close button stays at the top. The background page does not scroll while a dialog is open.',
           helpTitle: 'How to use & notes', close: 'Close',
           helpBasicsTitle: 'Basics',
           helpStep1: 'Choose a PDF from your device, or drop it into the file area.',

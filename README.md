@@ -167,3 +167,5 @@ For source-level regressions, run `node --test tests/*.test.cjs`. The repository
 ### Responsive dialogs and controls
 
 Keep signature and PDF export dialog content scrollable on short desktop and phone windows, without moving the close header.
+
+Modal dialogs keep the background document stationary until closed.

@@ -22,3 +22,7 @@ for (const kind of ['signature', 'export']) {
     assert.match(body, /overscroll-behavior:\s*contain\s*;/);
   });
 }
+
+test('an open modal locks the underlying document scroll', () => {
+  assert.match(css, /html:has\(dialog\[open\]\)\s*\{[^}]*overflow:\s*hidden/);
+});
