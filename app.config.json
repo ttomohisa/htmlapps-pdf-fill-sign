@@ -3,7 +3,7 @@
   "name": "PDF Fill & Sign",
   "nameJa": "PDF記入・署名",
   "slug": "pdf-fill-sign",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Fill in PDFs, add signatures and images, and save the completed PDF entirely in your browser.",
   "descriptionJa": "PDFに文字・署名・画像などを書き込み、完成したPDFをブラウザ内だけで作成・保存します。",
   "defaultLanguage": "auto",

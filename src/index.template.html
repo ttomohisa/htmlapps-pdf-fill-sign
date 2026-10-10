@@ -755,10 +755,11 @@
       color: var(--text);
       box-shadow: var(--shadow-md);
     }
+    .signature-dialog[open], .export-dialog[open] { display: flex; flex-direction: column; }
     .signature-dialog::backdrop { background: rgba(15,17,14,.48); backdrop-filter: blur(3px); }
-    .signature-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
+    .signature-dialog-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
     .signature-dialog-title { margin: 0; font-size: 17px; letter-spacing: -.01em; }
-    .signature-dialog-body { padding: 18px; }
+    .signature-dialog-body { min-height: 0; flex: 1 1 auto; padding: 18px; overflow-y: auto; overscroll-behavior: contain; }
     .signature-dialog-note { margin: 0 0 12px; color: var(--muted); font-size: 12px; line-height: 1.65; }
     .signature-color-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
     .signature-color-label { margin-right: 2px; color: var(--muted); font-size: 11px; font-weight: 760; }
@@ -802,9 +803,9 @@
       box-shadow: var(--shadow-md);
     }
     .export-dialog::backdrop { background: rgba(15,17,14,.48); backdrop-filter: blur(3px); }
-    .export-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
+    .export-dialog-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
     .export-dialog-title { margin: 0; font-size: 17px; letter-spacing: -.01em; }
-    .export-dialog-body { padding: 18px; }
+    .export-dialog-body { min-height: 0; flex: 1 1 auto; padding: 18px; overflow-y: auto; overscroll-behavior: contain; }
     .export-field { display: grid; gap: 7px; }
     .export-field > span { color: var(--muted); font-size: 11px; font-weight: 760; }
     .export-field input { width: 100%; min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; font-size: 13px; }
@@ -999,7 +1000,7 @@
           <img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt="">
         </div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.2</span></p>
+          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.3</span></p>
           <p class="brand-meta" data-i18n="brandMeta">PDFに記入・署名して保存</p>
         </div>
       </div>
@@ -1302,6 +1303,7 @@
         <li data-i18n="helpNoteMobile">スマートフォンでは下部のツール・ページ・選択項目・保存から主要操作へ移動できます。PDF表示は1本指で移動し、2本指で拡大・縮小できます。</li>
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">必要なPDF処理コードは配布HTMLへ内包され、ローカルで直接開いた場合も利用できます。</p>
+      <p data-i18n="helpDialogScroll">画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。</p>
       <!-- APP:HELP:END -->
     </div>
   </dialog>
@@ -1418,6 +1420,7 @@
         ja: {
           brandMeta: 'PDFに記入・署名して保存',
           helpFormView: '既存の入力欄はページの回転や拡大率に合わせて表示されます。EN / JAで表示言語を切り替えても、入力した内容は変わりません。',
+          helpDialogScroll: '画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。',
           helpTitle: '使い方と注意事項', close: '閉じる',
           helpBasicsTitle: '基本操作',
           helpStep1: '「PDFを選択」から端末内のPDFを開きます。PDFを枠内へドロップすることもできます。',
@@ -1458,6 +1461,7 @@
         en: {
           brandMeta: 'Fill, sign & save PDFs',
           helpFormView: 'Existing fields follow the page rotation and zoom. Switching the interface language with EN / JA does not change your entered values.',
+          helpDialogScroll: 'In a short window, scroll inside the signature or save dialog to reach its actions. The close button stays at the top.',
           helpTitle: 'How to use & notes', close: 'Close',
           helpBasicsTitle: 'Basics',
           helpStep1: 'Choose a PDF from your device, or drop it into the file area.',

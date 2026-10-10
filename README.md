@@ -163,3 +163,7 @@ Run `node --test tests/*.test.cjs` (Node.js 24). These dependency-free tests cov
 Optional PDF round-trip integration: after building, run `node tests/verify-duplicate-export.cjs` with `@napi-rs/canvas` available as development tooling. It uses the cached pinned PDF.js Node-compatible bundle to reopen exported text/date, marks, and vector signatures at all four rotations. It does not replace browser/image-export QA. Set `PDF_TEST_OUTPUT_DIR` to an existing directory to retain its PDFs.
 
 For source-level regressions, run `node --test tests/*.test.cjs`. The repository check runs these tests and repeats them against the readable, root, and decoded self-extract artifacts, rejecting a stale root standalone. After rebuilding, refresh the root distribution with `Copy-Item dist/index.html pdf-fill-sign.html` before the repository check. These checks use simulated DOM/viewport boundaries; they do not replace real-PDF rendering/export or browser/device testing.
+
+### Responsive dialogs and controls
+
+Keep signature and PDF export dialog content scrollable on short desktop and phone windows, without moving the close header.

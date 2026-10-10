@@ -9,7 +9,7 @@ This file is the product contract for PDF Fill & Sign. Implementation decisions 
 - **Slug:** `pdf-fill-sign`
 - **Repository:** `ttomohisa/htmlapps-pdf-fill-sign`
 - **Target release:** v1.0.1
-- **Current milestone:** v1.0.2 — Form viewport compatibility patch
+- **Current milestone:** v1.0.3 — Responsive dialog compatibility patch
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
 - **Primary color:** Browser Kitty `#16624F` for application UI accents. The supplied canonical app icon in `assets/favicon.svg` is used unchanged.
 
@@ -936,3 +936,9 @@ Do not delay v1.0 only because additional optional features could still be added
 - The canonical icon background and matching green details use `#16624f`.
 - Background corner radii are exactly 25% of their corresponding width and height; existing bounds, padding, and foreground artwork are preserved.
 - Header, favicon, and self-extract loader inherit the canonical `assets/favicon.svg`.
+
+## v1.0.3 — Responsive layout audit
+
+- Keep signature and PDF export dialog content scrollable on short desktop and phone windows, without moving the close header.
+- Preserve existing input, editing/review, filename, export, privacy, and canonical icon behavior.
+- Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
