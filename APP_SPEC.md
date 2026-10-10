@@ -942,3 +942,5 @@ Do not delay v1.0 only because additional optional features could still be added
 - Keep signature and PDF export dialog content scrollable on short desktop and phone windows, without moving the close header.
 - Preserve existing input, editing/review, filename, export, privacy, and canonical icon behavior.
 - Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
+
+- Modal dialogs lock document scrolling without changing the current page position; internal dialog scrolling remains available.

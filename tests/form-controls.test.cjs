@@ -115,10 +115,10 @@ test('language switch shows the destination code and accessible name; privacy wo
     assert.equal(run("translate('localBadge')"), badge);
   }
 });
-test('this patch uses canonical 1.0.3 metadata and a matching static header fallback', () => {
+test('this patch uses canonical 1.0.4 metadata and a matching static header fallback', () => {
   const config = JSON.parse(fs.readFileSync(path.join(root, 'app.config.json')));
-  assert.equal(config.version, '1.0.3');
-  assert.match(source, /id="versionBadge">v1\.0\.3<\/span>/);
+  assert.equal(config.version, '1.0.4');
+  assert.match(source, /id="versionBadge">v1\.0\.4<\/span>/);
   const { state, node, run } = setup(); state.pdf = null;
   const assignment = source.match(/      \$\('#versionBadge'\)\.textContent = [^\n]+/)[0];
   run(assignment);
