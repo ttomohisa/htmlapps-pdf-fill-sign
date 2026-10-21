@@ -33,7 +33,7 @@ test('gzip trailing bytes and extra members rejected just like browser Decompres
 function assertPinnedTestRuntime(workflow) {
   const check=workflow.search(/run:\s*\.\/scripts\/check-repository\.ps1/);
   assert.ok(check>=0,'Repository test step exists');
-  const setup=workflow.match(/uses:\s*actions\/setup-node@v6\s+with:\s+node-version:\s*['"]?24['"]?(?=\s|$)/);
+  const setup=workflow.match(/uses:\s*actions\/setup-node@(?:v6|249970729cb0ef3589644e2896645e5dc5ba9c38)\s+with:\s+node-version:\s*['"]?24['"]?(?=\s|$)/);
   assert.ok(setup,'Repository tests require the tested Node 24 runtime');
   assert.ok(setup.index<check,'Set up Node before running repository tests');
 }
