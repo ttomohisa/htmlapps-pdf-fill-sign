@@ -107,7 +107,7 @@ test('language switch shows the destination code and accessible name; privacy wo
   const { state, context, node, run } = setup(); state.pdf = null;
   for (const [language, label, accessibleName, badge] of [
     ['ja', 'EN', '英語に切り替え', '完全ローカル処理'],
-    ['en', 'JA', 'Switch to Japanese', 'Completely local processing']
+    ['en', 'JA', 'Switch to Japanese', 'Fully local processing']
   ]) {
     context.language = language; run('applyLanguage()');
     assert.equal(node('#languageButton').textContent, label);

@@ -875,6 +875,7 @@
       .pdf-viewer-controls { width: 100%; justify-content: space-between; gap: 6px; }
     }
     @media (max-width: 640px) {
+      footer { display: none; }
       body.pdf-has-mobile-actions { padding-bottom: calc(var(--pdf-mobile-action-height) + env(safe-area-inset-bottom)); }
       body.pdf-has-mobile-actions .app-toast { bottom: calc(var(--pdf-mobile-action-height) + 12px + env(safe-area-inset-bottom)); }
       .pdf-mobile-action-bar:not([hidden]) {
@@ -968,6 +969,7 @@
       .signature-dialog-actions { margin-top: 10px; }
     }
     @media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+      footer { display: none; }
       :root { --pdf-mobile-action-height: 60px; }
       body.pdf-has-mobile-actions { padding-bottom: calc(var(--pdf-mobile-action-height) + env(safe-area-inset-bottom)); }
       body.pdf-has-mobile-actions .app-toast { bottom: calc(var(--pdf-mobile-action-height) + 8px + env(safe-area-inset-bottom)); }
@@ -1480,7 +1482,7 @@
           helpOffline: 'Required PDF processing code is embedded in the distributed HTML and also works when opened locally.',
           introTitle: 'PDF Fill & Sign',
           lead: 'Add text, dates, marks, signatures, initials, stamps, and images to PDFs, then save the completed PDF to your device. Processing stays entirely on your device.',
-          localBadge: 'Completely local processing',
+          localBadge: 'Fully local processing',
           dropTitle: 'Drop a PDF here', dropBody: 'or choose a PDF from your device.', selectPdf: 'Choose PDF', fileLimit: 'PDF · up to 100 MB · one file',
           previousPage: 'Previous page', nextPage: 'Next page', zoomOut: 'Zoom out', zoomIn: 'Zoom in', zoomReset: 'Reset zoom to 100%', fitWidth: 'Fit width', savePdf: 'Save PDF', closePdf: 'Close PDF', pageList: 'Page list', unsavedChanges: 'Unsaved changes', savedState: 'Saved', saveStarted: 'PDF download started',
           opening: 'Opening PDF…', rendering: 'Rendering page…',

@@ -91,7 +91,7 @@ The app must not use runtime:
 - remote fonts,
 - remote images.
 
-UI may state **完全ローカル処理 / Completely local processing** only while this remains true.
+UI may state **完全ローカル処理 / Fully local processing** only while this remains true.
 
 ### 5.2 Persistence
 
@@ -180,6 +180,8 @@ Do not claim that Browser Kitty provides identity verification, legal validity g
 Help copy must state that the tool places visual content into PDFs and does not provide identity verification, signature-request workflows, audit trails, or digital certificates.
 
 ## 9. Main UI contract
+
+- Hide only the informational app footer at the existing 640px mobile breakpoint. Preserve functional navigation/action bars, their safe-area clearance, and the wider-screen footer. The existing landscape-phone mode (up to 900px wide and 500px high) also hides the informational footer.
 
 Use the current `htmlapps-template` application shell rather than creating a separate visual system.
 
@@ -488,7 +490,7 @@ Switching language does not reload the PDF or page.
 
 User PDF contents and user-entered text are never translated automatically.
 
-The language button displays the destination language code: **EN** in Japanese mode and **JA** in English mode, with a descriptive accessible name. Keep the accurate **完全ローカル処理 / Completely local processing** badge and display `vMAJOR.MINOR.PATCH` from canonical app metadata.
+The language button displays the destination language code: **EN** in Japanese mode and **JA** in English mode, with a descriptive accessible name. Keep the accurate **完全ローカル処理 / Fully local processing** badge and display `vMAJOR.MINOR.PATCH` from canonical app metadata.
 
 ## 24. Help dialog
 
