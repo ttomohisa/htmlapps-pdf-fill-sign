@@ -89,6 +89,11 @@ async function main() {
         await page.setViewportSize({width:PHONE_WIDTH, height});
         assert.equal(await page.locator('body > footer').isVisible(), false, label + ': phone resize');
         await page.setViewportSize({width,height});
+        // The existing 120 ms fit-to-page debounce can scroll the selected thumbnail.
+        // Finish that native render before testing the modal's background scroll lock.
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+        await page.waitForTimeout(150);
+        await page.waitForFunction(() => !document.querySelector('#stageMessage').classList.contains('show'));
         // Capture the actual viewport after resize, not a stitched full-page image of fixed controls.
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
