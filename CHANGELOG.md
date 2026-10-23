@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Hide the informational footer in the existing phone layout while preserving functional actions and the wider-screen footer.
+- Standardize the English local-processing badge as “Fully local processing”, preserving the Japanese label.
+
 - Clarify Japanese and English help by removing internal layout, implementation, and audit commentary while preserving usage guidance and cautions.
 
 ## 1.0.4 - 2026-10-10
