@@ -995,6 +995,8 @@
       .signature-image-drop { min-height: 96px; }
     }
   </style>
+  <style>__BK_UI_CSS__</style>
+  <script data-bk-ui-version="1.0.0">__BK_UI_JS__</script>
 </head>
 <body>
   <header class="app-header">
@@ -1009,15 +1011,15 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
-        <button class="icon-button header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
+        <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="language-button" id="languageButton" type="button" aria-label="Switch language">EN</button>
+        <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="icon-button header-icon-button" id="helpButton" type="button" data-i18n-title="helpTitle" data-i18n-aria-label="helpTitle" title="使い方と注意事項" aria-label="使い方と注意事項">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.72 1.9c-.92.67-1.52 1.12-1.52 2.1"/><path d="M12 17h.01"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <div class="app-shell"><p id="retentionStatus"></p><p id="retentionScope"></p><p id="languageNotice" role="status"></p><p id="failureNotice" role="alert"></p></div><main class="main">
     <section class="page-intro" aria-labelledby="heroTitle">
       <div>
         <h2 id="heroTitle" data-i18n="introTitle">PDFに記入・署名</h2>
@@ -1038,7 +1040,7 @@
           </div>
           <h2 id="workspaceTitle" data-i18n="dropTitle">PDFをここにドロップ</h2>
           <p data-i18n="dropBody">または端末からPDFを選択してください。</p>
-          <button class="button primary" id="selectButton" type="button" data-i18n="selectPdf">PDFを選択</button>
+          <button data-bk-button data-bk-variant="secondary" class="button primary" id="selectButton" type="button" data-i18n="selectPdf">PDFを選択</button>
           <div class="pdf-drop-limit" data-i18n="fileLimit">PDF · 最大100 MB · 1ファイル</div>
         </div>
         <input class="pdf-hidden-input" id="fileInput" type="file" accept="application/pdf,.pdf">
@@ -1056,34 +1058,34 @@
           </div>
           <div class="pdf-viewer-controls" aria-label="PDF controls">
             <div class="pdf-control-group">
-              <button class="icon-button" id="prevButton" type="button" data-i18n-title="previousPage" data-i18n-aria-label="previousPage" title="前のページ" aria-label="前のページ">
+              <button data-bk-button data-bk-variant="secondary" class="icon-button" id="prevButton" type="button" data-i18n-title="previousPage" data-i18n-aria-label="previousPage" title="前のページ" aria-label="前のページ">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
               </button>
               <span class="pdf-page-indicator" id="pageIndicator">1 / 1</span>
-              <button class="icon-button" id="nextButton" type="button" data-i18n-title="nextPage" data-i18n-aria-label="nextPage" title="次のページ" aria-label="次のページ">
+              <button data-bk-button data-bk-variant="secondary" class="icon-button" id="nextButton" type="button" data-i18n-title="nextPage" data-i18n-aria-label="nextPage" title="次のページ" aria-label="次のページ">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
               </button>
             </div>
             <div class="pdf-control-group">
               <div class="pdf-zoom-control" aria-label="Zoom">
-                <button class="icon-button" id="zoomOutButton" type="button" data-i18n-title="zoomOut" data-i18n-aria-label="zoomOut" title="縮小" aria-label="縮小">
+                <button data-bk-button data-bk-variant="secondary" class="icon-button" id="zoomOutButton" type="button" data-i18n-title="zoomOut" data-i18n-aria-label="zoomOut" title="縮小" aria-label="縮小">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>
                 </button>
-                <button class="pdf-zoom-label" id="zoomResetButton" type="button" data-i18n-title="zoomReset" data-i18n-aria-label="zoomReset" title="100%に戻す" aria-label="100%に戻す"><span id="zoomLabel">100%</span></button>
-                <button class="icon-button" id="zoomInButton" type="button" data-i18n-title="zoomIn" data-i18n-aria-label="zoomIn" title="拡大" aria-label="拡大">
+                <button data-bk-button data-bk-variant="secondary" class="pdf-zoom-label" id="zoomResetButton" type="button" data-i18n-title="zoomReset" data-i18n-aria-label="zoomReset" title="100%に戻す" aria-label="100%に戻す"><span id="zoomLabel">100%</span></button>
+                <button data-bk-button data-bk-variant="secondary" class="icon-button" id="zoomInButton" type="button" data-i18n-title="zoomIn" data-i18n-aria-label="zoomIn" title="拡大" aria-label="拡大">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>
                 </button>
               </div>
-              <button class="button pdf-fit-button" id="fitButton" type="button" data-i18n-title="fitWidth" title="幅に合わせる">
+              <button data-bk-button data-bk-variant="secondary" class="button pdf-fit-button" id="fitButton" type="button" data-i18n-title="fitWidth" title="幅に合わせる">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3"/></svg>
                 <span data-i18n="fitWidth">幅に合わせる</span>
               </button>
             </div>
-            <button class="button primary pdf-save-button" id="exportPdfButton" type="button" data-i18n-title="savePdf" title="PDFを保存">
+            <button data-bk-button data-bk-variant="primary" class="button primary pdf-save-button" id="exportPdfButton" type="button" data-i18n-title="savePdf" title="PDFを保存">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v6h8V4M8 20v-6h8v6"/></svg>
               <span data-i18n="savePdf">PDFを保存</span>
             </button>
-            <button class="button pdf-close-button" id="closePdfButton" type="button" data-i18n="closePdf">PDFを閉じる</button>
+            <button data-bk-button data-bk-variant="secondary" class="button pdf-close-button" id="closePdfButton" type="button" data-i18n="closePdf">PDFを閉じる</button>
           </div>
         </div>
         <div class="pdf-edit-toolbar" id="editToolbar" role="toolbar" data-i18n-aria-label="editTools" aria-label="編集ツール">
@@ -1106,21 +1108,21 @@
             <button class="button pdf-tool-button" type="button" data-tool="circle" aria-pressed="false" data-i18n-title="toolCircle" title="○印">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="7"/></svg><span data-i18n="toolCircle">○印</span>
             </button>
-            <button class="button pdf-tool-button" id="signatureButton" type="button" data-i18n-title="toolSignature" title="署名">
+            <button data-bk-button data-bk-variant="secondary" class="button pdf-tool-button" id="signatureButton" type="button" data-i18n-title="toolSignature" title="署名">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17.5c2.2-1.1 3.8-2.8 5-5.2.9-1.8 1.2-4.7-.2-5.2-1.1-.4-2.1 1.2-2.1 2.7 0 2.8 2.4 5.2 4.7 5.2 1.6 0 2.4-1 3.3-2.2.1 1.4.7 2.2 1.8 2.2 1.2 0 2.2-.7 3.5-2"/><path d="M4 20h16"/></svg><span data-i18n="toolSignature">署名</span>
             </button>
-            <button class="button pdf-tool-button" id="initialsButton" type="button" data-i18n-title="toolInitials" title="イニシャル">
+            <button data-bk-button data-bk-variant="secondary" class="button pdf-tool-button" id="initialsButton" type="button" data-i18n-title="toolInitials" title="イニシャル">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 10 6l4 12M8 13h5"/><path d="M17 6v12"/></svg><span data-i18n="toolInitials">イニシャル</span>
             </button>
-            <button class="button pdf-tool-button" id="imageButton" type="button" data-i18n-title="toolImage" title="画像・印影">
+            <button data-bk-button data-bk-variant="secondary" class="button pdf-tool-button" id="imageButton" type="button" data-i18n-title="toolImage" title="画像・印影">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="m6 17 4.5-4 3 2.5 2-2 2.5 3.5"/></svg><span data-i18n="toolImage">画像・印影</span>
             </button>
           </div>
           <div class="pdf-tool-group">
-            <button class="icon-button pdf-history-button" id="undoButton" type="button" aria-keyshortcuts="Control+Z Meta+Z" data-i18n-title="undo" data-i18n-aria-label="undo" title="元に戻す" aria-label="元に戻す" disabled>
+            <button data-bk-button data-bk-variant="secondary" class="icon-button pdf-history-button" id="undoButton" type="button" aria-keyshortcuts="Control+Z Meta+Z" data-i18n-title="undo" data-i18n-aria-label="undo" title="元に戻す" aria-label="元に戻す" disabled>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 8 5 12l4 4"/><path d="M6 12h7a6 6 0 0 1 6 6"/></svg>
             </button>
-            <button class="icon-button pdf-history-button" id="redoButton" type="button" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y Meta+Y" data-i18n-title="redo" data-i18n-aria-label="redo" title="やり直す" aria-label="やり直す" disabled>
+            <button data-bk-button data-bk-variant="secondary" class="icon-button pdf-history-button" id="redoButton" type="button" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y Meta+Y" data-i18n-title="redo" data-i18n-aria-label="redo" title="やり直す" aria-label="やり直す" disabled>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 8 4 4-4 4"/><path d="M18 12h-7a6 6 0 0 0-6 6"/></svg>
             </button>
           </div>
@@ -1129,8 +1131,8 @@
           <svg class="pdf-form-notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h3M8 16h5"/><path d="m14.5 13.8 1.4 1.4 2.8-3"/></svg>
           <div class="pdf-form-notice-copy"><p class="pdf-form-notice-title" data-i18n="formDetected">このPDFには入力できる欄があります。</p><p class="pdf-form-notice-meta" id="formNoticeMeta"></p></div>
           <div class="pdf-form-nav">
-            <button class="icon-button" id="previousFieldButton" type="button" data-i18n-title="previousField" data-i18n-aria-label="previousField" title="前の入力欄" aria-label="前の入力欄"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
-            <button class="icon-button" id="nextFieldButton" type="button" data-i18n-title="nextField" data-i18n-aria-label="nextField" title="次の入力欄" aria-label="次の入力欄"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button data-bk-button data-bk-variant="secondary" class="icon-button" id="previousFieldButton" type="button" data-i18n-title="previousField" data-i18n-aria-label="previousField" title="前の入力欄" aria-label="前の入力欄"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+            <button data-bk-button data-bk-variant="secondary" class="icon-button" id="nextFieldButton" type="button" data-i18n-title="nextField" data-i18n-aria-label="nextField" title="次の入力欄" aria-label="次の入力欄"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
           </div>
         </div>
         <div class="pdf-layout">
@@ -1173,11 +1175,11 @@
                 </label>
               </div>
               <div class="button-row">
-                <button class="button" id="centerHorizontalButton" type="button" data-i18n="centerHorizontal" disabled>左右中央に配置</button>
-                <button class="button" id="centerVerticalButton" type="button" data-i18n="centerVertical" disabled>上下中央に配置</button>
+                <button data-bk-button data-bk-variant="secondary" class="button" id="centerHorizontalButton" type="button" data-i18n="centerHorizontal" disabled>左右中央に配置</button>
+                <button data-bk-button data-bk-variant="secondary" class="button" id="centerVerticalButton" type="button" data-i18n="centerVertical" disabled>上下中央に配置</button>
               </div>
-              <button class="button" id="duplicateOverlayButton" type="button" data-i18n="duplicateItem">選択項目を複製</button>
-              <button class="button pdf-delete-button" id="deleteOverlayButton" type="button" data-i18n="deleteItem">選択項目を削除</button>
+              <button data-bk-button data-bk-variant="secondary" class="button" id="duplicateOverlayButton" type="button" data-i18n="duplicateItem">選択項目を複製</button>
+              <button data-bk-button data-bk-variant="secondary" class="button pdf-delete-button" id="deleteOverlayButton" type="button" data-i18n="deleteItem">選択項目を削除</button>
             </div>
           </aside>
         </div>
@@ -1190,15 +1192,15 @@
   <footer><span id="footerName">PDF記入・署名</span> · MIT License · <span data-i18n="footer">Generated as one self-contained HTML file</span></footer>
   <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default">
     <span class="app-toast-message" id="appToastMessage"></span>
-    <button class="app-toast-action" id="appToastAction" type="button" hidden></button>
+    <button data-bk-button data-bk-variant="secondary" class="app-toast-action" id="appToastAction" type="button" hidden></button>
   </div>
 
   <nav class="pdf-mobile-action-bar" id="mobileActionBar" data-i18n-aria-label="mobileActions" aria-label="モバイル操作" hidden>
-    <button class="pdf-mobile-action is-active" id="mobileToolsButton" type="button" data-mobile-action="tools">
+    <button data-bk-button data-bk-variant="secondary" class="pdf-mobile-action is-active" id="mobileToolsButton" type="button" data-mobile-action="tools">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M17 7h3M4 17h3M10 17h10"/><circle cx="15.5" cy="7" r="1.5"/><circle cx="8.5" cy="17" r="1.5"/></svg>
       <span data-i18n="mobileTools">ツール</span>
     </button>
-    <button class="pdf-mobile-action" id="mobilePagesButton" type="button" data-mobile-action="pages">
+    <button data-bk-button data-bk-variant="secondary" class="pdf-mobile-action" id="mobilePagesButton" type="button" data-mobile-action="pages">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v14H7z"/><path d="M4 7v13h10"/></svg>
       <span data-i18n="mobilePages">ページ</span>
     </button>
@@ -1206,7 +1208,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="m14 8 3 3"/></svg>
       <span data-i18n="mobileEdit">選択項目</span>
     </button>
-    <button class="pdf-mobile-action primary" id="mobileSaveButton" type="button" data-mobile-action="save">
+    <button data-bk-button data-bk-variant="primary" class="pdf-mobile-action primary" id="mobileSaveButton" type="button" data-mobile-action="save">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v6h8V4M8 20v-6h8v6"/></svg>
       <span data-i18n="mobileSave">保存</span>
     </button>
@@ -1216,15 +1218,15 @@
   <dialog class="app-confirm-dialog" id="appConfirmDialog" aria-labelledby="appConfirmTitle" aria-describedby="appConfirmMessage">
     <div class="app-confirm-header">
       <h2 class="app-confirm-title" id="appConfirmTitle">確認</h2>
-      <button class="app-confirm-close" id="appConfirmClose" type="button" data-i18n-aria-label="close" aria-label="閉じる">
+      <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="app-confirm-close" id="appConfirmClose" type="button" data-i18n-aria-label="close" aria-label="閉じる">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </div>
     <div class="app-confirm-body">
       <p class="app-confirm-message" id="appConfirmMessage"></p>
       <div class="app-confirm-actions">
-        <button class="app-confirm-button" id="appConfirmCancel" type="button">キャンセル</button>
-        <button class="app-confirm-button primary" id="appConfirmOk" type="button">実行する</button>
+        <button data-bk-button data-bk-variant="secondary" class="app-confirm-button" id="appConfirmCancel" type="button">キャンセル</button>
+        <button data-bk-button data-bk-variant="danger" class="app-confirm-button primary" id="appConfirmOk" type="button">実行する</button>
       </div>
     </div>
   </dialog>
@@ -1232,7 +1234,7 @@
   <dialog class="signature-dialog" id="signatureDialog" aria-labelledby="signatureDialogTitle">
     <div class="signature-dialog-header">
       <h2 class="signature-dialog-title" id="signatureDialogTitle">署名を追加</h2>
-      <button class="app-confirm-close" id="signatureCloseButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="app-confirm-close" id="signatureCloseButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="signature-dialog-body">
       <p class="signature-dialog-note" id="signatureDialogNote">手書きするか、画像を選択してください。</p>
@@ -1249,38 +1251,38 @@
         <div class="signature-pad-shell"><canvas class="signature-pad" id="signatureCanvas" aria-label="署名入力エリア"></canvas><div class="signature-pad-hint"><span data-i18n="signaturePadHint">マウス・指・ペンで書けます</span><span data-i18n="signatureTransparent">背景は透明です</span></div></div>
       </div>
       <div class="signature-panel" id="signatureImagePanel" hidden>
-        <div class="signature-image-drop"><img class="signature-image-preview" id="signatureImagePreview" alt="" hidden><span id="signatureImagePlaceholder" data-i18n="signatureImagePrompt">PNG / JPEG / WebP の画像を選択</span><button class="button" id="signatureImageChooseButton" type="button" data-i18n="chooseImage">画像を選択</button></div>
+        <div class="signature-image-drop"><img class="signature-image-preview" id="signatureImagePreview" alt="" hidden><span id="signatureImagePlaceholder" data-i18n="signatureImagePrompt">PNG / JPEG / WebP の画像を選択</span><button data-bk-button data-bk-variant="secondary" class="button" id="signatureImageChooseButton" type="button" data-i18n="chooseImage">画像を選択</button></div>
         <input class="pdf-hidden-image-input" id="signatureImageInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
       </div>
       <div class="signature-save-row"><label><input id="signatureSaveCheckbox" type="checkbox"><span data-i18n="saveOnDevice">この端末に保存する</span></label><span data-i18n="saveOnDeviceNote">保存したデータも外部へ送信されません。</span></div>
-      <div class="signature-saved-actions" id="signatureSavedActions" hidden><button class="button" id="signatureUseSavedButton" type="button" data-i18n="useSaved">保存済みを使う</button><button class="button" id="signatureDeleteSavedButton" type="button" data-i18n="deleteSaved">保存済みを削除</button></div>
-      <div class="signature-dialog-actions"><button class="button" id="signatureClearButton" type="button" data-i18n="signatureClear">消去</button><div class="signature-dialog-actions-right"><button class="button" id="signatureCancelButton" type="button" data-i18n="cancel">キャンセル</button><button class="button primary" id="signatureUseButton" type="button" data-i18n="signatureUse" disabled>使用する</button></div></div>
+      <div class="signature-saved-actions" id="signatureSavedActions" hidden><button data-bk-button data-bk-variant="secondary" class="button" id="signatureUseSavedButton" type="button" data-i18n="useSaved">保存済みを使う</button><button data-bk-button data-bk-variant="secondary" class="button" id="signatureDeleteSavedButton" type="button" data-i18n="deleteSaved">保存済みを削除</button></div>
+      <div class="signature-dialog-actions"><button data-bk-button data-bk-variant="secondary" class="button" id="signatureClearButton" type="button" data-i18n="signatureClear">消去</button><div class="signature-dialog-actions-right"><button data-bk-button data-bk-variant="secondary" class="button" id="signatureCancelButton" type="button" data-i18n="cancel">キャンセル</button><button data-bk-button data-bk-variant="primary" class="button primary" id="signatureUseButton" type="button" data-i18n="signatureUse" disabled>使用する</button></div></div>
     </div>
   </dialog>
 
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportDialogTitle">
     <div class="export-dialog-header">
       <h2 class="export-dialog-title" id="exportDialogTitle" data-i18n="exportTitle">PDFを保存</h2>
-      <button class="app-confirm-close" id="exportCloseButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="app-confirm-close" id="exportCloseButton" type="button" data-i18n-aria-label="close" aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="export-dialog-body">
-      <div id="exportSetup">
+      <div id="exportSetup"><p id="exportScope"></p>
         <label class="export-field"><span data-i18n="exportFilename">ファイル名</span><input id="exportFilenameInput" type="text" maxlength="180" autocomplete="off" spellcheck="false"></label>
         <p class="export-note" data-i18n="exportNote">追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。</p>
         <label class="export-option" id="flattenFormsRow" hidden><input id="flattenFormsCheckbox" type="checkbox" checked><span class="export-option-copy"><span class="export-option-title" data-i18n="flattenForms">入力内容を固定する</span><span class="export-option-note" data-i18n="flattenFormsNote">フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。</span></span></label>
         <p class="export-required-warning" id="requiredWarning" hidden></p>
-        <div class="export-actions"><button class="button" id="exportCancelButton" type="button" data-i18n="cancel">キャンセル</button><button class="button primary" id="exportCreateButton" type="button" data-i18n="exportCreate">PDFを作成</button></div>
+        <div class="export-actions"><button data-bk-button data-bk-variant="secondary" class="button" id="exportCancelButton" type="button" data-i18n="cancel">キャンセル</button><button data-bk-button data-bk-variant="primary" class="button primary" id="exportCreateButton" type="button" data-i18n="exportCreate">PDFを作成</button></div>
       </div>
       <div class="export-status" id="exportProgress" hidden role="status" aria-live="polite"><div class="export-inline-spinner" aria-hidden="true"></div><h3 class="export-status-title" data-i18n="exporting">PDFを作成しています…</h3><p class="export-status-message" data-i18n="exportingNote">ページ数や画像の大きさによって時間がかかる場合があります。</p></div>
-      <div class="export-status" id="exportResult" hidden role="status" aria-live="polite"><div class="export-status-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><h3 class="export-status-title" data-i18n="exportReady">PDFを作成しました</h3><p class="export-status-message" data-i18n="exportReadyNote">「PDFを保存」を押して端末へ保存してください。</p><p class="export-result-meta" id="exportResultMeta"></p><div class="export-actions"><button class="button" id="exportBackButton" type="button" data-i18n="exportBack">ファイル名を変更</button><a class="button primary export-download" id="exportDownloadButton" href="#" download data-i18n="savePdf">PDFを保存</a></div></div>
-      <div class="export-status" id="exportError" hidden role="alert"><div class="export-status-icon export-error-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></div><h3 class="export-status-title" data-i18n="exportFailed">PDFを作成できませんでした</h3><p class="export-status-message" id="exportErrorMessage"></p><div class="export-actions"><button class="button" id="exportErrorCloseButton" type="button" data-i18n="close">閉じる</button><button class="button primary" id="exportRetryButton" type="button" data-i18n="retry">もう一度試す</button></div></div>
+      <div class="export-status" id="exportResult" hidden role="status" aria-live="polite"><div class="export-status-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></div><h3 class="export-status-title" data-i18n="exportReady">PDFを作成しました</h3><p class="export-status-message" data-i18n="exportReadyNote">「PDFを保存」を押して端末へ保存してください。</p><p class="export-result-meta" id="exportResultMeta"></p><div class="export-actions"><button data-bk-button data-bk-variant="secondary" class="button" id="exportBackButton" type="button" data-i18n="exportBack">ファイル名を変更</button><a class="button primary export-download" data-bk-button data-bk-variant="primary" id="exportDownloadButton" href="#" download data-i18n="savePdf">PDFを保存</a></div></div>
+      <div class="export-status" id="exportError" hidden role="alert"><div class="export-status-icon export-error-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></div><h3 class="export-status-title" data-i18n="exportFailed">PDFを作成できませんでした</h3><p class="export-status-message" id="exportErrorMessage"></p><div class="export-actions"><button data-bk-button data-bk-variant="secondary" class="button" id="exportErrorCloseButton" type="button" data-i18n="close">閉じる</button><button data-bk-button data-bk-variant="primary" class="button primary" id="exportRetryButton" type="button" data-i18n="retry">もう一度試す</button></div></div>
     </div>
   </dialog>
 
   <dialog id="helpDialog" aria-labelledby="helpTitle">
     <div class="dialog-header">
       <h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2>
-      <button class="icon-button" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
+      <button data-bk-button data-bk-variant="secondary" data-bk-header-action class="icon-button" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
       </button>
     </div>
@@ -1307,7 +1309,7 @@
         <li data-i18n="helpNoteMobile">スマートフォンでは下部のツール・ページ・選択項目・保存から主要操作へ移動できます。PDF表示は1本指で移動し、2本指で拡大・縮小できます。</li>
       </ul>
       <p class="dialog-note" data-i18n="helpOffline">必要なPDF処理コードは配布HTMLへ内包され、ローカルで直接開いた場合も利用できます。</p>
-      <!-- APP:HELP:END -->
+      <p data-i18n="retentionScope"></p><p data-i18n="exportScope"></p><!-- APP:HELP:END -->
     </div>
   </dialog>
 
@@ -1505,8 +1507,13 @@
       };
       const $ = selector => document.querySelector(selector);
       const storageKeys = { language: `${APP_CONFIG.slug}:language` };
-      let language = readStorage(storageKeys.language) || detectLanguage();
+      let language = BrowserKittyUI.resolveLanguage({legacyKeys:[storageKeys.language]});
+      const ui={languageNotice:false,errors:{},assetBusy:false,imageGeneration:0,signatureGeneration:0,signatureImageGeneration:0,exportErrorKey:'',lastDownloadSignature:null,exportFilename:''};
 
+      Object.assign(translations.ja,{deleteSignatureTitle:'保存済み署名を削除しますか？',deleteInitialsTitle:'保存済みイニシャルを削除しますか？',retentionScope:'PDFの編集内容はこのタブだけに保持します。自動保存されません。完成したPDFを保存してください。任意に保存した署名・イニシャルだけをこのブラウザーに保持します。',exportScope:'全ページと現在の編集内容を新しいPDFに作成します。元PDFは変更しません。',assetStorageFailed:'署名データをこのブラウザーに保存・削除できませんでした。入力は残っています。同じ操作を再試行してください。',assetReadFailed:'保存済み署名を読み込めませんでした。署名ダイアログを開き直して再試行してください。',deleteAssetTitle:'保存済み署名データを削除しますか？',deleteAssetMessage:'このブラウザーの選択した署名またはイニシャル1件を削除します。元に戻せません。PDF上の項目と言語設定は残ります。',clearSignatureTitle:'署名の入力をクリアしますか？',clearSignatureMessage:'このダイアログで入力した手書き・画像を消去します。PDF上と保存済みの署名は残ります。',signatureClear:'署名の入力をクリア',exportWait:'処理完了までお待ちください。',saveOnDevice:'署名をこのブラウザーに保存',savedState:'この版の保存を開始しました'});
+      Object.assign(translations.en,{deleteSignatureTitle:'Delete the saved signature?',deleteInitialsTitle:'Delete the saved initials?',retentionScope:'PDF edits stay in this tab only and are not autosaved. Save the completed PDF. Only optionally saved signatures/initials are retained in this browser.',exportScope:'Create a new PDF with all pages and current edits. The original PDF is unchanged.',assetStorageFailed:'Could not save/delete signature data in this browser. Your input remains. Retry the same action.',assetReadFailed:'Could not read saved signatures. Reopen the signature dialog to retry.',deleteAssetTitle:'Delete the saved signature data?',deleteAssetMessage:'Delete the selected saved signature or initials from this browser. This cannot be undone. Items on the PDF and language preference remain.',clearSignatureTitle:'Clear signature input?',clearSignatureMessage:'Clear the drawing/image entered in this dialog. Items on the PDF and saved signatures remain.',signatureClear:'Clear signature input',exportWait:'Please wait for processing to finish.',saveOnDevice:'Save signature in this browser',savedState:'Download started for this version'});
+      function renderConventions(){BrowserKittyUI.setSaveStatus($('#retentionStatus'),{mode:'session',language});$('#retentionScope').textContent=translate('retentionScope');$('#languageNotice').textContent=ui.languageNotice?BrowserKittyUI.text('languageSessionOnly',language):'';$('#failureNotice').textContent=Object.values(ui.errors).filter(Boolean).map(translate).join(' ');$('#exportScope').textContent=translate('exportScope');if(ui.exportErrorKey)$('#exportErrorMessage').textContent=translate(ui.exportErrorKey);if($('#signatureDialog').open){$('#signatureDialogTitle').textContent=translate(signatureUi.kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=(signatureUi.targetField?translate('formSignature')+' · ':'')+translate('signatureDialogNote');}BrowserKittyUI.setButtonState($('#exportPdfButton'),state.exporting?'busy':state.pdf&&!state.opening?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportCreateButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportRetryButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#signatureUseButton'),ui.assetBusy?'busy':(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image)?'ready':'unavailable');for(const id of ['signatureUseSavedButton','signatureDeleteSavedButton'])BrowserKittyUI.setButtonState($('#'+id),ui.assetBusy?'busy':signatureUi.saved?'ready':'unavailable');for(const id of ['signatureDrawTab','signatureImageTab','signatureImageChooseButton','signatureImageInput','signatureClearButton','signatureSaveCheckbox'])$('#'+id).disabled=ui.assetBusy;if(state.exportUrl&&state.exportSnapshotSignature!==editStateSignature())$('#exportResultMeta').textContent=BrowserKittyUI.text('previousResult',language);}
+      function setUiFailure(domain,key){if(key)ui.errors[domain]=key;else delete ui.errors[domain];renderConventions();}
       // Reusable Promise-based confirmation API. Canonical source: components/confirm-dialog.html.
       const AppConfirm = (() => {
         const dialog = $('#appConfirmDialog');
@@ -1517,6 +1524,8 @@
         const okButton = $('#appConfirmOk');
         let resolver = null;
         let restoreFocus = null;
+        let content=null;
+        function refresh(){if(!content||!dialog.open)return;for(const [node,value] of [[title,content.heading],[message,content.body],[okButton,content.confirm],[cancelButton,content.cancel]]){const key=Object.keys(translations.en).find(key=>translations.ja[key]===value||translations.en[key]===value);node.textContent=(key?translate(key):value)+(node===title&&content.scopeName?' · '+content.scopeName:'');}closeButton.setAttribute('aria-label',translate('cancel'));}
         function finish(result) {
           if (!dialog.open) return;
           const currentResolver = resolver;
@@ -1526,7 +1535,7 @@
           restoreFocus = null;
           if (currentResolver) currentResolver(result);
         }
-        function ask({ title: heading, message: body, confirmLabel, cancelLabel, tone = 'default' } = {}) {
+        function ask({ title: heading, message: body, confirmLabel, cancelLabel, scopeName='', tone = 'default' } = {}) {
           if (dialog.open) finish(false);
           title.textContent = heading || translate('confirmTitle');
           message.textContent = body || '';
@@ -1534,10 +1543,10 @@
           okButton.textContent = confirmLabel || translate('confirmAction');
           okButton.classList.toggle('danger', tone === 'danger');
           okButton.classList.toggle('primary', tone !== 'danger');
-          restoreFocus = document.activeElement;
+          restoreFocus = document.activeElement;content={scopeName,heading:heading||translate('confirmTitle'),body:body||'',confirm:confirmLabel||translate('confirmAction'),cancel:cancelLabel||translate('cancel')};
           return new Promise(resolve => {
             resolver = resolve;
-            dialog.showModal();
+            dialog.showModal();refresh();
             requestAnimationFrame(() => cancelButton.focus({ preventScroll: true }));
           });
         }
@@ -1550,7 +1559,7 @@
           const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
           if (outside) finish(false);
         });
-        return Object.freeze({ ask });
+        return Object.freeze({ ask, refresh });
       })();
       window.AppConfirm = AppConfirm;
 
@@ -1581,12 +1590,14 @@
           if (duration > 0) timer = window.setTimeout(dismiss, duration);
           return Object.freeze({ dismiss });
         }
+        root.addEventListener('focusin',()=>{clearTimeout(timer);timer=0;});root.addEventListener('focusout',()=>{if(actionHandler)timer=window.setTimeout(dismiss,3200);});
         action.addEventListener('click', () => { const handler = actionHandler; dismiss(); if (handler) handler(); });
         return Object.freeze({ show, dismiss });
       })();
       window.AppToast = AppToast;
 
       function applyLanguage() {
+        const active=document.activeElement,drafts=Array.from(document.querySelectorAll('#contentInput,#fontSizeInput,#colorInput,[data-form-id]')).map(el=>({el,id:el.id,formId:el.dataset.formId,value:el.value,checked:el.checked,start:el.selectionStart,end:el.selectionEnd}));
         document.documentElement.lang = language;
         document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = translate(element.dataset.i18n); });
         document.querySelectorAll('[data-i18n-title]').forEach(element => { element.title = translate(element.dataset.i18nTitle); });
@@ -1597,11 +1608,13 @@
         $('#brandName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         $('#footerName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         if (state.pdf) { updateMeta(); renderInspector(); renderOverlays(); renderFormLayer(); updateFormNotice(); }
+        for(const draft of drafts){const el=draft.id?document.getElementById(draft.id):document.querySelector('[data-form-id="'+CSS.escape(draft.formId||'')+'"]');if(!el)continue;el.value=draft.value;el.checked=draft.checked;if(draft.el===active){el.focus({preventScroll:true});try{el.setSelectionRange(draft.start,draft.end)}catch{}}}
+        AppConfirm.refresh();renderConventions();
       }
 
       $('#languageButton').addEventListener('click', () => {
         language = language === 'ja' ? 'en' : 'ja';
-        writeStorage(storageKeys.language, language);
+        ui.languageNotice=!BrowserKittyUI.chooseLanguage(language).persisted;
         applyLanguage();
       });
       const helpDialog = $('#helpDialog');
@@ -1733,6 +1746,7 @@
         return 'invalid';
       }
       async function releaseDocument() {
+        ui.exportFilename='';
         state.generation += 1;
         state.renderTask?.cancel?.();
         state.renderTask = null;
@@ -1773,13 +1787,13 @@
       async function openFile(file) {
         if (!file || state.exporting) return;
         const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) { AppToast.show({ message: translate('invalid'), duration: 5000, tone: 'warning' }); return; }
-        if (file.size > MAX_BYTES) { AppToast.show({ message: translate('tooLarge'), duration: 5000, tone: 'warning' }); return; }
+        if (!isPdf) { setUiFailure('open','invalid');AppToast.show({ message: translate('invalid'), duration: 5000, tone: 'warning' }); return; }
+        if (file.size > MAX_BYTES) { setUiFailure('open','tooLarge');AppToast.show({ message: translate('tooLarge'), duration: 5000, tone: 'warning' }); return; }
 
         const previousPdf = state.pdf;
         if (previousPdf && hasUnsavedChanges()) {
           const confirmed = await AppConfirm.ask({
-            title: translate('discardTitle'), message: translate('discardMessage'),
+            title: translate('discardTitle'), message: translate('discardMessage'),scopeName:state.file?.name||'',
             confirmLabel: translate('discardReplaceAction'), cancelLabel: translate('cancel'), tone: 'danger'
           });
           if (!confirmed) return;
@@ -1805,7 +1819,7 @@
           // If the current document changed while the replacement was loading, ask again before discarding it.
           if (previousPdf && state.pdf === previousPdf && hasUnsavedChanges() && editStateSignature() !== confirmedSignature) {
             const confirmedAgain = await AppConfirm.ask({
-              title: translate('discardTitle'), message: translate('discardMessage'),
+              title: translate('discardTitle'), message: translate('discardMessage'),scopeName:state.file?.name||'',
               confirmLabel: translate('discardReplaceAction'), cancelLabel: translate('cancel'), tone: 'danger'
             });
             if (!confirmedAgain || requestId !== state.openRequestId) { try { await pdf.destroy(); } catch {} hideStage(); return; }
@@ -1815,7 +1829,7 @@
           await releaseDocument();
           if (requestId !== state.openRequestId) { try { await pdf.destroy(); } catch {} return; }
           const generation = state.generation;
-          state.pdf = pdf;
+          state.pdf = pdf;setUiFailure('open','');
           state.file = file;
           state.page = 1;
           state.fit = true;
@@ -1847,7 +1861,7 @@
           if (requestId !== state.openRequestId) return;
           if (previousPdf && state.pdf === previousPdf) {
             hideStage();
-            AppToast.show({ message: translate(classifyOpenError(error)), duration: 6000, tone: 'warning' });
+            setUiFailure('open',classifyOpenError(error));AppToast.show({ message: translate(classifyOpenError(error)), duration: 6000, tone: 'warning' });
             return;
           }
           await releaseDocument();
@@ -1855,7 +1869,7 @@
           $('#emptyView').hidden = false;
           $('#sidebar').textContent = '';
           hideStage();
-          AppToast.show({ message: translate(classifyOpenError(error)), duration: 6000, tone: 'warning' });
+          setUiFailure('open',classifyOpenError(error));AppToast.show({ message: translate(classifyOpenError(error)), duration: 6000, tone: 'warning' });
         } finally {
           if (requestId === state.openRequestId) {
             state.opening = false;
@@ -2849,15 +2863,15 @@
         $('#exportRetryButton').disabled = busy;
         $('#exportFilenameInput').disabled = busy;
         $('#flattenFormsCheckbox').disabled = busy;
-        updateMobileUi();
+        updateMobileUi();renderConventions();
       }
       const exportDialog = $('#exportDialog');
       async function openExportDialog() {
-        if (!state.pdf || state.exporting) return;
+        if (!state.pdf || state.exporting || state.opening) return;
+        const pdf=state.pdf,generation=state.generation;
         await ensureAllFormFieldsScanned();
-        if (!state.pdf || exportDialog.open) return;
-        revokeExportResult();
-        $('#exportFilenameInput').value = sanitizeExportFilename(defaultExportFilename());
+        if (pdf!==state.pdf||generation!==state.generation||exportDialog.open) return;
+        $('#exportFilenameInput').value = sanitizeExportFilename(ui.exportFilename||defaultExportFilename());
         const hasForms = state.formOrder.length > 0;
         $('#flattenFormsRow').hidden = !hasForms;
         $('#flattenFormsCheckbox').checked = true;
@@ -2871,10 +2885,10 @@
         if (exportDialog.open) exportDialog.close();
       }
       async function runExport() {
-        if (!state.pdf || state.exporting) return;
+        if (!state.pdf || state.exporting || state.opening) return;
         state.exporting = true;
         const filename = sanitizeExportFilename($('#exportFilenameInput').value);
-        $('#exportFilenameInput').value = filename;
+        $('#exportFilenameInput').value = filename;ui.exportFilename=filename;
         setExportView('progress');
         try {
           const bytes = await generateCompletedPdf(filename, { flattenForms: !$('#flattenFormsRow').hidden && $('#flattenFormsCheckbox').checked });
@@ -2883,36 +2897,40 @@
           const download = $('#exportDownloadButton');
           download.href = state.exportUrl;
           download.download = state.exportName;
-          setExportView('result');
+          ui.exportErrorKey='';setUiFailure('export','');setExportView('result');
         } catch (error) {
           if (error?.message === 'EXPORT_STALE') { setExportView('setup'); if (exportDialog.open) exportDialog.close(); return; }
           console.error(error);
-          const key = error?.message === 'EXPORT_UNSUPPORTED' ? 'exportUnsupported' : 'exportFailureMessage';
+          const key = error?.message === 'EXPORT_UNSUPPORTED' ? 'exportUnsupported' : 'exportFailureMessage';ui.exportErrorKey=key;setUiFailure('export',key);
           $('#exportErrorMessage').textContent = translate(key);
           setExportView('error');
         } finally {
           state.exporting = false;
           updatePositionButtons();
-          updateMobileUi();
+          updateMobileUi();renderConventions();
         }
       }
 
       async function closePdf() {
         if (state.exporting) return;
+        const pdf=state.pdf,generation=state.generation,signature=editStateSignature(),opener=document.activeElement;
         if (hasUnsavedChanges()) {
           const confirmed = await AppConfirm.ask({
-            title: translate('discardTitle'), message: translate('discardMessage'),
+            title: translate('discardTitle'), message: translate('discardMessage'),scopeName:state.file?.name||'',
             confirmLabel: translate('discardCloseAction'), cancelLabel: translate('cancel'), tone: 'danger'
           });
           if (!confirmed) return;
         }
-        state.openRequestId += 1;
+        if(state.pdf!==pdf||state.generation!==generation||editStateSignature()!==signature)return;
+        const requestId=++state.openRequestId;
         await releaseDocument();
+        if(requestId!==state.openRequestId)return;
         $('#viewer').hidden = true;
         $('#emptyView').hidden = false;
         $('#sidebar').textContent = '';
         $('#pdfCanvas').width = 1;
         $('#pdfCanvas').height = 1;
+        if(document.activeElement===opener||document.activeElement===document.body)$('#selectButton').focus({preventScroll:true});
         hideStage();
       }
 
@@ -3324,14 +3342,15 @@
       const signatureDrawing = { pointerId: null, hasInk: false, dpr: 1, lastX: 0, lastY: 0, strokes: [], activeStroke: null };
       const signatureUi = { kind: 'signature', mode: 'draw', image: null, saved: null, targetField: null };
       const IMAGE_MAX_DIMENSION = 1600;
-      let assetDbPromise = null;
-      function openAssetDb() { if (!('indexedDB' in window)) return Promise.resolve(null); if (assetDbPromise) return assetDbPromise; assetDbPromise = new Promise(resolve => { const request = indexedDB.open(`${APP_CONFIG.slug}:assets`, 1); request.onupgradeneeded = () => { if (!request.result.objectStoreNames.contains('assets')) request.result.createObjectStore('assets'); }; request.onsuccess = () => resolve(request.result); request.onerror = () => resolve(null); }); return assetDbPromise; }
-      async function readSavedAsset(kind) { const db = await openAssetDb(); if (!db) return null; return await new Promise(resolve => { const request = db.transaction('assets', 'readonly').objectStore('assets').get(kind); request.onsuccess = () => resolve(request.result || null); request.onerror = () => resolve(null); }); }
-      async function writeSavedAsset(kind, value) { const db = await openAssetDb(); if (!db) return false; return await new Promise(resolve => { const request = db.transaction('assets', 'readwrite').objectStore('assets').put(value, kind); request.onsuccess = () => resolve(true); request.onerror = () => resolve(false); }); }
-      async function deleteSavedAsset(kind) { const db = await openAssetDb(); if (!db) return false; return await new Promise(resolve => { const request = db.transaction('assets', 'readwrite').objectStore('assets').delete(kind); request.onsuccess = () => resolve(true); request.onerror = () => resolve(false); }); }
+      let assetDbPromise = null,assetMutationQueue=Promise.resolve();
+      function openAssetDb(){if(!('indexedDB' in window))return Promise.resolve(null);if(assetDbPromise)return assetDbPromise;const attempt=new Promise(resolve=>{try{const request=indexedDB.open(APP_CONFIG.slug+':assets',1);request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains('assets'))request.result.createObjectStore('assets')};request.onsuccess=()=>resolve(request.result);request.onerror=request.onblocked=()=>resolve(null);}catch{resolve(null)}});assetDbPromise=attempt;attempt.then(db=>{if(!db&&assetDbPromise===attempt)assetDbPromise=null});return attempt;}
+      async function readSavedAsset(kind){try{const db=await openAssetDb();if(!db)throw Error('storage');const value=await new Promise((resolve,reject)=>{const tx=db.transaction('assets','readonly'),request=tx.objectStore('assets').get(kind);let value=null;request.onsuccess=()=>{value=request.result||null};tx.oncomplete=()=>resolve(value);tx.onerror=tx.onabort=()=>reject(Error('storage'));});setUiFailure('assetRead-'+kind,'');return value;}catch{setUiFailure('assetRead-'+kind,'assetReadFailed');return null;}}
+      function mutateSavedAsset(kind,value,remove=false){const operation=async()=>{try{const db=await openAssetDb();if(!db)return false;return await new Promise(resolve=>{const tx=db.transaction('assets','readwrite');tx.oncomplete=()=>resolve(true);tx.onerror=tx.onabort=()=>resolve(false);const store=tx.objectStore('assets');if(remove)store.delete(kind);else store.put(value,kind);});}catch{return false;}};const result=assetMutationQueue.then(operation,operation);assetMutationQueue=result.then(()=>undefined,()=>undefined);return result;}
+      async function writeSavedAsset(kind,value){return await mutateSavedAsset(kind,value);}
+      async function deleteSavedAsset(kind){return await mutateSavedAsset(kind,null,true);}
       function selectedSignatureColor() { return document.querySelector('input[name="signatureColor"]:checked')?.value || '#20211f'; }
       function prepareSignatureCanvas() { const rect = signatureCanvas.getBoundingClientRect(); const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1)); signatureDrawing.dpr = dpr; signatureCanvas.width = Math.max(1, Math.round(rect.width * dpr)); signatureCanvas.height = Math.max(1, Math.round(rect.height * dpr)); signatureContext.setTransform(dpr, 0, 0, dpr, 0, 0); signatureContext.lineCap = 'round'; signatureContext.lineJoin = 'round'; signatureContext.clearRect(0, 0, rect.width, rect.height); signatureDrawing.pointerId = null; signatureDrawing.hasInk = false; signatureDrawing.strokes = []; signatureDrawing.activeStroke = null; updateSignatureUseButton(); }
-      function clearSignatureCanvas() { const rect = signatureCanvas.getBoundingClientRect(); signatureContext.save(); signatureContext.setTransform(signatureDrawing.dpr,0,0,signatureDrawing.dpr,0,0); signatureContext.clearRect(0,0,rect.width,rect.height); signatureContext.restore(); signatureDrawing.pointerId=null; signatureDrawing.hasInk=false; signatureDrawing.strokes=[]; signatureDrawing.activeStroke=null; if (signatureUi.mode==='image') { signatureUi.image=null; $('#signatureImagePreview').hidden=true; $('#signatureImagePreview').removeAttribute('src'); $('#signatureImagePlaceholder').hidden=false; $('#signatureImageInput').value=''; } updateSignatureUseButton(); }
+      function clearSignatureCanvas() { ui.signatureImageGeneration++;const rect = signatureCanvas.getBoundingClientRect(); signatureContext.save(); signatureContext.setTransform(signatureDrawing.dpr,0,0,signatureDrawing.dpr,0,0); signatureContext.clearRect(0,0,rect.width,rect.height); signatureContext.restore(); signatureDrawing.pointerId=null; signatureDrawing.hasInk=false; signatureDrawing.strokes=[]; signatureDrawing.activeStroke=null; if (signatureUi.mode==='image') { signatureUi.image=null; $('#signatureImagePreview').hidden=true; $('#signatureImagePreview').removeAttribute('src'); $('#signatureImagePlaceholder').hidden=false; $('#signatureImageInput').value=''; } updateSignatureUseButton(); }
       function signaturePoint(event) { const rect=signatureCanvas.getBoundingClientRect(); return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
       function beginSignatureStroke(event) { if (signatureDrawing.pointerId!==null || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); signatureDrawing.pointerId=event.pointerId; signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.activeStroke=[point]; signatureDrawing.strokes.push(signatureDrawing.activeStroke); signatureCanvas.setPointerCapture?.(event.pointerId); }
       function continueSignatureStroke(event) { if (signatureDrawing.pointerId!==event.pointerId || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); const pressure=event.pointerType==='pen'&&event.pressure>0?event.pressure:.5; signatureContext.strokeStyle=selectedSignatureColor(); signatureContext.lineWidth=2+pressure*1.4; signatureContext.beginPath(); signatureContext.moveTo(signatureDrawing.lastX,signatureDrawing.lastY); signatureContext.lineTo(point.x,point.y); signatureContext.stroke(); signatureDrawing.activeStroke?.push(point); signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.hasInk=true; updateSignatureUseButton(); }
@@ -3339,22 +3358,26 @@
       function trimmedSignatureData() { if (!signatureDrawing.hasInk) return null; const width=signatureCanvas.width,height=signatureCanvas.height,pixels=signatureContext.getImageData(0,0,width,height).data; let minX=width,minY=height,maxX=-1,maxY=-1; for(let y=0;y<height;y+=1) for(let x=0;x<width;x+=1){const alpha=pixels[(y*width+x)*4+3]; if(alpha<=8)continue; minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);} if(maxX<minX||maxY<minY)return null; const padding=Math.max(3,Math.round(6*signatureDrawing.dpr)),sx=Math.max(0,minX-padding),sy=Math.max(0,minY-padding),sw=Math.min(width-sx,maxX-minX+1+padding*2),sh=Math.min(height-sy,maxY-minY+1+padding*2); const trimmed=document.createElement('canvas'); trimmed.width=sw;trimmed.height=sh;trimmed.getContext('2d').drawImage(signatureCanvas,sx,sy,sw,sh,0,0,sw,sh); const cropX=sx/signatureDrawing.dpr,cropY=sy/signatureDrawing.dpr,cropWidth=Math.max(1,sw/signatureDrawing.dpr),cropHeight=Math.max(1,sh/signatureDrawing.dpr); const vectorStrokes=signatureDrawing.strokes.filter(stroke=>stroke.length>1).map(stroke=>stroke.map(point=>({x:Math.max(0,Math.min(1,(point.x-cropX)/cropWidth)),y:Math.max(0,Math.min(1,(point.y-cropY)/cropHeight))}))); return {imageData:trimmed.toDataURL('image/png'),width:sw,height:sh,vectorStrokes,vectorColor:selectedSignatureColor(),vectorThicknessRatio:Math.max(.004,Math.min(.12,2.7/Math.max(1,Math.min(cropWidth,cropHeight))))}; }
       function loadImageElement(src) { return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src;}); }
       async function normalizeImageFile(file) { const allowed=['image/png','image/jpeg','image/webp']; if(!file||!allowed.includes(file.type))throw new Error('unsupported image'); const url=URL.createObjectURL(file); try{const image=await loadImageElement(url); const scale=Math.min(1,IMAGE_MAX_DIMENSION/Math.max(image.naturalWidth,image.naturalHeight)); const width=Math.max(1,Math.round(image.naturalWidth*scale)),height=Math.max(1,Math.round(image.naturalHeight*scale)); const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;canvas.getContext('2d').drawImage(image,0,0,width,height); return {imageData:canvas.toDataURL('image/png'),width,height};}finally{URL.revokeObjectURL(url);} }
-      async function loadSignatureImage(file) { try{signatureUi.image=await normalizeImageFile(file);$('#signatureImagePreview').src=signatureUi.image.imageData;$('#signatureImagePreview').hidden=false;$('#signatureImagePlaceholder').hidden=true;updateSignatureUseButton();}catch{signatureUi.image=null;updateSignatureUseButton();AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});} }
+      async function loadSignatureImage(file) { const generation=++ui.signatureImageGeneration,session=ui.signatureGeneration;try{const image=await normalizeImageFile(file);if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;signatureUi.image=image;setUiFailure('signatureImage','');$('#signatureImagePreview').src=signatureUi.image.imageData;$('#signatureImagePreview').hidden=false;$('#signatureImagePlaceholder').hidden=true;updateSignatureUseButton();}catch{if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;setUiFailure('signatureImage','invalidImage');updateSignatureUseButton();AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});} }
       function setSignatureMode(mode) { signatureUi.mode=mode; $('#signatureDrawTab').classList.toggle('active',mode==='draw');$('#signatureImageTab').classList.toggle('active',mode==='image');$('#signatureDrawTab').setAttribute('aria-selected',mode==='draw'?'true':'false');$('#signatureImageTab').setAttribute('aria-selected',mode==='image'?'true':'false');$('#signatureDrawPanel').hidden=mode!=='draw';$('#signatureImagePanel').hidden=mode!=='image';updateSignatureUseButton(); }
       function currentSignatureData(){return signatureUi.mode==='draw'?trimmedSignatureData():signatureUi.image;}
-      function updateSignatureUseButton(){ $('#signatureUseButton').disabled=!(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image); }
+      function updateSignatureUseButton(){ $('#signatureUseButton').disabled=ui.assetBusy||!(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image);renderConventions(); }
       function placeImageOverlay(data,type,widthFraction=.34,targetField=null){if(!data)return false;const ratio=data.width/Math.max(1,data.height);let pdfRect,pageIndex=state.page-1;if(targetField){const [x1,y1,x2,y2]=targetField.rect;const box={x:Math.min(x1,x2),y:Math.min(y1,y2),width:Math.abs(x2-x1),height:Math.abs(y2-y1)};let width=Math.max(8,box.width*.9),height=width/ratio;if(height>box.height*.84){height=Math.max(8,box.height*.84);width=height*ratio;}pdfRect={x:box.x+(box.width-width)/2,y:box.y+(box.height-height)/2,width,height};pageIndex=targetField.pageIndex;}else{if(!state.viewport)return false;let width=Math.min(type==='image'?280:220,Math.max(100,state.viewport.width*widthFraction)),height=width/ratio;const maxHeight=Math.max(48,state.viewport.height*(type==='image'?.32:.22));if(height>maxHeight){height=maxHeight;width=height*ratio;}const left=Math.max(0,(state.viewport.width-width)/2),top=Math.max(0,(state.viewport.height-height)/2);pdfRect=pdfRectFromViewportRect({left,top,width,height});if(!pdfRect)return false;}const before=cloneEditState();const item={id:newOverlayId(),pageIndex,type,content:'',imageData:data.imageData,aspectRatio:ratio,color:data.vectorColor||'#20211f',fontSize:12,vectorStrokes:Array.isArray(data.vectorStrokes)?data.vectorStrokes:null,vectorThicknessRatio:data.vectorThicknessRatio||null,...pdfRect};state.overlays.push(item);state.selectedId=item.id;pushHistory(before);setTool('select');renderOverlays();renderInspector();return true;}
-      async function refreshSavedAsset(){signatureUi.saved=await readSavedAsset(signatureUi.kind);$('#signatureSavedActions').hidden=!signatureUi.saved;}
-      async function openSignatureDialog(kind='signature',targetField=null){if(!state.pdf)return;signatureUi.kind=kind;signatureUi.targetField=targetField;signatureUi.image=null;signatureUi.saved=null;state.selectedId=null;setTool('select');renderOverlays();renderInspector();$('#signatureDialogTitle').textContent=translate(kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=targetField?translate('formSignature')+' · '+translate('signatureDialogNote'):translate('signatureDialogNote');$('#signatureSaveCheckbox').checked=false;$('#signatureImagePreview').hidden=true;$('#signatureImagePreview').removeAttribute('src');$('#signatureImagePlaceholder').hidden=false;$('#signatureImageInput').value='';setSignatureMode('draw');signatureDialog.showModal();requestAnimationFrame(()=>prepareSignatureCanvas());await refreshSavedAsset();}
-      function closeSignatureDialog(){if(signatureDialog.open)signatureDialog.close();signatureDrawing.pointerId=null;signatureUi.targetField=null;}
+      async function refreshSavedAsset(){const generation=ui.signatureGeneration,kind=signatureUi.kind;const saved=await readSavedAsset(kind);if(generation!==ui.signatureGeneration||kind!==signatureUi.kind)return;signatureUi.saved=saved;$('#signatureSavedActions').hidden=!saved;}
+      async function openSignatureDialog(kind='signature',targetField=null){if(!state.pdf||ui.assetBusy)return;ui.signatureGeneration++;ui.signatureImageGeneration++;signatureUi.kind=kind;signatureUi.targetField=targetField;signatureUi.image=null;signatureUi.saved=null;state.selectedId=null;setTool('select');renderOverlays();renderInspector();$('#signatureDialogTitle').textContent=translate(kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=targetField?translate('formSignature')+' · '+translate('signatureDialogNote'):translate('signatureDialogNote');$('#signatureSaveCheckbox').checked=false;$('#signatureImagePreview').hidden=true;$('#signatureImagePreview').removeAttribute('src');$('#signatureImagePlaceholder').hidden=false;$('#signatureImageInput').value='';setSignatureMode('draw');signatureDialog.showModal();requestAnimationFrame(()=>prepareSignatureCanvas());await refreshSavedAsset();}
+      function closeSignatureDialog(){ui.signatureGeneration++;ui.signatureImageGeneration++;if(signatureDialog.open)signatureDialog.close();signatureDrawing.pointerId=null;signatureUi.targetField=null;}
       signatureCanvas.addEventListener('pointerdown',beginSignatureStroke);signatureCanvas.addEventListener('pointermove',continueSignatureStroke);signatureCanvas.addEventListener('pointerup',finishSignatureStroke);signatureCanvas.addEventListener('pointercancel',finishSignatureStroke);
       $('#signatureButton').addEventListener('click',()=>openSignatureDialog('signature'));$('#initialsButton').addEventListener('click',()=>openSignatureDialog('initials'));$('#imageButton').addEventListener('click',()=>$('#imageInput').click());
-      $('#imageInput').addEventListener('change',async event=>{const file=event.target.files?.[0];event.target.value='';if(!file)return;try{const data=await normalizeImageFile(file);if(!placeImageOverlay(data,'image',.30))AppToast.show({message:translate('pageNotReady'),tone:'warning'});}catch{AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});}});
+      async function addImageFile(file){if(!file||!state.pdf||state.exporting)return;const pdf=state.pdf,generation=state.generation,request=++ui.imageGeneration;try{const data=await normalizeImageFile(file);if(request!==ui.imageGeneration||pdf!==state.pdf||generation!==state.generation)return;if(!placeImageOverlay(data,'image',.30)){setUiFailure('image','pageNotReady');return;}setUiFailure('image','');}catch{if(request===ui.imageGeneration&&pdf===state.pdf&&generation===state.generation)setUiFailure('image','invalidImage');}}
+      $('#imageInput').addEventListener('change',event=>{const file=event.target.files?.[0];event.target.value='';void addImageFile(file);});
       $('#signatureDrawTab').addEventListener('click',()=>setSignatureMode('draw'));$('#signatureImageTab').addEventListener('click',()=>setSignatureMode('image'));$('#signatureImageChooseButton').addEventListener('click',()=>$('#signatureImageInput').click());$('#signatureImageInput').addEventListener('change',event=>{const file=event.target.files?.[0];if(file)loadSignatureImage(file);});
-      $('#signatureCloseButton').addEventListener('click',closeSignatureDialog);$('#signatureCancelButton').addEventListener('click',closeSignatureDialog);$('#signatureClearButton').addEventListener('click',clearSignatureCanvas);
-      $('#signatureUseSavedButton').addEventListener('click',()=>{if(!signatureUi.saved)return;if(placeImageOverlay(signatureUi.saved,signatureUi.kind,signatureUi.kind==='initials'?.18:.34,signatureUi.targetField))closeSignatureDialog();});
-      $('#signatureDeleteSavedButton').addEventListener('click',async()=>{await deleteSavedAsset(signatureUi.kind);signatureUi.saved=null;$('#signatureSavedActions').hidden=true;AppToast.show({message:translate('savedDeleted')});});
-      $('#signatureUseButton').addEventListener('click',async()=>{const data=currentSignatureData();if(!data){AppToast.show({message:translate('signatureEmpty'),tone:'warning'});return;}if(!placeImageOverlay(data,signatureUi.kind,signatureUi.kind==='initials'?.18:.34,signatureUi.targetField)){AppToast.show({message:translate('pageNotReady'),tone:'warning'});return;}if($('#signatureSaveCheckbox').checked)await writeSavedAsset(signatureUi.kind,data);closeSignatureDialog();});
+      $('#signatureCloseButton').addEventListener('click',closeSignatureDialog);$('#signatureCancelButton').addEventListener('click',closeSignatureDialog);$('#signatureClearButton').addEventListener('click',confirmClearSignature);
+      $('#signatureUseSavedButton').addEventListener('click',()=>{if(ui.assetBusy||!state.pdf||!signatureUi.saved)return;if(placeImageOverlay(signatureUi.saved,signatureUi.kind,signatureUi.kind==='initials'?.18:.34,signatureUi.targetField))closeSignatureDialog();});
+      async function confirmClearSignature(){const generation=ui.signatureGeneration;if(!await AppConfirm.ask({title:translate('clearSignatureTitle'),message:translate('clearSignatureMessage'),confirmLabel:translate('signatureClear'),cancelLabel:translate('cancel'),tone:'danger'}))return;if(generation===ui.signatureGeneration&&!ui.assetBusy)clearSignatureCanvas();}
+      async function deleteCurrentSavedAsset(){if(ui.assetBusy||!signatureUi.saved)return;const generation=ui.signatureGeneration,kind=signatureUi.kind,saved=signatureUi.saved,opener=document.activeElement;if(!await AppConfirm.ask({title:translate(kind==='initials'?'deleteInitialsTitle':'deleteSignatureTitle'),message:translate('deleteAssetMessage'),confirmLabel:translate('deleteSaved'),cancelLabel:translate('cancel'),tone:'danger'}))return;if(ui.assetBusy||generation!==ui.signatureGeneration||kind!==signatureUi.kind||saved!==signatureUi.saved)return;ui.assetBusy=true;renderConventions();try{const ok=await deleteSavedAsset(kind);setUiFailure('assetDelete-'+kind,ok?'':'assetStorageFailed');if(ok&&generation===ui.signatureGeneration){signatureUi.saved=null;$('#signatureSavedActions').hidden=true;if(document.activeElement===opener||document.activeElement===document.body)$('#signatureDrawTab').focus({preventScroll:true});AppToast.show({message:translate('savedDeleted')});}}finally{ui.assetBusy=false;$('#signatureDeleteSavedButton').disabled=false;updateSignatureUseButton();}}
+      async function useCurrentSignature(){if(ui.assetBusy||!state.pdf)return;const data=currentSignatureData();if(!data)return;const generation=ui.signatureGeneration,pdf=state.pdf,pdfGeneration=state.generation,kind=signatureUi.kind,target=signatureUi.targetField,save=$('#signatureSaveCheckbox').checked;ui.assetBusy=true;renderConventions();try{if(save){const ok=await writeSavedAsset(kind,data);setUiFailure('assetWrite-'+kind,ok?'':'assetStorageFailed');if(!ok)return;}if(generation!==ui.signatureGeneration||pdf!==state.pdf||pdfGeneration!==state.generation)return;if(!placeImageOverlay(data,kind,kind==='initials'?.18:.34,target)){setUiFailure('signaturePlace','pageNotReady');return;}setUiFailure('signaturePlace','');closeSignatureDialog();}finally{ui.assetBusy=false;$('#signatureUseSavedButton').disabled=false;$('#signatureDeleteSavedButton').disabled=false;updateSignatureUseButton();}}
+      $('#signatureDeleteSavedButton').addEventListener('click',deleteCurrentSavedAsset);
+      $('#signatureUseButton').addEventListener('click',useCurrentSignature);
       signatureDialog.addEventListener('cancel',event=>{event.preventDefault();closeSignatureDialog();});signatureDialog.addEventListener('click',event=>{const rect=signatureDialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeSignatureDialog();});
 
       $('#editToolbar').addEventListener('keydown', event => {
@@ -3472,10 +3495,11 @@
         const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
         if (outside) closeExportDialog();
       });
+      $('#exportFilenameInput').addEventListener('input',()=>{ui.exportFilename=$('#exportFilenameInput').value;});
       $('#exportFilenameInput').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); runExport(); } });
       $('#exportDownloadButton').addEventListener('click', () => {
         if (state.exportSnapshotSignature !== null) {
-          markCurrentStateSaved(state.exportSnapshotSignature);
+          ui.lastDownloadSignature=state.exportSnapshotSignature;
           AppToast.show({ message: translate('saveStarted') });
         }
       });

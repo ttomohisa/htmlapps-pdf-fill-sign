@@ -169,3 +169,5 @@ For source-level regressions, run `node --test tests/*.test.cjs`. The repository
 Keep signature and PDF export dialog content scrollable on short desktop and phone windows, without moving the close header.
 
 Modal dialogs keep the background document stationary until closed.
+
+Common UI v1 supersedes earlier download-as-saved-baseline criteria: PDF edits stay in this tab only, with visible retention. Anchor download reports its start and keeps the conservative unload/discard warning because device completion is unconfirmed. Optional signature/initial storage succeeds only after transaction commit; failed save/delete retains input/saved data for retry. Stored-asset deletion and signature-input clear require scoped Cancel-first confirmation. Language switches retain drafts and pending operations.

@@ -330,6 +330,8 @@ $manifest = [ordered]@{
 
 Write-Step "Generating standalone HTML"
 $template = [System.IO.File]::ReadAllText($TemplatePath, [System.Text.Encoding]::UTF8)
+. (Join-Path $Root "scripts/embed-ui-conventions.ps1")
+$template = Expand-BrowserKittyUI -Template $template -ComponentsPath (Join-Path $Root "components")
 $assetBundleJson = ConvertTo-SafeJson $assetBundle 50
 $replacements = [ordered]@{
   "__APP_CONFIG_JSON__" = ConvertTo-SafeJson $appConfig 20
@@ -452,6 +454,9 @@ if ($appConfig.build.PSObject.Properties.Name -contains "sizeBudget" -and $appCo
 }
 
 $outputHash = Get-Sha256FileHex $OutputPath
+if (-not $OutputPathWasSpecified) {
+  Copy-Item -LiteralPath $OutputPath -Destination (Join-Path $Root "pdf-fill-sign.html") -Force
+}
 $outputSizeMb = [Math]::Round($readableBytes / 1MB, 2)
 Write-Host ""
 Write-Host "[OK] Standalone HTML: $OutputPath" -ForegroundColor Green

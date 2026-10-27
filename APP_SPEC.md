@@ -946,3 +946,5 @@ Do not delay v1.0 only because additional optional features could still be added
 - Check native desktop and narrow/short CSS viewports in Japanese and English; report physical phone/Safari/on-screen keyboard coverage separately.
 
 - Modal dialogs lock document scrolling without changing the current page position; internal dialog scrolling remains available.
+
+Common UI v1 supersedes earlier download-as-saved-baseline criteria: PDF edits stay in this tab only, with visible retention. Anchor download reports its start and keeps the conservative unload/discard warning because device completion is unconfirmed. Optional signature/initial storage succeeds only after transaction commit; failed save/delete retains input/saved data for retry. Stored-asset deletion and signature-input clear require scoped Cancel-first confirmation. Language switches retain drafts and pending operations.
