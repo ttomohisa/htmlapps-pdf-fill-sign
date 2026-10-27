@@ -948,3 +948,7 @@ Do not delay v1.0 only because additional optional features could still be added
 - Modal dialogs lock document scrolling without changing the current page position; internal dialog scrolling remains available.
 
 Common UI v1 supersedes earlier download-as-saved-baseline criteria: PDF edits stay in this tab only, with visible retention. Anchor download reports its start and keeps the conservative unload/discard warning because device completion is unconfirmed. Optional signature/initial storage succeeds only after transaction commit; failed save/delete retains input/saved data for retry. Stored-asset deletion and signature-input clear require scoped Cancel-first confirmation. Language switches retain drafts and pending operations.
+
+During an optional signature save, new canvas strokes are unavailable until the owned storage transaction finishes, so accepted ink cannot be silently discarded. A failed export Blob/URL allocation retains all prior output fields until a complete new result can replace them. A focused deletion Undo notice translates its text and action without replacing the callback or restarting expiry.
+
+While regenerating or after a retryable export failure, the previously completed PDF remains downloadable with a localized Previous result label beside the current progress/error. Only a successful replacement updates its URL/name.

@@ -358,3 +358,9 @@ All notable changes to PDF Fill & Sign are documented here.
 - Completed PDF export.
 
 Common UI v1 supersedes earlier download-as-saved-baseline criteria: PDF edits stay in this tab only, with visible retention. Anchor download reports its start and keeps the conservative unload/discard warning because device completion is unconfirmed. Optional signature/initial storage succeeds only after transaction commit; failed save/delete retains input/saved data for retry. Stored-asset deletion and signature-input clear require scoped Cancel-first confirmation. Language switches retain drafts and pending operations.
+
+## Unreleased — common UI review follow-up
+
+- Lock signature drawing during an optional saved-asset transaction; retain input on failure.
+- Allocate completed-PDF replacements before revoking the previous successful output.
+- Translate active Undo notices without losing keyboard focus, callback, or paused expiry.

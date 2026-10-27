@@ -27,7 +27,7 @@ function setup({type='text',rotation=0,scale=1}={}) {
     if(!nodes.has(id)) nodes.set(id,{value:'',hidden:false,disabled:false,style:{},listeners:{},classList:{add(){},remove(){},toggle(){}},addEventListener(type,fn){this.listeners[type]=fn;},focus(){context.document.activeElement=this;},querySelectorAll(){return[];},setAttribute(){}});
     return nodes.get(id);
   };
-  context=vm.createContext({renderConventions(){},setUiFailure(){},state,crypto:{randomUUID:()=>`copy-${++id}`},requestAnimationFrame:fn=>fn(),document:{querySelector:()=>null,activeElement:null},CSS:{escape:x=>x},$:node,
+  context=vm.createContext({ui:{},renderConventions(){},setUiFailure(){},state,crypto:{randomUUID:()=>`copy-${++id}`},requestAnimationFrame:fn=>fn(),document:{querySelector:()=>null,activeElement:null},CSS:{escape:x=>x},$:node,
     setTool:()=>{},renderOverlays:()=>{},renderInspector:()=>{},renderFormLayer:()=>{},syncAllFormStorage:()=>{},updateRequiredWarning:()=>{},updateHistoryButtons:()=>{},updateSaveState:()=>{},updateMobileUi:()=>{},translate:x=>x,overlayTypeLabel:x=>x.type,
     AppToast:{show(){}},renderCurrentPage:async()=>{state.viewport=viewport(90,.65,781,432);},setScale:scale=>{state.scale=scale;}});
   load(context,['sameFormValue','cloneFormValue','cloneOverlayItem','cloneEditState','editStateSignature','pushHistory','restoreEditState','commitMutation','undoEdit','redoEdit','selectedOverlay','positionableSelection','newOverlayId','viewportRectFromPdfRect','pdfRectFromViewportRect','duplicateSelected','moveSelectedBy','deleteSelected','goPage']);

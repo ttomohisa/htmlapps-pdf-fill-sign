@@ -1512,7 +1512,7 @@
 
       Object.assign(translations.ja,{deleteSignatureTitle:'保存済み署名を削除しますか？',deleteInitialsTitle:'保存済みイニシャルを削除しますか？',retentionScope:'PDFの編集内容はこのタブだけに保持します。自動保存されません。完成したPDFを保存してください。任意に保存した署名・イニシャルだけをこのブラウザーに保持します。',exportScope:'全ページと現在の編集内容を新しいPDFに作成します。元PDFは変更しません。',assetStorageFailed:'署名データをこのブラウザーに保存・削除できませんでした。入力は残っています。同じ操作を再試行してください。',assetReadFailed:'保存済み署名を読み込めませんでした。署名ダイアログを開き直して再試行してください。',deleteAssetTitle:'保存済み署名データを削除しますか？',deleteAssetMessage:'このブラウザーの選択した署名またはイニシャル1件を削除します。元に戻せません。PDF上の項目と言語設定は残ります。',clearSignatureTitle:'署名の入力をクリアしますか？',clearSignatureMessage:'このダイアログで入力した手書き・画像を消去します。PDF上と保存済みの署名は残ります。',signatureClear:'署名の入力をクリア',exportWait:'処理完了までお待ちください。',saveOnDevice:'署名をこのブラウザーに保存',savedState:'この版の保存を開始しました'});
       Object.assign(translations.en,{deleteSignatureTitle:'Delete the saved signature?',deleteInitialsTitle:'Delete the saved initials?',retentionScope:'PDF edits stay in this tab only and are not autosaved. Save the completed PDF. Only optionally saved signatures/initials are retained in this browser.',exportScope:'Create a new PDF with all pages and current edits. The original PDF is unchanged.',assetStorageFailed:'Could not save/delete signature data in this browser. Your input remains. Retry the same action.',assetReadFailed:'Could not read saved signatures. Reopen the signature dialog to retry.',deleteAssetTitle:'Delete the saved signature data?',deleteAssetMessage:'Delete the selected saved signature or initials from this browser. This cannot be undone. Items on the PDF and language preference remain.',clearSignatureTitle:'Clear signature input?',clearSignatureMessage:'Clear the drawing/image entered in this dialog. Items on the PDF and saved signatures remain.',signatureClear:'Clear signature input',exportWait:'Please wait for processing to finish.',saveOnDevice:'Save signature in this browser',savedState:'Download started for this version'});
-      function renderConventions(){BrowserKittyUI.setSaveStatus($('#retentionStatus'),{mode:'session',language});$('#retentionScope').textContent=translate('retentionScope');$('#languageNotice').textContent=ui.languageNotice?BrowserKittyUI.text('languageSessionOnly',language):'';$('#failureNotice').textContent=Object.values(ui.errors).filter(Boolean).map(translate).join(' ');$('#exportScope').textContent=translate('exportScope');if(ui.exportErrorKey)$('#exportErrorMessage').textContent=translate(ui.exportErrorKey);if($('#signatureDialog').open){$('#signatureDialogTitle').textContent=translate(signatureUi.kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=(signatureUi.targetField?translate('formSignature')+' · ':'')+translate('signatureDialogNote');}BrowserKittyUI.setButtonState($('#exportPdfButton'),state.exporting?'busy':state.pdf&&!state.opening?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportCreateButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportRetryButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#signatureUseButton'),ui.assetBusy?'busy':(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image)?'ready':'unavailable');for(const id of ['signatureUseSavedButton','signatureDeleteSavedButton'])BrowserKittyUI.setButtonState($('#'+id),ui.assetBusy?'busy':signatureUi.saved?'ready':'unavailable');for(const id of ['signatureDrawTab','signatureImageTab','signatureImageChooseButton','signatureImageInput','signatureClearButton','signatureSaveCheckbox'])$('#'+id).disabled=ui.assetBusy;if(state.exportUrl&&state.exportSnapshotSignature!==editStateSignature())$('#exportResultMeta').textContent=BrowserKittyUI.text('previousResult',language);}
+      function renderConventions(){BrowserKittyUI.setSaveStatus($('#retentionStatus'),{mode:'session',language});$('#retentionScope').textContent=translate('retentionScope');$('#languageNotice').textContent=ui.languageNotice?BrowserKittyUI.text('languageSessionOnly',language):'';$('#failureNotice').textContent=Object.values(ui.errors).filter(Boolean).map(translate).join(' ');$('#exportScope').textContent=translate('exportScope');if(ui.exportErrorKey)$('#exportErrorMessage').textContent=translate(ui.exportErrorKey);if($('#signatureDialog').open){$('#signatureDialogTitle').textContent=translate(signatureUi.kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=(signatureUi.targetField?translate('formSignature')+' · ':'')+translate('signatureDialogNote');}BrowserKittyUI.setButtonState($('#exportPdfButton'),state.exporting?'busy':state.pdf&&!state.opening?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportCreateButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#exportRetryButton'),state.exporting?'busy':state.pdf?'ready':'unavailable');BrowserKittyUI.setButtonState($('#signatureUseButton'),ui.assetBusy?'busy':(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image)?'ready':'unavailable');for(const id of ['signatureUseSavedButton','signatureDeleteSavedButton'])BrowserKittyUI.setButtonState($('#'+id),ui.assetBusy?'busy':signatureUi.saved?'ready':'unavailable');for(const id of ['signatureDrawTab','signatureImageTab','signatureImageChooseButton','signatureImageInput','signatureClearButton','signatureSaveCheckbox'])$('#'+id).disabled=ui.assetBusy;if(state.exportUrl&&(ui.previousExport||state.exportSnapshotSignature!==editStateSignature()))$('#exportResultMeta').textContent=BrowserKittyUI.text('previousResult',language);}
       function setUiFailure(domain,key){if(key)ui.errors[domain]=key;else delete ui.errors[domain];renderConventions();}
       // Reusable Promise-based confirmation API. Canonical source: components/confirm-dialog.html.
       const AppConfirm = (() => {
@@ -1578,21 +1578,23 @@
         const action = $('#appToastAction');
         let timer = 0;
         let actionHandler = null;
+        let currentMessage = '', currentAction = '', currentMessageKey = '', currentActionKey = '';
+        function refresh() { message.textContent = currentMessageKey ? translate(currentMessageKey) : currentMessage; action.textContent = currentActionKey ? translate(currentActionKey) : currentAction; }
         function dismiss() { clearTimeout(timer); timer = 0; root.classList.remove('show'); actionHandler = null; }
-        function show({ message: text = '', actionLabel = '', onAction = null, duration = 3200, tone = 'default' } = {}) {
+        function show({ message: text = '', messageKey = '', actionLabel = '', actionKey = '', onAction = null, duration = 3200, tone = 'default' } = {}) {
           clearTimeout(timer);
-          message.textContent = String(text);
+          currentMessage = String(text); currentAction = actionLabel || ''; currentMessageKey = messageKey; currentActionKey = actionKey;
+          refresh();
           root.dataset.tone = tone;
           actionHandler = typeof onAction === 'function' ? onAction : null;
-          action.textContent = actionLabel || '';
-          action.hidden = !actionHandler || !actionLabel;
+          action.hidden = !actionHandler || !(actionLabel || actionKey);
           root.classList.add('show');
           if (duration > 0) timer = window.setTimeout(dismiss, duration);
           return Object.freeze({ dismiss });
         }
         root.addEventListener('focusin',()=>{clearTimeout(timer);timer=0;});root.addEventListener('focusout',()=>{if(actionHandler)timer=window.setTimeout(dismiss,3200);});
         action.addEventListener('click', () => { const handler = actionHandler; dismiss(); if (handler) handler(); });
-        return Object.freeze({ show, dismiss });
+        return Object.freeze({ show, dismiss, refresh });
       })();
       window.AppToast = AppToast;
 
@@ -1609,7 +1611,7 @@
         $('#footerName').textContent = language === 'ja' ? APP_CONFIG.nameJa : APP_CONFIG.name;
         if (state.pdf) { updateMeta(); renderInspector(); renderOverlays(); renderFormLayer(); updateFormNotice(); }
         for(const draft of drafts){const el=draft.id?document.getElementById(draft.id):document.querySelector('[data-form-id="'+CSS.escape(draft.formId||'')+'"]');if(!el)continue;el.value=draft.value;el.checked=draft.checked;if(draft.el===active){el.focus({preventScroll:true});try{el.setSelectionRange(draft.start,draft.end)}catch{}}}
-        AppConfirm.refresh();renderConventions();
+        AppConfirm.refresh();AppToast.refresh();renderConventions();
       }
 
       $('#languageButton').addEventListener('click', () => {
@@ -1787,8 +1789,8 @@
       async function openFile(file) {
         if (!file || state.exporting) return;
         const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-        if (!isPdf) { setUiFailure('open','invalid');AppToast.show({ message: translate('invalid'), duration: 5000, tone: 'warning' }); return; }
-        if (file.size > MAX_BYTES) { setUiFailure('open','tooLarge');AppToast.show({ message: translate('tooLarge'), duration: 5000, tone: 'warning' }); return; }
+        if (!isPdf) { setUiFailure('open','invalid');AppToast.show({ message: translate('invalid'), messageKey: 'invalid', duration: 5000, tone: 'warning' }); return; }
+        if (file.size > MAX_BYTES) { setUiFailure('open','tooLarge');AppToast.show({ message: translate('tooLarge'), messageKey: 'tooLarge', duration: 5000, tone: 'warning' }); return; }
 
         const previousPdf = state.pdf;
         if (previousPdf && hasUnsavedChanges()) {
@@ -1853,9 +1855,9 @@
           updateMeta();
           buildThumbnails(generation);
           await renderCurrentPage(generation);
-          if (pdf.isPureXfa) AppToast.show({ message: translate('xfaUnsupported'), duration: 7000, tone: 'warning' });
+          if (pdf.isPureXfa) AppToast.show({ message: translate('xfaUnsupported'), messageKey: 'xfaUnsupported', duration: 7000, tone: 'warning' });
           else void startFormScan(generation);
-          if (pdf.numPages > 200) AppToast.show({ message: translate('manyPages'), duration: 5000 });
+          if (pdf.numPages > 200) AppToast.show({ message: translate('manyPages'), messageKey: 'manyPages', duration: 5000 });
         } catch (error) {
           console.error(error);
           if (requestId !== state.openRequestId) return;
@@ -2840,11 +2842,14 @@
           const bytes = await pdf.saveDocument();
           if (pdf !== state.pdf || generation !== state.generation) throw new Error('EXPORT_STALE');
           if (!(bytes instanceof Uint8Array) || bytes.length < 5) throw new Error('Empty PDF output.');
+          // Allocate the complete replacement before releasing the last valid output.
+          const nextName = sanitizeExportFilename(filename);
+          const nextUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
           revokeExportResult();
           state.exportBytes = bytes;
           state.exportSnapshotSignature = exportSignature;
-          state.exportName = sanitizeExportFilename(filename);
-          state.exportUrl = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+          state.exportName = nextName;
+          state.exportUrl = nextUrl;
           return bytes;
         } finally {
           for (const { key, value } of entries) { storage.remove(key); value.bitmap?.close?.(); }
@@ -2855,7 +2860,9 @@
         updatePositionButtons();
         $('#exportSetup').hidden = view !== 'setup';
         $('#exportProgress').hidden = view !== 'progress';
-        $('#exportResult').hidden = view !== 'result';
+        ui.previousExport = Boolean(view !== 'result' && state.exportUrl);
+        $('#exportResult').hidden = view !== 'result' && !ui.previousExport;
+        if (ui.previousExport) $('#exportResultMeta').textContent = BrowserKittyUI.text('previousResult', language);
         $('#exportError').hidden = view !== 'error';
         const busy = view === 'progress';
         $('#exportCloseButton').disabled = busy;
@@ -3242,7 +3249,7 @@
           state.overlays = state.overlays.filter(candidate => candidate.id !== item.id);
           state.selectedId = null;
         });
-        if (toast) AppToast.show({ message: translate('deleted'), actionLabel: translate('undo'), onAction: undoEdit });
+        if (toast) AppToast.show({ message: translate('deleted'), messageKey: 'deleted', actionLabel: translate('undo'), actionKey: 'undo', onAction: undoEdit });
       }
       function moveSelectedBy(dxPixels, dyPixels) {
         const item = positionableSelection();
@@ -3352,13 +3359,13 @@
       function prepareSignatureCanvas() { const rect = signatureCanvas.getBoundingClientRect(); const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1)); signatureDrawing.dpr = dpr; signatureCanvas.width = Math.max(1, Math.round(rect.width * dpr)); signatureCanvas.height = Math.max(1, Math.round(rect.height * dpr)); signatureContext.setTransform(dpr, 0, 0, dpr, 0, 0); signatureContext.lineCap = 'round'; signatureContext.lineJoin = 'round'; signatureContext.clearRect(0, 0, rect.width, rect.height); signatureDrawing.pointerId = null; signatureDrawing.hasInk = false; signatureDrawing.strokes = []; signatureDrawing.activeStroke = null; updateSignatureUseButton(); }
       function clearSignatureCanvas() { ui.signatureImageGeneration++;const rect = signatureCanvas.getBoundingClientRect(); signatureContext.save(); signatureContext.setTransform(signatureDrawing.dpr,0,0,signatureDrawing.dpr,0,0); signatureContext.clearRect(0,0,rect.width,rect.height); signatureContext.restore(); signatureDrawing.pointerId=null; signatureDrawing.hasInk=false; signatureDrawing.strokes=[]; signatureDrawing.activeStroke=null; if (signatureUi.mode==='image') { signatureUi.image=null; $('#signatureImagePreview').hidden=true; $('#signatureImagePreview').removeAttribute('src'); $('#signatureImagePlaceholder').hidden=false; $('#signatureImageInput').value=''; } updateSignatureUseButton(); }
       function signaturePoint(event) { const rect=signatureCanvas.getBoundingClientRect(); return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
-      function beginSignatureStroke(event) { if (signatureDrawing.pointerId!==null || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); signatureDrawing.pointerId=event.pointerId; signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.activeStroke=[point]; signatureDrawing.strokes.push(signatureDrawing.activeStroke); signatureCanvas.setPointerCapture?.(event.pointerId); }
-      function continueSignatureStroke(event) { if (signatureDrawing.pointerId!==event.pointerId || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); const pressure=event.pointerType==='pen'&&event.pressure>0?event.pressure:.5; signatureContext.strokeStyle=selectedSignatureColor(); signatureContext.lineWidth=2+pressure*1.4; signatureContext.beginPath(); signatureContext.moveTo(signatureDrawing.lastX,signatureDrawing.lastY); signatureContext.lineTo(point.x,point.y); signatureContext.stroke(); signatureDrawing.activeStroke?.push(point); signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.hasInk=true; updateSignatureUseButton(); }
+      function beginSignatureStroke(event) { if (ui.assetBusy) return; if (signatureDrawing.pointerId!==null || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); signatureDrawing.pointerId=event.pointerId; signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.activeStroke=[point]; signatureDrawing.strokes.push(signatureDrawing.activeStroke); signatureCanvas.setPointerCapture?.(event.pointerId); }
+      function continueSignatureStroke(event) { if (ui.assetBusy) return; if (signatureDrawing.pointerId!==event.pointerId || signatureUi.mode!=='draw') return; event.preventDefault(); const point=signaturePoint(event); const pressure=event.pointerType==='pen'&&event.pressure>0?event.pressure:.5; signatureContext.strokeStyle=selectedSignatureColor(); signatureContext.lineWidth=2+pressure*1.4; signatureContext.beginPath(); signatureContext.moveTo(signatureDrawing.lastX,signatureDrawing.lastY); signatureContext.lineTo(point.x,point.y); signatureContext.stroke(); signatureDrawing.activeStroke?.push(point); signatureDrawing.lastX=point.x; signatureDrawing.lastY=point.y; signatureDrawing.hasInk=true; updateSignatureUseButton(); }
       function finishSignatureStroke(event) { if (signatureDrawing.pointerId!==event.pointerId) return; signatureDrawing.pointerId=null; if (signatureDrawing.activeStroke?.length<2) signatureDrawing.strokes.pop(); signatureDrawing.activeStroke=null; try { signatureCanvas.releasePointerCapture?.(event.pointerId); } catch {} }
       function trimmedSignatureData() { if (!signatureDrawing.hasInk) return null; const width=signatureCanvas.width,height=signatureCanvas.height,pixels=signatureContext.getImageData(0,0,width,height).data; let minX=width,minY=height,maxX=-1,maxY=-1; for(let y=0;y<height;y+=1) for(let x=0;x<width;x+=1){const alpha=pixels[(y*width+x)*4+3]; if(alpha<=8)continue; minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);} if(maxX<minX||maxY<minY)return null; const padding=Math.max(3,Math.round(6*signatureDrawing.dpr)),sx=Math.max(0,minX-padding),sy=Math.max(0,minY-padding),sw=Math.min(width-sx,maxX-minX+1+padding*2),sh=Math.min(height-sy,maxY-minY+1+padding*2); const trimmed=document.createElement('canvas'); trimmed.width=sw;trimmed.height=sh;trimmed.getContext('2d').drawImage(signatureCanvas,sx,sy,sw,sh,0,0,sw,sh); const cropX=sx/signatureDrawing.dpr,cropY=sy/signatureDrawing.dpr,cropWidth=Math.max(1,sw/signatureDrawing.dpr),cropHeight=Math.max(1,sh/signatureDrawing.dpr); const vectorStrokes=signatureDrawing.strokes.filter(stroke=>stroke.length>1).map(stroke=>stroke.map(point=>({x:Math.max(0,Math.min(1,(point.x-cropX)/cropWidth)),y:Math.max(0,Math.min(1,(point.y-cropY)/cropHeight))}))); return {imageData:trimmed.toDataURL('image/png'),width:sw,height:sh,vectorStrokes,vectorColor:selectedSignatureColor(),vectorThicknessRatio:Math.max(.004,Math.min(.12,2.7/Math.max(1,Math.min(cropWidth,cropHeight))))}; }
       function loadImageElement(src) { return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src;}); }
       async function normalizeImageFile(file) { const allowed=['image/png','image/jpeg','image/webp']; if(!file||!allowed.includes(file.type))throw new Error('unsupported image'); const url=URL.createObjectURL(file); try{const image=await loadImageElement(url); const scale=Math.min(1,IMAGE_MAX_DIMENSION/Math.max(image.naturalWidth,image.naturalHeight)); const width=Math.max(1,Math.round(image.naturalWidth*scale)),height=Math.max(1,Math.round(image.naturalHeight*scale)); const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;canvas.getContext('2d').drawImage(image,0,0,width,height); return {imageData:canvas.toDataURL('image/png'),width,height};}finally{URL.revokeObjectURL(url);} }
-      async function loadSignatureImage(file) { const generation=++ui.signatureImageGeneration,session=ui.signatureGeneration;try{const image=await normalizeImageFile(file);if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;signatureUi.image=image;setUiFailure('signatureImage','');$('#signatureImagePreview').src=signatureUi.image.imageData;$('#signatureImagePreview').hidden=false;$('#signatureImagePlaceholder').hidden=true;updateSignatureUseButton();}catch{if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;setUiFailure('signatureImage','invalidImage');updateSignatureUseButton();AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});} }
+      async function loadSignatureImage(file) { const generation=++ui.signatureImageGeneration,session=ui.signatureGeneration;try{const image=await normalizeImageFile(file);if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;signatureUi.image=image;setUiFailure('signatureImage','');$('#signatureImagePreview').src=signatureUi.image.imageData;$('#signatureImagePreview').hidden=false;$('#signatureImagePlaceholder').hidden=true;updateSignatureUseButton();}catch{if(generation!==ui.signatureImageGeneration||session!==ui.signatureGeneration)return;setUiFailure('signatureImage','invalidImage');updateSignatureUseButton();AppToast.show({message:translate('invalidImage'), messageKey: 'invalidImage',tone:'warning',duration:5000});} }
       function setSignatureMode(mode) { signatureUi.mode=mode; $('#signatureDrawTab').classList.toggle('active',mode==='draw');$('#signatureImageTab').classList.toggle('active',mode==='image');$('#signatureDrawTab').setAttribute('aria-selected',mode==='draw'?'true':'false');$('#signatureImageTab').setAttribute('aria-selected',mode==='image'?'true':'false');$('#signatureDrawPanel').hidden=mode!=='draw';$('#signatureImagePanel').hidden=mode!=='image';updateSignatureUseButton(); }
       function currentSignatureData(){return signatureUi.mode==='draw'?trimmedSignatureData():signatureUi.image;}
       function updateSignatureUseButton(){ $('#signatureUseButton').disabled=ui.assetBusy||!(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image);renderConventions(); }
@@ -3374,7 +3381,7 @@
       $('#signatureCloseButton').addEventListener('click',closeSignatureDialog);$('#signatureCancelButton').addEventListener('click',closeSignatureDialog);$('#signatureClearButton').addEventListener('click',confirmClearSignature);
       $('#signatureUseSavedButton').addEventListener('click',()=>{if(ui.assetBusy||!state.pdf||!signatureUi.saved)return;if(placeImageOverlay(signatureUi.saved,signatureUi.kind,signatureUi.kind==='initials'?.18:.34,signatureUi.targetField))closeSignatureDialog();});
       async function confirmClearSignature(){const generation=ui.signatureGeneration;if(!await AppConfirm.ask({title:translate('clearSignatureTitle'),message:translate('clearSignatureMessage'),confirmLabel:translate('signatureClear'),cancelLabel:translate('cancel'),tone:'danger'}))return;if(generation===ui.signatureGeneration&&!ui.assetBusy)clearSignatureCanvas();}
-      async function deleteCurrentSavedAsset(){if(ui.assetBusy||!signatureUi.saved)return;const generation=ui.signatureGeneration,kind=signatureUi.kind,saved=signatureUi.saved,opener=document.activeElement;if(!await AppConfirm.ask({title:translate(kind==='initials'?'deleteInitialsTitle':'deleteSignatureTitle'),message:translate('deleteAssetMessage'),confirmLabel:translate('deleteSaved'),cancelLabel:translate('cancel'),tone:'danger'}))return;if(ui.assetBusy||generation!==ui.signatureGeneration||kind!==signatureUi.kind||saved!==signatureUi.saved)return;ui.assetBusy=true;renderConventions();try{const ok=await deleteSavedAsset(kind);setUiFailure('assetDelete-'+kind,ok?'':'assetStorageFailed');if(ok&&generation===ui.signatureGeneration){signatureUi.saved=null;$('#signatureSavedActions').hidden=true;if(document.activeElement===opener||document.activeElement===document.body)$('#signatureDrawTab').focus({preventScroll:true});AppToast.show({message:translate('savedDeleted')});}}finally{ui.assetBusy=false;$('#signatureDeleteSavedButton').disabled=false;updateSignatureUseButton();}}
+      async function deleteCurrentSavedAsset(){if(ui.assetBusy||!signatureUi.saved)return;const generation=ui.signatureGeneration,kind=signatureUi.kind,saved=signatureUi.saved,opener=document.activeElement;if(!await AppConfirm.ask({title:translate(kind==='initials'?'deleteInitialsTitle':'deleteSignatureTitle'),message:translate('deleteAssetMessage'),confirmLabel:translate('deleteSaved'),cancelLabel:translate('cancel'),tone:'danger'}))return;if(ui.assetBusy||generation!==ui.signatureGeneration||kind!==signatureUi.kind||saved!==signatureUi.saved)return;ui.assetBusy=true;renderConventions();try{const ok=await deleteSavedAsset(kind);setUiFailure('assetDelete-'+kind,ok?'':'assetStorageFailed');if(ok&&generation===ui.signatureGeneration){signatureUi.saved=null;$('#signatureSavedActions').hidden=true;if(document.activeElement===opener||document.activeElement===document.body)$('#signatureDrawTab').focus({preventScroll:true});AppToast.show({message:translate('savedDeleted'), messageKey: 'savedDeleted'});}}finally{ui.assetBusy=false;$('#signatureDeleteSavedButton').disabled=false;updateSignatureUseButton();}}
       async function useCurrentSignature(){if(ui.assetBusy||!state.pdf)return;const data=currentSignatureData();if(!data)return;const generation=ui.signatureGeneration,pdf=state.pdf,pdfGeneration=state.generation,kind=signatureUi.kind,target=signatureUi.targetField,save=$('#signatureSaveCheckbox').checked;ui.assetBusy=true;renderConventions();try{if(save){const ok=await writeSavedAsset(kind,data);setUiFailure('assetWrite-'+kind,ok?'':'assetStorageFailed');if(!ok)return;}if(generation!==ui.signatureGeneration||pdf!==state.pdf||pdfGeneration!==state.generation)return;if(!placeImageOverlay(data,kind,kind==='initials'?.18:.34,target)){setUiFailure('signaturePlace','pageNotReady');return;}setUiFailure('signaturePlace','');closeSignatureDialog();}finally{ui.assetBusy=false;$('#signatureUseSavedButton').disabled=false;$('#signatureDeleteSavedButton').disabled=false;updateSignatureUseButton();}}
       $('#signatureDeleteSavedButton').addEventListener('click',deleteCurrentSavedAsset);
       $('#signatureUseButton').addEventListener('click',useCurrentSignature);
@@ -3500,7 +3507,7 @@
       $('#exportDownloadButton').addEventListener('click', () => {
         if (state.exportSnapshotSignature !== null) {
           ui.lastDownloadSignature=state.exportSnapshotSignature;
-          AppToast.show({ message: translate('saveStarted') });
+          AppToast.show({ message: translate('saveStarted'), messageKey: 'saveStarted' });
         }
       });
 

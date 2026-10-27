@@ -41,7 +41,7 @@ function setup({ rotation = 0, scale = 1, userUnit = 1, viewBox = [0, 0, 500, 65
   const nodes = new Map();
   const node = id => { if (!nodes.has(id)) nodes.set(id, element()); return nodes.get(id); };
   const state = { pdf: {}, page: 1, tool: 'select', scale, formFieldsByPage: new Map(), formValues: {}, formInitialValues: {} };
-  const context = vm.createContext({ renderConventions(){},AppConfirm:{refresh(){}},state, $, document: { createElement: element, querySelector: () => null,
+  const context = vm.createContext({ renderConventions(){},AppToast:{refresh(){}},AppConfirm:{refresh(){}},state, $, document: { createElement: element, querySelector: () => null,
     querySelectorAll: () => [], documentElement: {} }, APP_CONFIG: JSON.parse(fs.readFileSync(path.join(root, 'app.config.json'))),
     language: 'ja', updateMeta() {}, renderInspector() {}, renderOverlays() {}, updateFormNotice() {},
     beginFormFieldEdit() {}, commitFormFieldEdit() {}, setFormFieldValue() {}, handleFormTab() {},
