@@ -952,3 +952,5 @@ Common UI v1 supersedes earlier download-as-saved-baseline criteria: PDF edits s
 During an optional signature save, new canvas strokes are unavailable until the owned storage transaction finishes, so accepted ink cannot be silently discarded. A failed export Blob/URL allocation retains all prior output fields until a complete new result can replace them. A focused deletion Undo notice translates its text and action without replacing the callback or restarting expiry.
 
 While regenerating or after a retryable export failure, the previously completed PDF remains downloadable with a localized Previous result label beside the current progress/error. Only a successful replacement updates its URL/name.
+
+Changing the prior PDF filename is unavailable during regeneration; its handler also rejects stale programmatic activation. The prior download stays available while the progress view owns all export mutations.

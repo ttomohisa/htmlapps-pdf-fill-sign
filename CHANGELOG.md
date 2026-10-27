@@ -8,6 +8,8 @@
 
 ## Unreleased
 
+- Keep prior PDF downloads available during regeneration and disable filename changes until export settles.
+
 - Hide the informational footer in the existing phone layout while preserving functional actions and the wider-screen footer.
 - Standardize the English local-processing badge as “Fully local processing”, preserving the Japanese label.
 
