@@ -78,7 +78,7 @@
     }
     .brand-mark img { width: 100%; height: 100%; display: block; }
     .brand-copy { min-width: 0; }
-    .brand-name {
+    .brand-name { display: flex; align-items: center;
       margin: 0;
       font-size: 17px;
       line-height: 1.2;
@@ -87,7 +87,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .version-badge {
+    #brandName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .version-badge { flex-shrink: 0;
       display: inline-flex;
       align-items: center;
       margin-left: 7px;
@@ -108,7 +109,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .header-actions { flex-shrink: 0; margin-left: auto; display: flex; align-items: center; gap: 12px; }
     .button {
       border: 1px solid var(--line);
       background: var(--surface);
@@ -1003,7 +1004,7 @@
           <img id="appBrandIcon" src="__APP_ICON_DATA_URI__" alt="">
         </div>
         <div class="brand-copy">
-          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.4</span></p>
+          <p class="brand-name"><span id="brandName">PDF記入・署名</span><span class="version-badge" id="versionBadge">v1.0.5</span></p>
           <p class="brand-meta" data-i18n="brandMeta">PDFに記入・署名して保存</p>
         </div>
       </div>
@@ -1291,7 +1292,7 @@
         <li data-i18n="helpStep2">編集ツールを選び、PDF上をクリックして文字・日付・チェックなどを追加します。選択した項目はドラッグで移動し、右下のハンドルで大きさを変更できます。「選択項目を複製」（入力中でなければCtrl/Cmd+D）で同じページにコピーできます。複製も元に戻す・やり直す操作に対応します。</li>
         <li data-i18n="helpStep3">既存の入力欄があるPDFでは、その欄へ直接入力できます。文字・署名・画像などの追加内容と合わせて「PDFを保存」から完成PDFを作成できます。</li>
       </ol>
-      <p data-i18n="helpFormView">EN / JAで表示言語を切り替えられます。入力した内容は変わりません。</p>
+      <p data-i18n="helpFormView">表示言語を変更しても、入力した内容は変わりません。</p>
       <p data-i18n="helpCentering">選択項目の「左右中央に配置」「上下中央に配置」で、表示中のページの中央に移動できます。大きさや内容は変わらず、元に戻す・やり直す操作に対応します。ページに収まらない方向の中央配置は使えません。</p>
       <h3 data-i18n="helpPrivacyTitle">プライバシー</h3>
       <p data-i18n="helpPrivacyBody">PDFはブラウザー内だけで処理され、Browser Kittyのサーバーや外部APIへ送信されません。実行時の外部通信も行いません。</p>
@@ -1421,7 +1422,7 @@
       const translations = {
         ja: {
           brandMeta: 'PDFに記入・署名して保存',
-          helpFormView: "EN / JAで表示言語を切り替えられます。入力した内容は変わりません。",
+          helpFormView: "表示言語を変更しても、入力した内容は変わりません。",
 
           helpTitle: '使い方と注意事項', close: '閉じる',
           helpBasicsTitle: '基本操作',
@@ -1462,7 +1463,7 @@
         },
         en: {
           brandMeta: 'Fill, sign & save PDFs',
-          helpFormView: "Use EN / JA to switch the interface language. Your entered values are kept.",
+          helpFormView: "Changing the interface language keeps your entered values.",
 
           helpTitle: 'How to use & notes', close: 'Close',
           helpBasicsTitle: 'Basics',
