@@ -9,7 +9,7 @@ This file is the product contract for PDF Fill & Sign. Implementation decisions 
 - **Slug:** `pdf-fill-sign`
 - **Repository:** `ttomohisa/htmlapps-pdf-fill-sign`
 - **Target release:** v1.0.1
-- **Current milestone:** v1.0.3 — Responsive dialog compatibility patch
+- **Current milestone:** v1.0.5 — Focused bilingual Help
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
 - **Primary color:** Browser Kitty `#16624F` for application UI accents. The supplied canonical app icon in `assets/favicon.svg` is used unchanged.
 

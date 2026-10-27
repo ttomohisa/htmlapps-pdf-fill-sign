@@ -48,13 +48,42 @@ async function exerciseActions(page, width, height, label) {
   await checkActions(page, width, height, label);
 }
 
+// Check rendered geometry, including clipping by an ancestor (isVisible alone misses it).
+async function auditHeader(page, label) {
+  const badge = page.locator('header #versionBadge');
+  assert.equal(await badge.textContent(), 'v' + require('../app.config.json').version, label + ': current header version');
+  assert.equal(await badge.isVisible(), true, label + ': version visible');
+  const clipped = await badge.evaluate(el => {
+    const r = el.getBoundingClientRect(), problems = [];
+    if (r.width <= 0 || r.height <= 0 || r.left < -1 || r.right > innerWidth + 1 || r.top < -1 || r.bottom > innerHeight + 1) problems.push('outside viewport');
+    if (el.scrollWidth > el.clientWidth + 1) problems.push('version text clipped');
+    for (let p = el.parentElement; p; p = p.parentElement) {
+      const s = getComputedStyle(p), b = p.getBoundingClientRect();
+      if (/hidden|clip|auto|scroll/.test(s.overflowX) && (r.left < b.left - 1 || r.right > b.right + 1)) problems.push('ancestor clips x: ' + p.className);
+      if (/hidden|clip|auto|scroll/.test(s.overflowY) && (r.top < b.top - 1 || r.bottom > b.bottom + 1)) problems.push('ancestor clips y: ' + p.className);
+    }
+    return problems;
+  });
+  assert.deepEqual(clipped, [], label + ': complete header version remains readable');
+  const help = page.locator('#helpButton svg');
+  assert.equal(await help.isVisible(), true, label + ': Help icon visible');
+  assert.ok(await help.evaluate(svg => {
+    const paths = [...svg.querySelectorAll('path')], shape = paths.map(p => p.getAttribute('d')).join(' ');
+    return /[aAcC]/.test(shape) && paths.some(p => /[hH]\.01/.test(p.getAttribute('d')) && getComputedStyle(p).strokeLinecap === 'round') && svg.getBBox().width > 0;
+  }), label + ': question-mark curve and painted dot, not information icon');
+  const shield = page.locator('.local-badge svg');
+  if (await shield.count()) {
+    assert.ok(await shield.evaluate(svg => [...svg.querySelectorAll('path')].some(p => /^M12 3 5 6/.test(p.getAttribute('d')))), label + ': local-processing shield');
+  }
+}
+
 async function main() {
   fs.mkdirSync(artifacts, {recursive:true});
   const browser = await chromium.launch();
   try {
     const cases = [];
     for (const language of ['ja', 'en']) {
-      for (const [width, height] of [[1360,900], [PHONE_WIDTH + 1,568], [PHONE_WIDTH,568], [320,568], [393,252]]) cases.push({file:'dist/index.html', language, width, height});
+      for (const [width, height] of [[1360,900], [PHONE_WIDTH + 1,568], [PHONE_WIDTH,568], [320,568], [360,640], [390,844], [393,252]]) cases.push({file:'dist/index.html', language, width, height});
     }
     // Preserve the app's separate landscape-phone width and height boundaries.
     for (const [width,height] of [[900,500],[901,500],[900,501]]) cases.push({file:'dist/index.html',language:'en',width,height});
@@ -100,7 +129,12 @@ async function main() {
         await checkActions(page, width, height, label);
         if (file === 'dist/index.html' && [1360,320].includes(width)) await page.screenshot({path:path.join(artifacts, `${language}-${width}.png`)});
 
+        await auditHeader(page, label);
         await page.locator(HELP).click();
+        const visibleHelpText = await page.locator('#helpDialog').innerText();
+        assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
+        assert.match(visibleHelpText, language === 'ja' ? /入力した内容は変わりません/ : /keeps your entered values/i, label + ': useful adjacent Help guidance retained');
+
         const body = page.locator('#helpDialog .dialog-body');
         await body.evaluate(el => { el.scrollTop = el.scrollHeight; });
         const finalItem = page.locator('#helpDialog .dialog-body p:visible, #helpDialog .dialog-body li:visible').last();
