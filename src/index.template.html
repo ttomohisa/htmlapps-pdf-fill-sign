@@ -97,7 +97,7 @@
       border-radius: 999px;
       color: var(--muted);
       background: var(--surface-muted);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 650;
       vertical-align: 2px;
     }
@@ -187,13 +187,13 @@
       gap: 7px;
       flex: 0 0 auto;
       margin-top: 3px;
-      padding: 7px 10px;
-      border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-      border-radius: 999px;
+      padding: 7px 0;
+      border: 0;
+      border-radius: 0;
       color: var(--accent);
-      background: var(--accent-soft);
+      background: transparent;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       white-space: nowrap;
     }
     .local-badge svg { width: 15px; height: 15px; display: block; }
@@ -511,6 +511,13 @@
     .pdf-zoom-control > * + * { border-left: 1px solid var(--line); }
     .pdf-zoom-control:focus-within { border-color: var(--focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 16%, transparent); }
     .pdf-viewer-head .icon-button { width: 36px; height: 36px; }
+    .dialog-close { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 9px; background: transparent; cursor: pointer; }
+    .dialog-close svg { width: 18px; height: 18px; }
+    .file-fallback-button { display: none; }
+    @media (max-width: 767px), (pointer: coarse) and (max-height: 600px) {
+      .file-fallback-button { display: block; width: 100%; margin-top: 8px; padding: 10px; border: 0; background: transparent; color: var(--accent); font-size: 13px; font-weight: 650; min-height: 44px; cursor: pointer; }
+      .file-fallback-button.in-toolbar { display: inline-flex; align-items: center; width: auto; margin-top: 0; min-height: 40px; }
+    }
     .pdf-viewer-head .button { min-height: 36px; padding: 6px 10px; font-size: 12px; }
     .pdf-page-indicator { min-width: 66px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
     .pdf-zoom-label { min-width: 52px; padding: 0 8px; color: var(--muted); text-align: center; font: inherit; font-size: 11px; font-weight: 720; font-variant-numeric: tabular-nums; cursor: pointer; }
@@ -1043,6 +1050,7 @@
         </div>
         <input class="pdf-hidden-input" id="fileInput" type="file" accept="application/pdf,.pdf">
         <input class="pdf-hidden-image-input" id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
+        <input id="imageFileFallbackInput" type="file" hidden>
       </div>
 
       <div class="pdf-viewer" id="viewer" hidden>
@@ -1115,6 +1123,7 @@
             <button class="button pdf-tool-button" id="imageButton" type="button" data-i18n-title="toolImage" title="画像・印影">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="m6 17 4.5-4 3 2.5 2-2 2.5 3.5"/></svg><span data-i18n="toolImage">画像・印影</span>
             </button>
+            <button class="file-fallback-button in-toolbar" id="imageFileFallbackButton" type="button" data-i18n="fileFallback">ファイルから選択</button>
           </div>
           <div class="pdf-tool-group">
             <button class="icon-button pdf-history-button" id="undoButton" type="button" aria-keyshortcuts="Control+Z Meta+Z" data-i18n-title="undo" data-i18n-aria-label="undo" title="元に戻す" aria-label="元に戻す" disabled>
@@ -1187,7 +1196,7 @@
 
   </main>
 
-  <footer><span id="footerName">PDF記入・署名</span> · MIT License · <span data-i18n="footer">Generated as one self-contained HTML file</span></footer>
+  <footer><span id="footerName">PDF記入・署名</span> · MIT License · <span data-i18n="footer">記入と署名はブラウザー内で完結</span></footer>
   <div class="app-toast" id="appToast" role="status" aria-live="polite" aria-atomic="true" data-tone="default">
     <span class="app-toast-message" id="appToastMessage"></span>
     <button class="app-toast-action" id="appToastAction" type="button" hidden></button>
@@ -1249,8 +1258,9 @@
         <div class="signature-pad-shell"><canvas class="signature-pad" id="signatureCanvas" aria-label="署名入力エリア"></canvas><div class="signature-pad-hint"><span data-i18n="signaturePadHint">マウス・指・ペンで書けます</span><span data-i18n="signatureTransparent">背景は透明です</span></div></div>
       </div>
       <div class="signature-panel" id="signatureImagePanel" hidden>
-        <div class="signature-image-drop"><img class="signature-image-preview" id="signatureImagePreview" alt="" hidden><span id="signatureImagePlaceholder" data-i18n="signatureImagePrompt">PNG / JPEG / WebP の画像を選択</span><button class="button" id="signatureImageChooseButton" type="button" data-i18n="chooseImage">画像を選択</button></div>
+        <div class="signature-image-drop"><img class="signature-image-preview" id="signatureImagePreview" alt="" hidden><span id="signatureImagePlaceholder" data-i18n="signatureImagePrompt">PNG / JPEG / WebP の画像を選択</span><button class="button" id="signatureImageChooseButton" type="button" data-i18n="chooseImage">画像を選択</button><button class="file-fallback-button" id="signatureFileFallbackButton" type="button" data-i18n="fileFallback">ファイルから選択</button></div>
         <input class="pdf-hidden-image-input" id="signatureImageInput" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp">
+        <input id="signatureFileFallbackInput" type="file" hidden>
       </div>
       <div class="signature-save-row"><label><input id="signatureSaveCheckbox" type="checkbox"><span data-i18n="saveOnDevice">この端末に保存する</span></label><span data-i18n="saveOnDeviceNote">保存したデータも外部へ送信されません。</span></div>
       <div class="signature-saved-actions" id="signatureSavedActions" hidden><button class="button" id="signatureUseSavedButton" type="button" data-i18n="useSaved">保存済みを使う</button><button class="button" id="signatureDeleteSavedButton" type="button" data-i18n="deleteSaved">保存済みを削除</button></div>
@@ -1280,8 +1290,8 @@
   <dialog id="helpDialog" aria-labelledby="helpTitle">
     <div class="dialog-header">
       <h2 id="helpTitle" data-i18n="helpTitle">使い方と注意事項</h2>
-      <button class="icon-button" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+      <button class="dialog-close" id="closeHelpButton" type="button" data-i18n-title="close" data-i18n-aria-label="close" title="閉じる" aria-label="閉じる">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"/><path d="M18 6 6 18"/></svg>
       </button>
     </div>
     <div class="dialog-body">
@@ -1456,10 +1466,10 @@
           undo: '元に戻す', redo: 'やり直す', inspectorTitle: '選択項目', inspectorEmpty: 'PDF上の文字・マーク・署名・画像を選択すると、ここで内容やサイズを変更できます。',
           contentLabel: '内容', fontSizeLabel: '文字サイズ', colorLabel: '色', colorBlack: '黒', colorBlue: '青', colorRed: '赤', duplicateItem: '選択項目を複製', deleteItem: '選択項目を削除',
           typeText: '文字', typeDate: '日付', typeMark: 'マーク', typeSignature: '署名', typeInitials: 'イニシャル', typeImage: '画像・印影', defaultText: 'テキスト', deleted: '選択項目を削除しました',
-          signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', retry: 'もう一度試す',
+          signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', fileFallback: 'ファイルから選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', retry: 'もう一度試す',
           discardTitle: '編集内容を破棄しますか？', discardMessage: '現在の編集内容はまだ端末へ保存されていません。PDFを閉じるか別のPDFを開くと失われます。', discardCloseAction: '破棄して閉じる', discardReplaceAction: '破棄して開く',
           confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル',
-          footer: '完全内包HTMLとして生成'
+          footer: '記入と署名はブラウザー内で完結'
         },
         en: {
           brandMeta: 'Fill, sign & save PDFs',
@@ -1497,10 +1507,10 @@
           undo: 'Undo', redo: 'Redo', inspectorTitle: 'Selected item', inspectorEmpty: 'Select text, a mark, a signature, or an image on the PDF to adjust it here.',
           contentLabel: 'Content', fontSizeLabel: 'Font size', colorLabel: 'Color', colorBlack: 'Black', colorBlue: 'Blue', colorRed: 'Red', duplicateItem: 'Duplicate selected item', deleteItem: 'Delete selected item',
           typeText: 'Text', typeDate: 'Date', typeMark: 'Mark', typeSignature: 'Signature', typeInitials: 'Initials', typeImage: 'Image / stamp', defaultText: 'Text', deleted: 'Item deleted',
-          signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', retry: 'Try again',
+          signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', fileFallback: 'Choose from files', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', retry: 'Try again',
           discardTitle: 'Discard your edits?', discardMessage: 'The current edits have not been saved to your device. Closing this PDF or opening another one will discard them.', discardCloseAction: 'Discard and close', discardReplaceAction: 'Discard and open',
           confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel',
-          footer: 'Generated as one self-contained HTML file'
+          footer: 'Filling and signing stay in the browser'
         }
       };
       const $ = selector => document.querySelector(selector);
@@ -3350,7 +3360,10 @@
       signatureCanvas.addEventListener('pointerdown',beginSignatureStroke);signatureCanvas.addEventListener('pointermove',continueSignatureStroke);signatureCanvas.addEventListener('pointerup',finishSignatureStroke);signatureCanvas.addEventListener('pointercancel',finishSignatureStroke);
       $('#signatureButton').addEventListener('click',()=>openSignatureDialog('signature'));$('#initialsButton').addEventListener('click',()=>openSignatureDialog('initials'));$('#imageButton').addEventListener('click',()=>$('#imageInput').click());
       $('#imageInput').addEventListener('change',async event=>{const file=event.target.files?.[0];event.target.value='';if(!file)return;try{const data=await normalizeImageFile(file);if(!placeImageOverlay(data,'image',.30))AppToast.show({message:translate('pageNotReady'),tone:'warning'});}catch{AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});}});
+      $('#imageFileFallbackButton').addEventListener('click',()=>$('#imageFileFallbackInput').click());
+      $('#imageFileFallbackInput').addEventListener('change',async event=>{const file=event.target.files?.[0];event.target.value='';if(!file)return;try{const data=await normalizeImageFile(file);if(!placeImageOverlay(data,'image',.30))AppToast.show({message:translate('pageNotReady'),tone:'warning'});}catch{AppToast.show({message:translate('invalidImage'),tone:'warning',duration:5000});}});
       $('#signatureDrawTab').addEventListener('click',()=>setSignatureMode('draw'));$('#signatureImageTab').addEventListener('click',()=>setSignatureMode('image'));$('#signatureImageChooseButton').addEventListener('click',()=>$('#signatureImageInput').click());$('#signatureImageInput').addEventListener('change',event=>{const file=event.target.files?.[0];if(file)loadSignatureImage(file);});
+      $('#signatureFileFallbackButton').addEventListener('click',()=>$('#signatureFileFallbackInput').click());$('#signatureFileFallbackInput').addEventListener('change',event=>{const file=event.target.files?.[0];event.target.value='';if(file)loadSignatureImage(file);});
       $('#signatureCloseButton').addEventListener('click',closeSignatureDialog);$('#signatureCancelButton').addEventListener('click',closeSignatureDialog);$('#signatureClearButton').addEventListener('click',clearSignatureCanvas);
       $('#signatureUseSavedButton').addEventListener('click',()=>{if(!signatureUi.saved)return;if(placeImageOverlay(signatureUi.saved,signatureUi.kind,signatureUi.kind==='initials'?.18:.34,signatureUi.targetField))closeSignatureDialog();});
       $('#signatureDeleteSavedButton').addEventListener('click',async()=>{await deleteSavedAsset(signatureUi.kind);signatureUi.saved=null;$('#signatureSavedActions').hidden=true;AppToast.show({message:translate('savedDeleted')});});
