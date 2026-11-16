@@ -586,6 +586,7 @@
       box-sizing: border-box;
     }
     .pdf-form-control input[type="text"],
+    .pdf-form-control input[type="password"],
     .pdf-form-control textarea,
     .pdf-form-control select {
       width: 100%;
@@ -604,6 +605,7 @@
     .pdf-form-control textarea { resize: none; overflow: auto; }
     .pdf-form-control select[multiple] { padding: 1px 3px; }
     .pdf-form-control input[type="text"]:focus,
+    .pdf-form-control input[type="password"]:focus,
     .pdf-form-control textarea:focus,
     .pdf-form-control select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent); }
     .pdf-form-check { align-items: center; justify-content: center; }
@@ -1277,6 +1279,7 @@
       <div id="exportSetup">
         <label class="export-field"><span data-i18n="exportFilename">ファイル名</span><input id="exportFilenameInput" type="text" maxlength="180" autocomplete="off" spellcheck="false"></label>
         <p class="export-note" data-i18n="exportNote">追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。</p>
+        <p class="export-required-warning" id="existingSignatureWarning" data-i18n="existingSignatureWarning" hidden>このPDFにはデジタル署名が含まれています。編集して保存すると、署名の検証結果が無効になる場合があります。</p>
         <label class="export-option" id="flattenFormsRow" hidden><input id="flattenFormsCheckbox" type="checkbox" checked><span class="export-option-copy"><span class="export-option-title" data-i18n="flattenForms">入力内容を固定する</span><span class="export-option-note" data-i18n="flattenFormsNote">フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。</span></span></label>
         <p class="export-required-warning" id="requiredWarning" hidden></p>
         <div class="export-actions"><button class="button" id="exportCancelButton" type="button" data-i18n="cancel">キャンセル</button><button class="button primary" id="exportCreateButton" type="button" data-i18n="exportCreate">PDFを作成</button></div>
@@ -1460,13 +1463,13 @@
           invalid: 'PDFを読み込めませんでした。ファイルが破損しているか、対応していない形式の可能性があります。',
           password: 'このPDFはパスワードで保護されています。パスワード付きPDFは現在開けません。',
           memoryError: 'このPDFを表示するためのメモリが不足しました。ほかのタブを閉じるか、より小さいPDFで試してください。',
-          pages: 'ページ', manyPages: 'ページ数が多いため、表示に時間がかかる場合があります。',
+          pages: 'ページ', manyPages: 'ページ数が多いため、表示に時間がかかる場合があります。', existingSignatureWarning: 'このPDFにはデジタル署名が含まれています。編集して保存すると、署名の検証結果が無効になる場合があります。',
           formDetected: 'このPDFには入力できる欄があります。', formFieldsCount: '{count}個の入力欄', previousField: '前の入力欄', nextField: '次の入力欄', formField: '入力欄', formText: 'テキスト欄', formCheckbox: 'チェック欄', formRadio: '選択欄', formChoice: '選択リスト', formSignature: '署名欄', signatureFieldHint: '署名を追加', requiredField: '必須', requiredWarning: '未入力の必須項目が{count}件あります。保存は続行できます。', xfaUnsupported: 'このPDFはXFAフォームを使用しています。既存欄の編集には対応していませんが、文字や署名を上から追加できます。',
           editTools: '編集ツール', mobileActions: 'モバイル操作', mobileTools: 'ツール', mobilePages: 'ページ', mobileEdit: '選択項目', mobileSave: '保存', toolSelect: '選択', toolText: '文字', toolDate: '日付', toolCheck: 'チェック', toolCross: '×印', toolCircle: '○印', toolSignature: '署名', toolInitials: 'イニシャル', toolImage: '画像・印影',
           undo: '元に戻す', redo: 'やり直す', inspectorTitle: '選択項目', inspectorEmpty: 'PDF上の文字・マーク・署名・画像を選択すると、ここで内容やサイズを変更できます。',
           contentLabel: '内容', fontSizeLabel: '文字サイズ', colorLabel: '色', colorBlack: '黒', colorBlue: '青', colorRed: '赤', duplicateItem: '選択項目を複製', deleteItem: '選択項目を削除',
           typeText: '文字', typeDate: '日付', typeMark: 'マーク', typeSignature: '署名', typeInitials: 'イニシャル', typeImage: '画像・印影', defaultText: 'テキスト', deleted: '選択項目を削除しました',
-          signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', fileFallback: 'ファイルから選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', retry: 'もう一度試す',
+          signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', fileFallback: 'ファイルから選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', exportTextOverflow: 'フォームの入力内容が欄に収まりません。内容を短くするか、「入力内容を固定する」をOFFにして保存してください。', retry: 'もう一度試す',
           discardTitle: '編集内容を破棄しますか？', discardMessage: '現在の編集内容はまだ端末へ保存されていません。PDFを閉じるか別のPDFを開くと失われます。', discardCloseAction: '破棄して閉じる', discardReplaceAction: '破棄して開く',
           confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル',
           footer: '記入と署名はブラウザー内で完結'
@@ -1501,13 +1504,13 @@
           invalid: 'The PDF could not be opened. It may be damaged or use an unsupported format.',
           password: 'This PDF is password-protected. Password-protected PDFs are not currently supported.',
           memoryError: 'There is not enough memory to display this PDF. Close other tabs or try a smaller PDF.',
-          pages: 'pages', manyPages: 'This PDF has many pages, so rendering may take longer.',
+          pages: 'pages', manyPages: 'This PDF has many pages, so rendering may take longer.', existingSignatureWarning: 'This PDF contains digital signatures. Editing and saving it may invalidate signature verification.',
           formDetected: 'This PDF has fillable fields.', formFieldsCount: '{count} fillable fields', previousField: 'Previous field', nextField: 'Next field', formField: 'Form field', formText: 'Text field', formCheckbox: 'Checkbox', formRadio: 'Radio option', formChoice: 'Choice field', formSignature: 'Signature field', signatureFieldHint: 'Add signature', requiredField: 'Required', requiredWarning: '{count} required field(s) are still empty. You can continue saving.', xfaUnsupported: 'This PDF uses an XFA form. Existing fields cannot be edited here, but you can still add text or a signature on top.',
           editTools: 'Editing tools', mobileActions: 'Mobile actions', mobileTools: 'Tools', mobilePages: 'Pages', mobileEdit: 'Selected', mobileSave: 'Save', toolSelect: 'Select', toolText: 'Text', toolDate: 'Date', toolCheck: 'Check', toolCross: 'Cross', toolCircle: 'Circle', toolSignature: 'Signature', toolInitials: 'Initials', toolImage: 'Image / stamp',
           undo: 'Undo', redo: 'Redo', inspectorTitle: 'Selected item', inspectorEmpty: 'Select text, a mark, a signature, or an image on the PDF to adjust it here.',
           contentLabel: 'Content', fontSizeLabel: 'Font size', colorLabel: 'Color', colorBlack: 'Black', colorBlue: 'Blue', colorRed: 'Red', duplicateItem: 'Duplicate selected item', deleteItem: 'Delete selected item',
           typeText: 'Text', typeDate: 'Date', typeMark: 'Mark', typeSignature: 'Signature', typeInitials: 'Initials', typeImage: 'Image / stamp', defaultText: 'Text', deleted: 'Item deleted',
-          signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', fileFallback: 'Choose from files', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', retry: 'Try again',
+          signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', fileFallback: 'Choose from files', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', exportTextOverflow: 'Some form text does not fit inside its field. Shorten the text, or turn off Fix entered form content before saving.', retry: 'Try again',
           discardTitle: 'Discard your edits?', discardMessage: 'The current edits have not been saved to your device. Closing this PDF or opening another one will discard them.', discardCloseAction: 'Discard and close', discardReplaceAction: 'Discard and open',
           confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel',
           footer: 'Filling and signing stay in the browser'
@@ -1630,6 +1633,7 @@
       const state = {
         pdf: null,
         file: null,
+        hasExistingSignatures: false,
         page: 1,
         scale: 1,
         fit: true,
@@ -1751,6 +1755,7 @@
         const previous = state.pdf;
         state.pdf = null;
         state.file = null;
+        state.hasExistingSignatures = false;
         state.viewport = null;
         state.opening = false;
         state.overlays = [];
@@ -1849,6 +1854,14 @@
           updateMeta();
           buildThumbnails(generation);
           await renderCurrentPage(generation);
+          // PDF.js 6.3 exposes actual signed metadata separately from unsigned Sig widgets.
+          try {
+            const signatures = typeof pdf.getSignatures === 'function' ? await pdf.getSignatures() : null;
+            if (generation === state.generation && state.pdf === pdf && Array.isArray(signatures) && signatures.length > 0) {
+              state.hasExistingSignatures = true;
+              AppToast.show({ message: translate('existingSignatureWarning'), duration: 9000, tone: 'warning' });
+            }
+          } catch (error) { console.warn('Digital signature metadata could not be checked.', error); }
           if (pdf.isPureXfa) AppToast.show({ message: translate('xfaUnsupported'), duration: 7000, tone: 'warning' });
           else void startFormScan(generation);
           if (pdf.numPages > 200) AppToast.show({ message: translate('manyPages'), duration: 5000 });
@@ -2553,9 +2566,13 @@
       }
       function markToInkEntry(item, viewport, rotation) {
         const box = viewportRectFromPdfRectForExport(item, viewport);
-        const x = box.left, y = box.top, w = box.width, h = box.height;
+        // Match the font-size adjustment offered by the mark inspector.
+        const sizeFactor = Math.max(.1, Math.min(1.4, (Number(item.fontSize) || 23) * (viewport.scale || 1) / Math.max(1, Math.min(box.width, box.height) * (23 / 38))));
+        const x = box.left + box.width * (1 - sizeFactor) / 2;
+        const y = box.top + box.height * (1 - sizeFactor) / 2;
+        const w = box.width * sizeFactor, h = box.height * sizeFactor;
         const left = x + w * .18, right = x + w * .82, top = y + h * .18, bottom = y + h * .82;
-        const thickness = Math.max(.8, Math.min(5, Math.min(w, h) * .075));
+        const thickness = Math.max(.35, Math.min(5, Math.min(w, h) * .075));
         if (item.content === '✓') {
           const visible = [x + w * .20, y + h * .52, x + w * .42, y + h * .72, x + w * .82, y + h * .24];
           return createInkEntry(item, { points: [viewportPathToPdf(visible, viewport)], thickness, rotation });
@@ -2649,6 +2666,24 @@
         const values = Array.isArray(value) ? value : [value];
         return values.filter(item => item !== null && item !== undefined && item !== '').map(item => field.options.find(option => option.exportValue === item)?.displayValue || String(item)).join(field.multiSelect ? ', ' : '');
       }
+      // Auto-fit every line before flattening; a PDF that omits entered text is not an acceptable output.
+      function layoutFlattenedFormText(ctx, field, text, box) {
+        const paddingX = Math.max(1.5, Math.min(4, box.width * .04));
+        const paddingY = Math.max(1, Math.min(3, box.height * .08));
+        const maxWidth = Math.max(0, box.width - paddingX * 2);
+        const availableHeight = Math.max(0, box.height - paddingY * 2);
+        const maxFontSize = Math.max(5, Math.min(box.height * .62, field.fontSize || Math.min(12, box.height * .58)));
+        for (let size = maxFontSize; size >= 3.5; size -= .5) {
+          ctx.font = size + 'px ' + OVERLAY_FONT;
+          const lines = field.multiLine ? wrapExportText(ctx, text, maxWidth) : [text.replace(/[\r\n]+/g, ' ')];
+          const lineHeight = size * 1.18;
+          if (lines.length * lineHeight <= availableHeight + .001 &&
+              lines.every(line => ctx.measureText(line).width <= maxWidth + .001)) {
+            return { size, lines, lineHeight, paddingX, paddingY };
+          }
+        }
+        throw new Error('FORM_TEXT_OVERFLOW');
+      }
       async function formFieldToBitmap(field) {
         const box = formRectNormalized(field);
         const renderScale = 2;
@@ -2656,17 +2691,24 @@
         canvas.width = Math.max(2, Math.ceil(box.width * renderScale));
         canvas.height = Math.max(2, Math.ceil(box.height * renderScale));
         const ctx = canvas.getContext('2d', { alpha: true });
+        if (!ctx) throw new Error('EXPORT_UNSUPPORTED');
         ctx.scale(renderScale, renderScale);
-        const bg = cssColorFromArray(field.backgroundColor, 'rgba(255,255,255,.96)');
+        // Transparent widgets must not cover printed instructions or rules underneath.
+        if (Array.isArray(field.backgroundColor) && field.backgroundColor.length >= 3) {
+          ctx.fillStyle = cssColorFromArray(field.backgroundColor, '#fff');
+          ctx.fillRect(0, 0, box.width, box.height);
+        }
         const border = cssColorFromArray(field.borderColor, '#8f948d');
         const textColor = cssColorFromArray(field.fontColor, '#20211f');
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, box.width, box.height);
-        ctx.strokeStyle = border;
-        ctx.lineWidth = Math.max(.7, Math.min(1.4, Math.min(box.width, box.height) * .035));
-        ctx.strokeRect(ctx.lineWidth / 2, ctx.lineWidth / 2, Math.max(0, box.width - ctx.lineWidth), Math.max(0, box.height - ctx.lineWidth));
         const kind = formFieldKind(field);
         const value = currentFormValue(field);
+        const needsBorder = Array.isArray(field.borderColor) && field.borderColor.length >= 3;
+        if (needsBorder || kind === 'checkbox') {
+          ctx.strokeStyle = border;
+          ctx.lineWidth = Math.max(.7, Math.min(1.4, Math.min(box.width, box.height) * .035));
+          ctx.strokeRect(ctx.lineWidth / 2, ctx.lineWidth / 2,
+            Math.max(0, box.width - ctx.lineWidth), Math.max(0, box.height - ctx.lineWidth));
+        }
         ctx.fillStyle = textColor;
         if (kind === 'checkbox') {
           if (value) {
@@ -2693,37 +2735,28 @@
           }
           return canvasToImageBitmap(canvas);
         }
-        if (kind === 'signature') {
-          ctx.setLineDash([Math.max(2, box.width * .035), Math.max(2, box.width * .025)]);
-          ctx.strokeStyle = border;
-          ctx.strokeRect(1, 1, Math.max(0, box.width - 2), Math.max(0, box.height - 2));
-          return canvasToImageBitmap(canvas);
-        }
+        if (kind === 'signature') return canvasToImageBitmap(canvas);
         let text = kind === 'choice' ? formChoiceDisplay(field, value) : String(value ?? '');
         if (field.password && text) text = '•'.repeat(Math.min(64, Array.from(text).length));
-        const size = Math.max(5, Math.min(box.height * .62, field.fontSize || Math.min(12, box.height * .58)));
-        ctx.font = `${size}px ${OVERLAY_FONT}`;
+        if (!text) return canvasToImageBitmap(canvas);
+        const layout = layoutFlattenedFormText(ctx, { ...field, multiLine: kind === 'text' && field.multiLine }, text, box);
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        const paddingX = Math.max(1.5, Math.min(4, box.width * .04));
-        const paddingY = Math.max(1, Math.min(3, box.height * .08));
-        const maxWidth = Math.max(1, box.width - paddingX * 2);
-        const lines = kind === 'text' && field.multiLine ? wrapExportText(ctx, text, maxWidth) : [text.replace(/[\r\n]+/g, ' ')];
-        const lineHeight = size * 1.2;
-        let y = paddingY;
-        for (const line of lines) {
-          if (y + size > box.height) break;
-          ctx.fillText(line, paddingX, y, maxWidth);
-          y += lineHeight;
+        ctx.fillStyle = textColor;
+        let y = layout.paddingY;
+        for (const line of layout.lines) {
+          ctx.fillText(line, layout.paddingX, y);
+          y += layout.lineHeight;
         }
         return canvasToImageBitmap(canvas);
       }
       async function createFlattenFormAnnotations() {
-        if (typeof OffscreenCanvas === 'undefined') throw new Error('EXPORT_UNSUPPORTED');
+        if (typeof createImageBitmap !== 'function' && typeof OffscreenCanvas === 'undefined') throw new Error('EXPORT_UNSUPPORTED');
         await ensureAllFormFieldsScanned();
         const stampType = state.pdfjs?.AnnotationEditorType?.STAMP ?? 13;
         const rotations = new Map();
         const entries = [];
+        try {
         for (const id of state.formOrder) {
           const field = formFieldById(id);
           if (!field) continue;
@@ -2753,6 +2786,10 @@
           });
         }
         return entries;
+        } catch (error) {
+          for (const entry of entries) entry.value.bitmap?.close?.();
+          throw error;
+        }
       }
       function captureFormStorage(storage) {
         const previous = new Map();
@@ -2784,6 +2821,7 @@
           return pageInfo.get(pageIndex);
         }
         const entries = [];
+        try {
         for (const item of state.overlays) {
           const key = `${PDFJS_EDITOR_PREFIX}browser-kitty-export-${item.id}`;
           const { rotation, viewport } = await getPageInfo(item.pageIndex);
@@ -2816,6 +2854,10 @@
           });
         }
         return entries;
+        } catch (error) {
+          for (const entry of entries) entry.value.bitmap?.close?.();
+          throw error;
+        }
       }
       async function generateCompletedPdf(filename, { flattenForms = false } = {}) {
         if (!state.pdf || !state.file) throw new Error('No PDF is open.');
@@ -2826,12 +2868,16 @@
         syncAllFormStorage();
         const exportSignature = editStateSignature();
         const storage = pdf.annotationStorage;
-        const overlayEntries = await createExportAnnotations();
-        const flattenEntries = flattenForms ? await createFlattenFormAnnotations() : [];
-        const entries = overlayEntries.concat(flattenEntries);
-        const previousFormStorage = flattenForms ? captureFormStorage(storage) : null;
+        const entries = [];
+        let previousFormStorage = null;
         try {
-          if (flattenForms) applyFlattenFormFlags(storage);
+          entries.push(...await createExportAnnotations());
+          if (flattenForms) entries.push(...await createFlattenFormAnnotations());
+          if (pdf !== state.pdf || generation !== state.generation) throw new Error('EXPORT_STALE');
+          if (flattenForms) {
+            previousFormStorage = captureFormStorage(storage);
+            applyFlattenFormFlags(storage);
+          }
           for (const { key, value } of entries) storage.setValue(key, value);
           const bytes = await pdf.saveDocument();
           if (pdf !== state.pdf || generation !== state.generation) throw new Error('EXPORT_STALE');
@@ -2844,7 +2890,7 @@
           return bytes;
         } finally {
           for (const { key, value } of entries) { storage.remove(key); value.bitmap?.close?.(); }
-          if (flattenForms && previousFormStorage) restoreFormStorage(storage, previousFormStorage);
+          if (previousFormStorage) restoreFormStorage(storage, previousFormStorage);
         }
       }
       function setExportView(view) {
@@ -2871,6 +2917,7 @@
         const hasForms = state.formOrder.length > 0;
         $('#flattenFormsRow').hidden = !hasForms;
         $('#flattenFormsCheckbox').checked = true;
+        $('#existingSignatureWarning').hidden = !state.hasExistingSignatures;
         updateRequiredWarning();
         setExportView('setup');
         exportDialog.showModal();
@@ -2897,7 +2944,7 @@
         } catch (error) {
           if (error?.message === 'EXPORT_STALE') { setExportView('setup'); if (exportDialog.open) exportDialog.close(); return; }
           console.error(error);
-          const key = error?.message === 'EXPORT_UNSUPPORTED' ? 'exportUnsupported' : 'exportFailureMessage';
+          const key = error?.message === 'EXPORT_UNSUPPORTED' ? 'exportUnsupported' : error?.message === 'FORM_TEXT_OVERFLOW' ? 'exportTextOverflow' : 'exportFailureMessage';
           $('#exportErrorMessage').textContent = translate(key);
           setExportView('error');
         } finally {
@@ -3162,6 +3209,8 @@
         if (state.tool === 'cross') { width = 38; height = 38; type = 'mark'; content = '×'; fontSize = 23; }
         if (state.tool === 'circle') { width = 38; height = 38; type = 'mark'; content = '○'; fontSize = 23; }
         const pageWidth = state.viewport.width, pageHeight = state.viewport.height;
+        width = Math.min(width, pageWidth);
+        height = Math.min(height, pageHeight);
         const left = Math.max(0, Math.min(pageWidth - width, x - (type === 'mark' ? width / 2 : 4)));
         const top = Math.max(0, Math.min(pageHeight - height, y - (type === 'mark' ? height / 2 : 4)));
         const pdfRect = pdfRectFromViewportRect({ left, top, width, height });
