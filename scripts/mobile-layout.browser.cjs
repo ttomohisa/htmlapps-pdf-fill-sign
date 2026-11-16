@@ -48,6 +48,30 @@ async function exerciseActions(page, width, height, label) {
   await checkActions(page, width, height, label);
 }
 
+// Exercise the actual embedded PDF.js save and reopen path, not just DOM source guards.
+async function exerciseExportRoundTrip(page,label) {
+  await page.locator('.pdf-tool-button[data-tool="text"]').first().click();
+  await page.locator('#overlayLayer').click({position:{x:60,y:75}});
+  await page.locator('#contentInput').fill('Round-trip PDF QA');
+  await page.locator('#exportPdfButton').click();
+  await page.locator('#exportCreateButton').click();
+  await page.locator('#exportResult').waitFor({state:'visible',timeout:30000});
+  const downloadPromise = page.waitForEvent('download');
+  await page.locator('#exportDownloadButton').click();
+  const download = await downloadPromise;
+  assert.match(download.suggestedFilename(),/\.pdf$/i,label+': expected PDF download');
+  const output = fs.readFileSync(await download.path());
+  assert.equal(output.subarray(0,5).toString('latin1'),'%PDF-',label+': PDF file header');
+  assert.ok(output.length>syntheticPdf().length,label+': output contains added content');
+  await page.locator('#exportCloseButton').click();
+  await page.locator('#fileInput').setInputFiles({
+    name:'round-trip.pdf',mimeType:'application/pdf',buffer:output
+  });
+  await page.waitForFunction(()=>document.querySelector('#fileName')?.textContent==='round-trip.pdf' &&
+    !document.querySelector('#stageMessage')?.classList.contains('show'));
+  assert.equal((await page.locator('#fileName').textContent()).trim(),'round-trip.pdf',label+': exported PDF reopens');
+}
+
 // Check rendered geometry, including clipping by an ancestor (isVisible alone misses it).
 async function auditHeader(page, label) {
   const badge = page.locator('header #versionBadge');
@@ -130,6 +154,7 @@ async function main() {
         if (file === 'dist/index.html' && [1360,320].includes(width)) await page.screenshot({path:path.join(artifacts, `${language}-${width}.png`)});
 
         await auditHeader(page, label);
+        if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseExportRoundTrip(page,label);
         await page.locator(HELP).click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
