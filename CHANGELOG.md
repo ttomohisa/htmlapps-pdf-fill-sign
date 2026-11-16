@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.6 - Unreleased
+
+- Refuse to flatten form text when it cannot fit instead of truncating entered lines; automatically reduce font size when possible.
+- Avoid painting an invented white form background or border when the source widget provides neither; retain explicit widget colors where provided.
+- Warn on detected digital signatures before saving a modified PDF.
+- Keep added items inside small page bounds; reflect mark font-size changes in exported Ink annotations; style password fields consistently.
+- Release allocated image bitmaps when PDF export fails; permit browsers with createImageBitmap but no OffscreenCanvas.
+- Add source-level PDF export regressions to CI. Cross-viewer output comparisons remain recommended.
+
 ## 1.0.5 - 2026-10-27
 
 - Keep the header version badge visible at narrow widths by truncating only the app title.
