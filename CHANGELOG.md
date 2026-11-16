@@ -7,7 +7,8 @@
 - Warn on detected digital signatures before saving a modified PDF.
 - Keep added items inside small page bounds; reflect mark font-size changes in exported Ink annotations; style password fields consistently.
 - Release allocated image bitmaps when PDF export fails; permit browsers with createImageBitmap but no OffscreenCanvas.
-- Add source-level PDF export regressions to CI. Cross-viewer output comparisons remain recommended.
+- Add a compensated `Math.sumPrecise` fallback to the embedded PDF.js main thread and Worker, fixing save failures on browsers without that API.
+- Add source-level PDF export regressions and a Chromium PDF download/reopen smoke test to CI. Cross-viewer form comparisons remain recommended.
 
 ## 1.0.5 - 2026-10-27
 
