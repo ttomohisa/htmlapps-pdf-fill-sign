@@ -49,13 +49,18 @@ async function exerciseActions(page, width, height, label) {
 }
 
 // Exercise the actual embedded PDF.js save and reopen path, not just DOM source guards.
-async function exerciseExportRoundTrip(page,label) {
+async function exerciseExportRoundTrip(page,label,errors) {
   await page.locator('.pdf-tool-button[data-tool="text"]').first().click();
   await page.locator('#overlayLayer').click({position:{x:60,y:75}});
   await page.locator('#contentInput').fill('Round-trip PDF QA');
   await page.locator('#exportPdfButton').click();
   await page.locator('#exportCreateButton').click();
-  await page.locator('#exportResult').waitFor({state:'visible',timeout:30000});
+  await page.waitForFunction(() => !document.querySelector('#exportResult').hidden ||
+    !document.querySelector('#exportError').hidden, null, {timeout:30000});
+  if (await page.locator('#exportError').isVisible()) {
+    throw new Error('PDF creation failed: ' + await page.locator('#exportErrorMessage').innerText() +
+      '; console errors: ' + JSON.stringify(errors));
+  }
   const downloadPromise = page.waitForEvent('download');
   await page.locator('#exportDownloadButton').click();
   const download = await downloadPromise;
@@ -154,7 +159,7 @@ async function main() {
         if (file === 'dist/index.html' && [1360,320].includes(width)) await page.screenshot({path:path.join(artifacts, `${language}-${width}.png`)});
 
         await auditHeader(page, label);
-        if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseExportRoundTrip(page,label);
+        if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseExportRoundTrip(page,label,errors);
         await page.locator(HELP).click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
