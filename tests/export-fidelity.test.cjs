@@ -159,6 +159,34 @@ test('a later flattening failure cleans successful overlay bitmaps and leaves fi
   await assert.rejects(vm.runInContext('generateCompletedPdf("x.pdf",{flattenForms:true})',sandbox),/FORM_TEXT_OVERFLOW/);
   assert.equal(closed,true);assert.equal(setCalls,0);
 });
+test('Math.sumPrecise fallback compensates floating-point cancellation',()=>{
+  const sandbox=vm.createContext({});
+  vm.runInContext(functions('function fallbackPreciseSum(', 'function installPreciseSumFallback('),sandbox);
+  assert.equal(vm.runInContext('fallbackPreciseSum([1e16,1,-1e16])',sandbox),1);
+  assert.equal(vm.runInContext('fallbackPreciseSum([Infinity,1])',sandbox),Infinity);
+  assert.ok(Number.isNaN(vm.runInContext('fallbackPreciseSum([Infinity,-Infinity])',sandbox)));
+});
+test('embedded PDF.js main and worker both receive the precision fallback',async()=>{
+  let capturedBlob;
+  const module={GlobalWorkerOptions:{}};
+  const sandbox=vm.createContext({
+    state:{pdfjs:null,workerUrl:null},
+    Blob,
+    URL:{createObjectURL:blob=>{capturedBlob=blob;return 'blob:pdf-worker-test';}},
+    StandaloneAssets:{
+      importModule:async()=>module,
+      bytesAsync:async()=>Buffer.from('export const workerReady = true;')
+    }
+  });
+  vm.runInContext(functions('function fallbackPreciseSum(', 'function classifyOpenError('),sandbox);
+  const loaded=await vm.runInContext('ensurePdfJs()',sandbox);
+  assert.equal(loaded,module);
+  assert.equal(module.GlobalWorkerOptions.workerSrc,'blob:pdf-worker-test');
+  const body=await capturedBlob.text();
+  assert.match(body,/Math\.sumPrecise = function fallbackPreciseSum/);
+  assert.ok(body.endsWith('export const workerReady = true;'));
+  assert.equal(typeof vm.runInContext('Math.sumPrecise',sandbox),'function');
+});
 test('digitally signed PDFs show a localized warning in the export dialog',()=>{
   assert.match(source,/typeof pdf\.getSignatures === 'function' \? await pdf\.getSignatures\(\)/);
   assert.match(source,/id="existingSignatureWarning"[^>]*data-i18n="existingSignatureWarning"/);
