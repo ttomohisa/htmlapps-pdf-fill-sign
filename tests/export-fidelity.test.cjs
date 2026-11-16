@@ -91,6 +91,29 @@ test('small pages clamp new text and marks inside the displayed page',()=>{
   assert.ok(rect.left+rect.width<=90);
   assert.ok(rect.top+rect.height<=110);
 });
+test('images and signatures remain within narrow pages and small signature fields',()=>{
+  const state={viewport:{width:40,height:60},page:1,overlays:[],selectedId:null};
+  let nextId=0;
+  const sandbox=vm.createContext({state,
+    pdfRectFromViewportRect:r=>({x:r.left,y:r.top,width:r.width,height:r.height}),
+    cloneEditState:()=>({}),newOverlayId:()=> 'asset-'+(++nextId),pushHistory(){},setTool(){},
+    renderOverlays(){},renderInspector(){}
+  });
+  vm.runInContext(functions('function placeImageOverlay(', 'async function refreshSavedAsset('),sandbox);
+  for(const [type,width,height] of [['image',500,2],['signature',2,500],['initials',100,100]]) {
+    sandbox.asset={imageData:'data:image/png;base64,a',width,height};
+    const placed=vm.runInContext('placeImageOverlay(asset, type)',Object.assign(sandbox,{type}));
+    assert.equal(placed,true);
+    const rect=state.overlays.at(-1);
+    assert.ok(rect.x>=0 && rect.y>=0 && rect.x+rect.width<=40+1e-7 && rect.y+rect.height<=60+1e-7);
+  }
+  const field={rect:[20,30,25,33],pageIndex:0};
+  const placed=vm.runInContext('placeImageOverlay(asset, "signature", .34, targetField)',
+    Object.assign(sandbox,{asset:{imageData:'data:image/png;base64,b',width:1,height:200},targetField:field}));
+  assert.equal(placed,true);
+  const rect=state.overlays.at(-1);
+  assert.ok(rect.x>=20 && rect.y>=30 && rect.x+rect.width<=25+1e-7 && rect.y+rect.height<=33+1e-7);
+});
 test('the PDF ink representation respects edited mark font sizes',()=>{
   const viewport={
     scale:1,
