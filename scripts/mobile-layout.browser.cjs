@@ -134,7 +134,17 @@ async function main() {
         assert.equal((await page.locator('[data-i18n="localBadge"]').textContent()).trim(), language === 'en' ? 'Fully local processing' : '完全ローカル処理', label + ': privacy wording');
         assert.equal(await page.locator('body > footer').isVisible(), !isPhone(width, height), label + ': informational footer breakpoint');
         const badge = page.locator('.local-badge');
-        assert.equal(await badge.isVisible(), true, label + ': preserve existing badge visibility');
+        assert.equal(await badge.isVisible(), !isPhone(width, height), label + ': privacy badge only on desktop');
+        const hero = page.locator('.page-intro');
+        assert.equal(await hero.isVisible(), !isPhone(width, height), label + ': intro hidden on phones');
+        assert.notEqual((await page.locator('#heroTitle').textContent()).trim(),
+          (await page.locator('#brandName').textContent()).trim(), label + ': distinct hero and header titles');
+        const lead = (await page.locator('.page-intro [data-i18n="lead"]').textContent()).trim();
+        assert.ok(lead.length < 90, label + ': compact intro');
+        assert.doesNotMatch(lead, /処理は端末内だけで完結します|Processing stays entirely on your device/i, label + ': omit redundant privacy claim');
+        const dropIconPaths = await page.locator('#dropZone .pdf-drop-icon svg').evaluate(el =>
+          [...el.querySelectorAll('path')].map(path => path.getAttribute('d')).join(' '));
+        assert.match(dropIconPaths, /m8 10 4 4 4-4/, label + ': drop area uses downward tray arrow');
         if (await badge.isVisible()) {
           const box = await badge.boundingBox(), text = await page.locator('[data-i18n="localBadge"]').boundingBox();
           assert.ok(box && text && box.x >= 0 && box.x + box.width <= width + 1 && text.x >= box.x && text.x + text.width <= box.x + box.width + 1, label + ': local-processing badge fits');
@@ -144,9 +154,15 @@ async function main() {
         // Responsive changes must not leave the informational footer in a stale state.
         await page.setViewportSize({width:PHONE_WIDTH + 1, height});
         assert.equal(await page.locator('body > footer').isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': wider resize');
+        assert.equal(await hero.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': intro at wider resize');
+        assert.equal(await badge.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': badge at wider resize');
         await page.setViewportSize({width:PHONE_WIDTH, height});
         assert.equal(await page.locator('body > footer').isVisible(), false, label + ': phone resize');
+        assert.equal(await hero.isVisible(), false, label + ': hide intro after phone resize');
+        assert.equal(await badge.isVisible(), false, label + ': hide badge after phone resize');
         await page.setViewportSize({width,height});
+        assert.equal(await hero.isVisible(), !isPhone(width, height), label + ': intro restored at original viewport');
+        assert.equal(await badge.isVisible(), !isPhone(width, height), label + ': badge restored at original viewport');
         // The existing 120 ms fit-to-page debounce can scroll the selected thumbnail.
         // Finish that native render before testing the modal's background scroll lock.
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -163,7 +179,7 @@ async function main() {
         await page.locator(HELP).click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
-        assert.match(visibleHelpText, language === 'ja' ? /入力した内容は変わりません/ : /keeps your entered values/i, label + ': useful adjacent Help guidance retained');
+        assert.doesNotMatch(visibleHelpText, /Browser Kitty|複製も元に戻す・やり直す操作に対応します|Undo\/Redo also covers duplication|表示言語を変更しても、入力した内容は変わりません|Changing the interface language keeps your entered values/i, label + ': requested Help copy removed');
 
         const body = page.locator('#helpDialog .dialog-body');
         await body.evaluate(el => { el.scrollTop = el.scrollHeight; });
