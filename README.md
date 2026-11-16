@@ -128,7 +128,8 @@ Primary targets are current Chrome and Edge. Firefox, Safari, iOS Safari, and An
 ├─ assets/favicon.svg
 └─ .github/workflows/
    ├─ build-standalone.yml       # Pull request/build validation
-   └─ deploy-pages.yml           # GitHub Pages deployment
+   ├─ deploy-pages.yml           # GitHub Pages deployment
+   └─ release-on-merge.yml       # Tag and release after PR merge
 ```
 
 ## Build
@@ -141,6 +142,8 @@ On Windows PowerShell 7:
 ```
 
 Generated files are written under `dist/`. Do not edit generated HTML manually.
+
+After a pull request is merged into `main`, the release workflow rebuilds and verifies the standalone artifacts, then creates the version tag from `app.config.json` and a GitHub Release with both the readable and self-extracting HTML files. An existing release is not republished. Merging the PR remains a manual step.
 
 ## Dependencies
 
