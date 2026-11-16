@@ -83,7 +83,7 @@ When flattening is disabled, supported form fields remain editable where the sou
 
 With flattening enabled, field text is reduced to fit when possible. If the full value still cannot fit, export stops rather than silently omitting text; shorten the value or turn flattening off. The app avoids inventing white backgrounds and borders where the source widget supplies none, but unusual PDF form appearances may not be reproduced exactly.
 
-When existing digital signatures are detected, the app warns that saving an edited PDF may invalidate signature verification.
+When existing digital signatures are detected, the app warns that saving an edited PDF may invalidate signature verification. A local precision-summing fallback supports PDF.js export in browsers that do not yet implement `Math.sumPrecise`.
 
 ## Privacy and runtime network protection
 
