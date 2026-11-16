@@ -81,6 +81,10 @@ Field controls follow page rotation and zoom. Use **EN / JA** in the header to s
 
 When flattening is disabled, supported form fields remain editable where the source PDF and PDF.js save path allow it.
 
+With flattening enabled, field text is reduced to fit when possible. If the full value still cannot fit, export stops rather than silently omitting text; shorten the value or turn flattening off. The app avoids inventing white backgrounds and borders where the source widget supplies none, but unusual PDF form appearances may not be reproduced exactly.
+
+When existing digital signatures are detected, the app warns that saving an edited PDF may invalidate signature verification.
+
 ## Privacy and runtime network protection
 
 PDF files, form values, signatures, images, and edits are processed in the browser. The app does not upload selected PDFs, use analytics or telemetry, load runtime assets from a CDN, fetch remote fonts, or call an external API.
