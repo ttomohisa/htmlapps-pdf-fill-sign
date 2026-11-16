@@ -2943,7 +2943,7 @@
           setExportView('result');
         } catch (error) {
           if (error?.message === 'EXPORT_STALE') { setExportView('setup'); if (exportDialog.open) exportDialog.close(); return; }
-          console.error(error);
+          console.error('PDF export failed:', error?.name, error?.message, error?.details || '', error?.stack || '');
           const key = error?.message === 'EXPORT_UNSUPPORTED' ? 'exportUnsupported' : error?.message === 'FORM_TEXT_OVERFLOW' ? 'exportTextOverflow' : 'exportFailureMessage';
           $('#exportErrorMessage').textContent = translate(key);
           setExportView('error');
