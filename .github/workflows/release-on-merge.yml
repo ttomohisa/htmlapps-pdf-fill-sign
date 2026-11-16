@@ -47,7 +47,7 @@ jobs:
           $tag = "v$version"
 
           # Tags are immutable. Never move an existing version tag.
-          $existingTag = (& git tag --list $tag).Trim()
+          $existingTag = ([string](& git tag --list $tag)).Trim()
           if ($existingTag) {
             $tagCommit = (& git rev-list -n 1 $tag).Trim()
             if ($tagCommit -ne $env:MERGED_COMMIT) {
