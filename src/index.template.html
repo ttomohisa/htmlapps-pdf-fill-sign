@@ -1731,10 +1731,41 @@
         else if (action === 'save') { setMobileActionActive('save'); void openExportDialog(); }
       }
 
+      // PDF.js 6.3 uses Math.sumPrecise while saving annotations. Some supported
+      // browsers lack that recent built-in, including the pinned Chromium CI.
+      // Neumaier compensated summation handles the ordinary finite PDF values.
+      function fallbackPreciseSum(values) {
+        let sum = 0, correction = 0;
+        for (const value of values) {
+          if (typeof value !== 'number') throw new TypeError('Expected numbers in Math.sumPrecise.');
+          if (Number.isNaN(value)) return NaN;
+          if (!Number.isFinite(value)) {
+            if (!Number.isFinite(sum) && sum !== value) return NaN;
+            sum = value;
+            correction = 0;
+            continue;
+          }
+          if (!Number.isFinite(sum)) continue;
+          const next = sum + value;
+          if (Math.abs(sum) >= Math.abs(value)) correction += (sum - next) + value;
+          else correction += (value - next) + sum;
+          sum = next;
+        }
+        return sum + correction;
+      }
+      function installPreciseSumFallback() {
+        if (typeof Math.sumPrecise !== 'function') Math.sumPrecise = fallbackPreciseSum;
+      }
       async function ensurePdfJs() {
         if (state.pdfjs) return state.pdfjs;
+        installPreciseSumFallback();
         const module = await StandaloneAssets.importModule('pdfjs-dist', 'pdf');
-        state.workerUrl = await StandaloneAssets.blobUrlAsync('pdfjs-dist', 'worker');
+        // A PDF.js Worker has a separate Math global; preload the same fallback
+        // inside its module Blob rather than relying on the main thread.
+        const workerBytes = await StandaloneAssets.bytesAsync('pdfjs-dist', 'worker');
+        const prelude = 'if (typeof Math.sumPrecise !== "function") Math.sumPrecise = ' +
+          fallbackPreciseSum.toString() + ';\n';
+        state.workerUrl = URL.createObjectURL(new Blob([prelude, workerBytes], {type:'text/javascript'}));
         module.GlobalWorkerOptions.workerSrc = state.workerUrl;
         state.pdfjs = module;
         return module;
