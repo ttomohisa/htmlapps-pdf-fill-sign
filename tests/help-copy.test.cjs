@@ -8,7 +8,11 @@ const rejected = [
   "画面が低いときは署名・保存ダイアログの中をスクロールして操作できます。閉じるボタンは上部に残ります。ダイアログを開いている間は背景ページをスクロールしません。",
   "In a short window, scroll inside the signature or save dialog to reach its actions. The close button stays at the top. The background page does not scroll while a dialog is open.",
   "既存の入力欄はページの回転や拡大率に合わせて表示されます。EN / JAで表示言語を切り替えても、入力した内容は変わりません。",
-  "Existing fields follow the page rotation and zoom. Switching the interface language with EN / JA does not change your entered values."
+  "Existing fields follow the page rotation and zoom. Switching the interface language with EN / JA does not change your entered values.",
+  "複製も元に戻す・やり直す操作に対応します。",
+  "Undo/Redo also covers duplication.",
+  "表示言語を変更しても、入力した内容は変わりません。",
+  "Changing the interface language keeps your entered values."
 ];
 
 test('help contains user guidance rather than implementation or layout audit prose', () => {
@@ -22,5 +26,14 @@ test('help contains user guidance rather than implementation or layout audit pro
     const payload = html.match(/<script id="self-extract-payload"[^>]*>([\s\S]*?)<\/script>/);
     if (payload) html = gunzipSync(Buffer.from(payload[1].replace(/\s/g, ''), 'base64')).toString('utf8');
     for (const copy of rejected) assert.ok(!html.includes(copy), `${file}: remove internal-facing help copy: ${copy}`);
+    const helpStart = html.indexOf('<dialog id="helpDialog"');
+    const helpEnd = html.indexOf('</dialog>', helpStart);
+    assert.ok(helpStart >= 0 && helpEnd > helpStart, `${file}: Help dialog remains present`);
+    const helpDialog = html.slice(helpStart, helpEnd + '</dialog>'.length);
+    assert.doesNotMatch(helpDialog, /Browser Kitty/i, `${file}: no brand name in Help`);
+    const privacyTranslations = [...html.matchAll(/helpPrivacyBody: '([^']+)'/g)].map(match => match[1]);
+    assert.equal(privacyTranslations.length, 2, `${file}: bilingual privacy text remains`);
+    for (const line of privacyTranslations) assert.doesNotMatch(line, /Browser Kitty/i, `${file}: no brand name in Help privacy text`);
+    assert.doesNotMatch(helpDialog, /data-i18n="helpFormView"/, `${file}: remove Help language paragraph`);
   }
 });
