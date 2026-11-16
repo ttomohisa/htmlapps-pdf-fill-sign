@@ -127,7 +127,8 @@ PDF表示は1本指で移動し、2本指ピンチで拡大・縮小できます
 ├─ assets/favicon.svg
 └─ .github/workflows/
    ├─ build-standalone.yml       # Build / 検証
-   └─ deploy-pages.yml           # GitHub Pages配信
+   ├─ deploy-pages.yml           # GitHub Pages配信
+   └─ release-on-merge.yml       # PRマージ後のタグ・Release作成
 ```
 
 ## ビルド
@@ -140,6 +141,8 @@ Windows PowerShell 7:
 ```
 
 生成物は `dist/` に出力されます。生成HTMLを直接編集しません。
+
+`main` へのPRマージ後は、検証が成功した場合に `app.config.json` のバージョンからタグとGitHub Releaseを自動作成し、通常版と自己展開版のHTMLを添付します。すでに公開済みのバージョンは再公開しません。PRのマージ操作そのものは手動です。
 
 ## 依存ライブラリ
 
