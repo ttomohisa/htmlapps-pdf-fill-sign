@@ -3402,7 +3402,43 @@
       function setSignatureMode(mode) { signatureUi.mode=mode; $('#signatureDrawTab').classList.toggle('active',mode==='draw');$('#signatureImageTab').classList.toggle('active',mode==='image');$('#signatureDrawTab').setAttribute('aria-selected',mode==='draw'?'true':'false');$('#signatureImageTab').setAttribute('aria-selected',mode==='image'?'true':'false');$('#signatureDrawPanel').hidden=mode!=='draw';$('#signatureImagePanel').hidden=mode!=='image';updateSignatureUseButton(); }
       function currentSignatureData(){return signatureUi.mode==='draw'?trimmedSignatureData():signatureUi.image;}
       function updateSignatureUseButton(){ $('#signatureUseButton').disabled=!(signatureUi.mode==='draw'?signatureDrawing.hasInk:signatureUi.image); }
-      function placeImageOverlay(data,type,widthFraction=.34,targetField=null){if(!data)return false;const ratio=data.width/Math.max(1,data.height);let pdfRect,pageIndex=state.page-1;if(targetField){const [x1,y1,x2,y2]=targetField.rect;const box={x:Math.min(x1,x2),y:Math.min(y1,y2),width:Math.abs(x2-x1),height:Math.abs(y2-y1)};let width=Math.max(8,box.width*.9),height=width/ratio;if(height>box.height*.84){height=Math.max(8,box.height*.84);width=height*ratio;}pdfRect={x:box.x+(box.width-width)/2,y:box.y+(box.height-height)/2,width,height};pageIndex=targetField.pageIndex;}else{if(!state.viewport)return false;let width=Math.min(type==='image'?280:220,Math.max(100,state.viewport.width*widthFraction)),height=width/ratio;const maxHeight=Math.max(48,state.viewport.height*(type==='image'?.32:.22));if(height>maxHeight){height=maxHeight;width=height*ratio;}const left=Math.max(0,(state.viewport.width-width)/2),top=Math.max(0,(state.viewport.height-height)/2);pdfRect=pdfRectFromViewportRect({left,top,width,height});if(!pdfRect)return false;}const before=cloneEditState();const item={id:newOverlayId(),pageIndex,type,content:'',imageData:data.imageData,aspectRatio:ratio,color:data.vectorColor||'#20211f',fontSize:12,vectorStrokes:Array.isArray(data.vectorStrokes)?data.vectorStrokes:null,vectorThicknessRatio:data.vectorThicknessRatio||null,...pdfRect};state.overlays.push(item);state.selectedId=item.id;pushHistory(before);setTool('select');renderOverlays();renderInspector();return true;}
+      function placeImageOverlay(data, type, widthFraction = .34, targetField = null) {
+        if (!data) return false;
+        const ratio = Math.max(.01, Number(data.width) || 1) / Math.max(.01, Number(data.height) || 1);
+        let pdfRect, pageIndex = state.page - 1;
+        if (targetField) {
+          const [x1,y1,x2,y2] = targetField.rect;
+          const box = { x:Math.min(x1,x2), y:Math.min(y1,y2), width:Math.abs(x2-x1), height:Math.abs(y2-y1) };
+          const width = Math.min(box.width * .9, box.height * .84 * ratio);
+          if (!(width > 0)) return false;
+          const height = width / ratio;
+          pdfRect = {x:box.x+(box.width-width)/2, y:box.y+(box.height-height)/2, width, height};
+          pageIndex = targetField.pageIndex;
+        } else {
+          if (!state.viewport) return false;
+          const pageWidth = state.viewport.width, pageHeight = state.viewport.height;
+          const preferredWidth = Math.min(type === 'image' ? 280 : 220, Math.max(100, pageWidth * widthFraction));
+          const allowedHeight = Math.min(pageHeight, Math.max(48, pageHeight * (type === 'image' ? .32 : .22)));
+          const width = Math.min(preferredWidth, pageWidth, allowedHeight * ratio);
+          if (!(width > 0)) return false;
+          const height = width / ratio;
+          const left = Math.max(0, (pageWidth - width) / 2), top = Math.max(0, (pageHeight - height) / 2);
+          pdfRect = pdfRectFromViewportRect({left,top,width,height});
+          if (!pdfRect) return false;
+        }
+        const before = cloneEditState();
+        const item = {id:newOverlayId(),pageIndex,type,content:'',imageData:data.imageData,aspectRatio:ratio,
+          color:data.vectorColor||'#20211f',fontSize:12,
+          vectorStrokes:Array.isArray(data.vectorStrokes)?data.vectorStrokes:null,
+          vectorThicknessRatio:data.vectorThicknessRatio||null,...pdfRect};
+        state.overlays.push(item);
+        state.selectedId = item.id;
+        pushHistory(before);
+        setTool('select');
+        renderOverlays();
+        renderInspector();
+        return true;
+      }
       async function refreshSavedAsset(){signatureUi.saved=await readSavedAsset(signatureUi.kind);$('#signatureSavedActions').hidden=!signatureUi.saved;}
       async function openSignatureDialog(kind='signature',targetField=null){if(!state.pdf)return;signatureUi.kind=kind;signatureUi.targetField=targetField;signatureUi.image=null;signatureUi.saved=null;state.selectedId=null;setTool('select');renderOverlays();renderInspector();$('#signatureDialogTitle').textContent=translate(kind==='initials'?'initialsDialogTitle':'signatureDialogTitle');$('#signatureDialogNote').textContent=targetField?translate('formSignature')+' · '+translate('signatureDialogNote'):translate('signatureDialogNote');$('#signatureSaveCheckbox').checked=false;$('#signatureImagePreview').hidden=true;$('#signatureImagePreview').removeAttribute('src');$('#signatureImagePlaceholder').hidden=false;$('#signatureImageInput').value='';setSignatureMode('draw');signatureDialog.showModal();requestAnimationFrame(()=>prepareSignatureCanvas());await refreshSavedAsset();}
       function closeSignatureDialog(){if(signatureDialog.open)signatureDialog.close();signatureDrawing.pointerId=null;signatureUi.targetField=null;}
