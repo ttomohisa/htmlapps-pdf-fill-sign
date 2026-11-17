@@ -8,7 +8,7 @@ This file is the product contract for PDF Fill & Sign. Implementation decisions 
 - **Japanese name:** PDF記入・署名
 - **Slug:** `pdf-fill-sign`
 - **Repository:** `ttomohisa/htmlapps-pdf-fill-sign`
-- **Target release:** v1.0.1
+- **Target release:** v1.0.6
 - **Current milestone:** v1.0.6 — PDF export fidelity and safety
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
 - **Primary color:** Browser Kitty `#16624F` for application UI accents. The supplied canonical app icon in `assets/favicon.svg` is used unchanged.
