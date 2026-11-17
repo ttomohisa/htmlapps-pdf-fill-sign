@@ -18,6 +18,70 @@ function syntheticPdf() {
   data += `xref\n0 5\n0000000000 65535 f \n${offsets.slice(1).map(n => String(n).padStart(10,'0') + ' 00000 n \n').join('')}trailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
   return Buffer.from(data);
 }
+
+function syntheticAcroFormPdf() {
+  const content = '0.09 0.38 0.31 rg 20 25 120 35 re f\n';
+  const blank = 'q 1 w 0 0 0 RG 1 1 18 18 re S Q\n';
+  const checked = 'q 1 w 0 0 0 RG 1 1 18 18 re S 2 10 m 8 4 l 17 16 l S Q\n';
+  const streamObject = data => '<< /Length ' + Buffer.byteLength(data) + ' >>\nstream\n' + data + 'endstream';
+  const appearanceObject = data => '<< /Type /XObject /Subtype /Form /FormType 1 /BBox [0 0 20 20] /Resources << >> /Length ' + Buffer.byteLength(data) + ' >>\nstream\n' + data + 'endstream';
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R /AcroForm 5 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 240] /Resources << /Font << /Helv 10 0 R >> >> /Contents 4 0 R /Annots [6 0 R 7 0 R] >>',
+    streamObject(content),
+    '<< /Fields [6 0 R 7 0 R] /DA (/Helv 12 Tf 0 g) /DR << /Font << /Helv 10 0 R >> >> /NeedAppearances true >>',
+    '<< /Type /Annot /Subtype /Widget /FT /Tx /T (customer) /Rect [20 170 180 196] /V (Original) /DA (/Helv 12 Tf 0 g) /P 3 0 R /F 4 >>',
+    '<< /Type /Annot /Subtype /Widget /FT /Btn /T (agreed) /Rect [20 120 40 140] /V /Off /AS /Off /P 3 0 R /F 4 /AP << /N << /Off 8 0 R /Yes 9 0 R >> >> >>',
+    appearanceObject(blank), appearanceObject(checked),
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'
+  ];
+  let data = '%PDF-1.4\n';
+  const offsets = [0];
+  objects.forEach((value, index) => {
+    offsets.push(Buffer.byteLength(data));
+    data += (index + 1) + ' 0 obj\n' + value + '\nendobj\n';
+  });
+  const xref = Buffer.byteLength(data);
+  data += 'xref\n0 ' + (objects.length + 1) + '\n0000000000 65535 f \n' +
+    offsets.slice(1).map(n => String(n).padStart(10, '0') + ' 00000 n \n').join('') +
+    'trailer\n<< /Size ' + (objects.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n';
+  return Buffer.from(data);
+}
+
+async function exerciseAcroFormRoundTrip(page, label, errors) {
+  const fixture = syntheticAcroFormPdf();
+  await page.locator('#fileInput').setInputFiles({name:'fillable.pdf',mimeType:'application/pdf',buffer:fixture});
+  const textField = page.locator('#formLayer input[type="text"]');
+  const checkField = page.locator('#formLayer input[type="checkbox"]');
+  await textField.waitFor({state:'visible',timeout:15000});
+  await checkField.waitFor({state:'visible',timeout:15000});
+  assert.equal(await textField.inputValue(),'Original',label+': AcroForm initial value loaded');
+  await textField.fill('Edited QA field');
+  await checkField.check();
+  await page.locator('#exportPdfButton').click();
+  assert.equal(await page.locator('#flattenFormsRow').isVisible(),true,label+': flattening offered for AcroForm');
+  await page.locator('#flattenFormsCheckbox').uncheck();
+  await page.locator('#exportCreateButton').click();
+  await page.waitForFunction(() => !document.querySelector('#exportResult').hidden ||
+    !document.querySelector('#exportError').hidden,null,{timeout:30000});
+  if (await page.locator('#exportError').isVisible())
+    throw new Error(label+': AcroForm editable PDF export failed: '+await page.locator('#exportErrorMessage').innerText()+
+      '; browser errors='+JSON.stringify(errors));
+  const pending=page.waitForEvent('download');
+  await page.locator('#exportDownloadButton').click();
+  const output=fs.readFileSync(await (await pending).path());
+  assert.equal(output.subarray(0,5).toString('latin1'),'%PDF-',label+': AcroForm output PDF');
+  await page.locator('#exportCloseButton').click();
+  await page.locator('#fileInput').setInputFiles({name:'reopened-form.pdf',mimeType:'application/pdf',buffer:output});
+  await page.waitForFunction(()=>document.querySelector('#fileName')?.textContent==='reopened-form.pdf' &&
+    !document.querySelector('#stageMessage')?.classList.contains('show'));
+  await textField.waitFor({state:'visible'});
+  await checkField.waitFor({state:'visible'});
+  assert.equal(await textField.inputValue(),'Edited QA field',label+': AcroForm value survives editable export');
+  assert.equal(await checkField.isChecked(),true,label+': checkbox value survives editable export');
+}
+
 function isPhone(width, height) { return width <= PHONE_WIDTH || (width <= 900 && height <= 500 && width >= height); }
 async function checkActions(page, width, height, label) {
   const nav = page.locator('#mobileActionBar');
@@ -183,6 +247,7 @@ async function main() {
 
         await auditHeader(page, label);
         if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseExportRoundTrip(page,label,errors);
+        if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseAcroFormRoundTrip(page,label,errors);
         await page.locator(HELP).click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
