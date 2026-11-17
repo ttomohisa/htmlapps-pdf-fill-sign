@@ -3374,20 +3374,22 @@
           };
         } else if (['signature','initials','image'].includes(item.type)) {
           const ratio = drag.startRect.width / Math.max(1, drag.startRect.height);
-          let width = Math.max(48, drag.startRect.width + dx);
-          let height = width / ratio;
-          const maxWidth = pageWidth - drag.startRect.left;
-          const maxHeight = pageHeight - drag.startRect.top;
-          if (width > maxWidth) { width = maxWidth; height = width / ratio; }
-          if (height > maxHeight) { height = maxHeight; width = height * ratio; }
-          if (height < 24) { height = 24; width = height * ratio; }
-          rect = { left: drag.startRect.left, top: drag.startRect.top, width, height };
+          const maxWidth = Math.max(.5, pageWidth - drag.startRect.left);
+          const maxHeight = Math.max(.5, pageHeight - drag.startRect.top);
+          // Keep the aspect ratio while respecting both edges. The preferred
+          // 48px/24px minimum must yield if the remaining page is smaller.
+          const allowedWidth = Math.min(maxWidth, maxHeight * ratio);
+          const minWidth = Math.min(allowedWidth, Math.max(48, 24 * ratio));
+          const width = Math.min(allowedWidth, Math.max(minWidth, drag.startRect.width + dx));
+          rect = { left: drag.startRect.left, top: drag.startRect.top, width, height: width / ratio };
         } else {
+          const maxWidth = Math.max(.5, pageWidth - drag.startRect.left);
+          const maxHeight = Math.max(.5, pageHeight - drag.startRect.top);
           rect = {
             left: drag.startRect.left,
             top: drag.startRect.top,
-            width: Math.max(28, Math.min(pageWidth - drag.startRect.left, drag.startRect.width + dx)),
-            height: Math.max(24, Math.min(pageHeight - drag.startRect.top, drag.startRect.height + dy))
+            width: Math.min(maxWidth, Math.max(28, drag.startRect.width + dx)),
+            height: Math.min(maxHeight, Math.max(24, drag.startRect.height + dy))
           };
         }
         const pdfRect = pdfRectFromViewportRect(rect);
