@@ -180,3 +180,34 @@ test('replacement loading keeps positioning disabled after an older render finis
   runtime.resolve({getDocument:()=>({promise:Promise.reject(new Error('invalid fixture'))})});await opening;
   assert.equal(state.opening,false);assert.equal(node('#centerHorizontalButton').disabled,false);assert.equal(state.overlays.length,1);
 });
+
+for (const rotation of [0,90,180,270]) for (const type of ['text','date','mark','image','signature','initials']) {
+  test(`resizing ${type} near a small page edge stays within bounds at rotation ${rotation}`,()=>{
+    for (const dx of [-100,100]) {
+      const {state,context,run}=setup({type,rotation});
+      state.viewport=viewport(rotation,.73,30,20,[0,0]);
+      const pageWidth=state.viewport.width, pageHeight=state.viewport.height;
+      const startRect={
+        left:pageWidth*.55,top:pageHeight*.55,
+        width:pageWidth*.25,height:pageHeight*.20
+      };
+      Object.assign(state.overlays[0],run('pdfRectFromViewportRect('+JSON.stringify(startRect)+')'));
+      state.drag={
+        pointerId:7,element:{style:{}},itemId:state.overlays[0].id,
+        mode:'resize',startClientX:0,startClientY:0,startRect,snapshot:run('cloneEditState()')
+      };
+      context.applyOverlayGeometry=()=>{};
+      context.moveEvent={pointerId:7,clientX:dx,clientY:dx,preventDefault(){}};
+      load(context,['handleOverlayPointerMove']);
+      run('handleOverlayPointerMove(moveEvent)');
+      const rect=run('viewportRectFromPdfRect(state.overlays[0])');
+      assert.ok(rect.left>=-1e-7&&rect.top>=-1e-7,
+        `negative rect at ${rotation}: ${JSON.stringify(rect)}`);
+      assert.ok(rect.left+rect.width<=pageWidth+1e-6,
+        `width exceeds page at ${rotation}: ${JSON.stringify(rect)} / ${pageWidth}`);
+      assert.ok(rect.top+rect.height<=pageHeight+1e-6,
+        `height exceeds page at ${rotation}: ${JSON.stringify(rect)} / ${pageHeight}`);
+      assert.ok(rect.width>0&&rect.height>0,'resize must preserve positive dimensions');
+    }
+  });
+}
