@@ -24,7 +24,7 @@ GitHub Pages delivers the initial HTML. After it loads, PDF parsing, form editin
 - **Add content anywhere** — Place text, dates, ✓ / × / ○ marks, handwritten signatures, initials, and PNG / JPEG / WebP images over the PDF.
 - **Keep editable additions as vectors where practical** — Text/date additions are saved as PDF FreeText annotations; ✓ / × / ○ and newly drawn signatures/initials are saved as vector Ink annotations.
 - **Keep image assets as images** — Uploaded signature images, stamps, photos, logos, and other image-based assets remain raster annotations.
-- **Work comfortably on desktop and mobile** — Includes thumbnails, zoom, cursor-anchored `Ctrl/Cmd + wheel` zoom, touch panning, pinch zoom, and a phone bottom action bar.
+- **Work comfortably on desktop and mobile** — Includes thumbnails, zoom, cursor-anchored `Ctrl/Cmd + wheel` zoom, touch panning, pinch zoom, and a phone bottom action bar. On phones, the short introduction text remains visible while the large heading and local-processing badge are hidden.
 - **Duplicate additions** — Select an added item and choose **Duplicate selected item** to reuse its content and appearance on the same page. Undo/Redo restores both the edit and selection.
 - **Undo and redo editing** — Browser Kitty additions and supported form-value changes participate in editing history.
 - **Save a completed copy** — Export to a new `-filled.pdf` file without overwriting the source PDF.
