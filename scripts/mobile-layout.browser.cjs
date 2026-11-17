@@ -80,6 +80,39 @@ async function exerciseAcroFormRoundTrip(page, label, errors) {
   await checkField.waitFor({state:'visible'});
   assert.equal(await textField.inputValue(),'Edited QA field',label+': AcroForm value survives editable export');
   assert.equal(await checkField.isChecked(),true,label+': checkbox value survives editable export');
+
+  // The default flatten option should preserve visible values while
+  // disabling the original widget fields in the newly saved PDF.
+  await page.locator('#exportPdfButton').click();
+  assert.equal(await page.locator('#flattenFormsCheckbox').isChecked(),true,label+': flatten ON by default');
+  await page.locator('#exportCreateButton').click();
+  await page.waitForFunction(() => !document.querySelector('#exportResult').hidden ||
+    !document.querySelector('#exportError').hidden,null,{timeout:30000});
+  if (await page.locator('#exportError').isVisible())
+    throw new Error(label+': flattened AcroForm export failed: '+await page.locator('#exportErrorMessage').innerText()+
+      '; browser errors='+JSON.stringify(errors));
+  const flattenPending=page.waitForEvent('download');
+  await page.locator('#exportDownloadButton').click();
+  const flattened=fs.readFileSync(await (await flattenPending).path());
+  assert.equal(flattened.subarray(0,5).toString('latin1'),'%PDF-',label+': flattened PDF header');
+  await page.locator('#exportCloseButton').click();
+  await page.locator('#fileInput').setInputFiles({name:'flattened-form.pdf',mimeType:'application/pdf',buffer:flattened});
+  await page.waitForFunction(()=>document.querySelector('#fileName')?.textContent==='flattened-form.pdf' &&
+    !document.querySelector('#stageMessage')?.classList.contains('show'));
+  // Saving a visually flattened PDF should not leave editable form controls.
+  assert.equal(await page.locator('#formLayer [data-form-control="true"]').count(),0,
+    label+': flattened PDF does not show editable original fields');
+  const inkPixels=await page.locator('#pdfCanvas').evaluate(canvas=>{
+    const ctx=canvas.getContext('2d');
+    const scale=canvas.width/200;
+    const x=Math.max(0,Math.floor(20*scale)), y=Math.max(0,Math.floor(44*scale));
+    const w=Math.min(canvas.width-x,Math.floor(160*scale)), h=Math.min(canvas.height-y,Math.floor(26*scale));
+    const data=ctx.getImageData(x,y,w,h).data;
+    let visible=0;
+    for(let i=0;i<data.length;i+=4)if(data[i]<205&&data[i+1]<205&&data[i+2]<205)visible+=1;
+    return visible;
+  });
+  assert.ok(inkPixels>15,label+': flattened field appearance is painted in the exported PDF ('+inkPixels+')');
 }
 
 function isPhone(width, height) { return width <= PHONE_WIDTH || (width <= 900 && height <= 500 && width >= height); }
