@@ -136,7 +136,11 @@ async function main() {
         const badge = page.locator('.local-badge');
         assert.equal(await badge.isVisible(), !isPhone(width, height), label + ': privacy badge only on desktop');
         const hero = page.locator('.page-intro');
-        assert.equal(await hero.isVisible(), !isPhone(width, height), label + ': intro hidden on phones');
+        const heroHeading = page.locator('#heroTitle');
+        const heroDescription = page.locator('.page-intro [data-i18n="lead"]');
+        assert.equal(await hero.isVisible(), true, label + ': intro description remains available');
+        assert.equal(await heroHeading.isVisible(), !isPhone(width, height), label + ': hide hero heading on phones');
+        assert.equal(await heroDescription.isVisible(), true, label + ': keep short description visible on phones');
         assert.notEqual((await page.locator('#heroTitle').textContent()).trim(),
           (await page.locator('#brandName').textContent()).trim(), label + ': distinct hero and header titles');
         const lead = (await page.locator('.page-intro [data-i18n="lead"]').textContent()).trim();
@@ -154,14 +158,17 @@ async function main() {
         // Responsive changes must not leave the informational footer in a stale state.
         await page.setViewportSize({width:PHONE_WIDTH + 1, height});
         assert.equal(await page.locator('body > footer').isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': wider resize');
-        assert.equal(await hero.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': intro at wider resize');
+        assert.equal(await heroHeading.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': heading at wider resize');
+        assert.equal(await heroDescription.isVisible(), true, label + ': description at wider resize');
         assert.equal(await badge.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': badge at wider resize');
         await page.setViewportSize({width:PHONE_WIDTH, height});
         assert.equal(await page.locator('body > footer').isVisible(), false, label + ': phone resize');
-        assert.equal(await hero.isVisible(), false, label + ': hide intro after phone resize');
+        assert.equal(await heroHeading.isVisible(), false, label + ': hide heading after phone resize');
+        assert.equal(await heroDescription.isVisible(), true, label + ': retain description after phone resize');
         assert.equal(await badge.isVisible(), false, label + ': hide badge after phone resize');
         await page.setViewportSize({width,height});
-        assert.equal(await hero.isVisible(), !isPhone(width, height), label + ': intro restored at original viewport');
+        assert.equal(await heroHeading.isVisible(), !isPhone(width, height), label + ': heading at original viewport');
+        assert.equal(await heroDescription.isVisible(), true, label + ': description at original viewport');
         assert.equal(await badge.isVisible(), !isPhone(width, height), label + ': badge restored at original viewport');
         // The existing 120 ms fit-to-page debounce can scroll the selected thumbnail.
         // Finish that native render before testing the modal's background scroll lock.
