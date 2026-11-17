@@ -197,6 +197,7 @@ for (const rotation of [0,90,180,270]) for (const type of ['text','date','mark',
         mode:'resize',startClientX:0,startClientY:0,startRect,snapshot:run('cloneEditState()')
       };
       context.applyOverlayGeometry=()=>{};
+      context.MAX_FONT_SIZE=200;
       context.moveEvent={pointerId:7,clientX:dx,clientY:dx,preventDefault(){}};
       load(context,['handleOverlayPointerMove']);
       run('handleOverlayPointerMove(moveEvent)');
