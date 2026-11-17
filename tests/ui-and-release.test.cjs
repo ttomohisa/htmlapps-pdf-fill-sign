@@ -18,10 +18,13 @@ test('hero titles differ from the app header in both languages and are concise',
   assert.doesNotMatch(source,/処理は端末内だけで完結します。/);
   assert.doesNotMatch(source,/Processing stays entirely on your device\./);
 });
-test('phone styles hide the introduction and processing badge without removing either from desktop',()=>{
+test('phone styles retain the short description while hiding the hero heading and processing badge',()=>{
   assert.match(source,/@media \(max-width: 640px\), \(max-width: 900px\) and \(max-height: 500px\) and \(orientation: landscape\)/);
-  assert.match(source,/\.page-intro, \.local-badge \{ display: none; \}/);
+  assert.match(source,/\.page-intro h2, \.local-badge \{ display: none; \}/);
+  assert.match(source,/\.page-intro p \{ margin-top: 0; \}/);
+  assert.doesNotMatch(source,/\.page-intro, \.local-badge \{ display: none; \}/);
   assert.match(source,/<section class="page-intro"/);
+  assert.match(source,/<p data-i18n="lead">文字やチェック、署名・画像を追加してPDFを保存できます。<\/p>/);
   assert.match(source,/class="local-badge"/);
   assert.match(source,/\.pdf-drop-icon/);
   assert.match(source,/<path d="m8 10 4 4 4-4"\/>/);
