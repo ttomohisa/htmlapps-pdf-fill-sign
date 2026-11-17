@@ -175,6 +175,63 @@ async function exerciseExportRoundTrip(page,label,errors) {
 }
 
 // Check rendered geometry, including clipping by an ancestor (isVisible alone misses it).
+
+async function exerciseVisualAnnotationsRoundTrip(page,label,errors) {
+  await page.locator('#fileInput').setInputFiles({name:'media.pdf',mimeType:'application/pdf',buffer:syntheticPdf()});
+  await page.waitForFunction(()=>document.querySelector('#fileName')?.textContent==='media.pdf' &&
+    !document.querySelector('#stageMessage')?.classList.contains('show'));
+  const inkCount=()=>page.locator('#pdfCanvas').evaluate(canvas=>{
+    const ctx=canvas.getContext('2d');
+    const height=Math.floor(canvas.height*.53);
+    const pixels=ctx.getImageData(0,0,canvas.width,height).data;
+    let dark=0;
+    for(let i=0;i<pixels.length;i+=4)
+      if(pixels[i]<195 && pixels[i+1]<195 && pixels[i+2]<195)dark++;
+    return dark;
+  });
+  const before=await inkCount();
+  await page.locator('.pdf-tool-button[data-tool="check"]').click();
+  await page.locator('#overlayLayer').click({position:{x:55,y:75}});
+  await page.locator('#signatureButton').click();
+  const canvas=page.locator('#signatureCanvas');
+  await canvas.waitFor({state:'visible'});
+  const area=await canvas.boundingBox();
+  assert.ok(area&&area.width>100&&area.height>50,label+': signature pad visible');
+  await page.mouse.move(area.x+area.width*.2,area.y+area.height*.6);
+  await page.mouse.down();
+  await page.mouse.move(area.x+area.width*.5,area.y+area.height*.3,{steps:8});
+  await page.mouse.move(area.x+area.width*.8,area.y+area.height*.6,{steps:8});
+  await page.mouse.up();
+  assert.equal(await page.locator('#signatureUseButton').isEnabled(),true,label+': drawn signature can be used');
+  await page.locator('#signatureUseButton').click();
+  const image=await page.evaluate(()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=24;canvas.height=24;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#142baa';ctx.fillRect(2,2,20,20);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  await page.locator('#imageInput').setInputFiles({name:'stamp.png',mimeType:'image/png',buffer:Buffer.from(image,'base64')});
+  await page.waitForFunction(()=>document.querySelectorAll('#overlayLayer .pdf-overlay-item').length===3);
+  await page.locator('#exportPdfButton').click();
+  await page.locator('#exportCreateButton').click();
+  await page.waitForFunction(()=>!document.querySelector('#exportResult').hidden ||
+    !document.querySelector('#exportError').hidden,null,{timeout:30000});
+  if(await page.locator('#exportError').isVisible())
+    throw new Error(label+': mark/signature/image export failed: '+await page.locator('#exportErrorMessage').innerText()+
+      '; browser errors='+JSON.stringify(errors));
+  const pending=page.waitForEvent('download');
+  await page.locator('#exportDownloadButton').click();
+  const output=fs.readFileSync(await (await pending).path());
+  assert.equal(output.subarray(0,5).toString('latin1'),'%PDF-',label+': visual annotation PDF header');
+  await page.locator('#exportCloseButton').click();
+  await page.locator('#fileInput').setInputFiles({name:'annotations.pdf',mimeType:'application/pdf',buffer:output});
+  await page.waitForFunction(()=>document.querySelector('#fileName')?.textContent==='annotations.pdf' &&
+    !document.querySelector('#stageMessage')?.classList.contains('show'));
+  const after=await inkCount();
+  assert.ok(after>before+60,label+': saved PDF visibly contains new annotations ('+before+' -> '+after+')');
+}
+
 async function auditHeader(page, label) {
   const badge = page.locator('header #versionBadge');
   assert.equal(await badge.textContent(), 'v' + require('../app.config.json').version, label + ': current header version');
@@ -281,6 +338,7 @@ async function main() {
         await auditHeader(page, label);
         if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseExportRoundTrip(page,label,errors);
         if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseAcroFormRoundTrip(page,label,errors);
+        if (file === 'dist/index.html' && language === 'en' && width === 1360) await exerciseVisualAnnotationsRoundTrip(page,label,errors);
         await page.locator(HELP).click();
         const visibleHelpText = await page.locator('#helpDialog').innerText();
         assert.doesNotMatch(visibleHelpText, /(?:EN\s*\/\s*JA|JA\s*[\/／]\s*EN|ヘッダーのEN|Use EN in the header)/, label + ': redundant language instructions removed');
