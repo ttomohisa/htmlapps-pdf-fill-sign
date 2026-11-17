@@ -9,7 +9,7 @@
 - Release allocated image bitmaps when PDF export fails; permit browsers with createImageBitmap but no OffscreenCanvas.
 - Add a compensated `Math.sumPrecise` fallback to the embedded PDF.js main thread and Worker, fixing save failures on browsers without that API.
 - Add source-level PDF export regressions and a Chromium PDF download/reopen smoke test to CI. Cross-viewer form comparisons remain recommended.
-- Use a short, distinct page heading and description on desktop; hide the introduction and local-processing badge on phone layouts, replace the file-drop icon, and remove redundant bilingual Help text.
+- Use a short, distinct heading and description on desktop; on phones show the short description without the heading or local-processing badge, replace the file-drop icon, and remove redundant bilingual Help text.
 - Create the versioned tag and GitHub Release automatically after a PR is merged into `main` and release checks pass.
 
 ## 1.0.5 - 2026-10-27
