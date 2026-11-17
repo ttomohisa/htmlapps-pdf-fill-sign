@@ -9,6 +9,8 @@
 - Release allocated image bitmaps when PDF export fails; permit browsers with createImageBitmap but no OffscreenCanvas.
 - Add a compensated `Math.sumPrecise` fallback to the embedded PDF.js main thread and Worker, fixing save failures on browsers without that API.
 - Add source-level PDF export regressions and a Chromium PDF download/reopen smoke test to CI. Cross-viewer form comparisons remain recommended.
+- Keep resize handles inside the page even near narrow margins and on small or rotated PDF pages.
+- Expand Chromium end-to-end checks to cover editable and flattened form exports (text + checkbox), vector marks, drawn signatures, and image stamps after saving and reopening.
 - Use a short, distinct heading and description on desktop; on phones show the short description without the heading or local-processing badge, replace the file-drop icon, and remove redundant bilingual Help text.
 - Create the versioned tag and GitHub Release automatically after a PR is merged into `main` and release checks pass.
 
