@@ -142,7 +142,7 @@ async function checkViewerControlsOneRow(page, width, height, label) {
   }
   for(let index=1;index<boxes.length;index++) {
     assert.ok(boxes[index].box.x >= boxes[index-1].box.x+boxes[index-1].box.width-1,
-      label+': '+boxes[index].selector+' must not overlap the previous control');
+      label+': '+boxes[index].selector+' must not overlap the previous control '+JSON.stringify({previous:boxes[index-1],current:boxes[index],container}));
   }
   assert.equal(await page.locator('#fitButton svg').isVisible(),true,label+': fit icon is visible');
   assert.equal(await page.locator('#closePdfButton svg').isVisible(),true,label+': close PDF icon is visible');
