@@ -62,15 +62,15 @@ test('Close PDF uses a compact cross icon on desktop and keeps phone tap targets
   assert.match(source,/\.pdf-close-button svg \{ display: block; width: 18px; height: 18px; \}/);
   assert.match(source,/flex: 0 0 40px; width: 40px; height: 44px; min-height: 44px; padding: 0;/);
 });
-test('phone close control is red and prompts even without unsaved edits',()=>{
-  assert.match(source,/\.pdf-viewer-head \.pdf-close-button \{ color: #b42318; \}/);
+test('desktop and phone close controls are red and always ask for confirmation',()=>{
+  assert.match(source,/\.pdf-close-button \{ display: inline-flex; align-items: center; justify-content: center; gap: 6px; color: #b42318;/);
   assert.match(source,/closePdfConfirmTitle: 'PDFを閉じますか？'/);
   assert.match(source,/closePdfConfirmTitle: 'Close this PDF\?'/);
-  assert.match(source,/if \(unsaved \|\| mobileQuery\?\.matches\) \{/);
   assert.match(source,/title: translate\(unsaved \? 'discardTitle' : 'closePdfConfirmTitle'\)/);
   assert.match(source,/confirmLabel: translate\(unsaved \? 'discardCloseAction' : 'closePdf'\)/);
-  assert.match(source,/tone: unsaved \? 'danger' : 'default'/);
+  assert.match(source,/cancelLabel: translate\('cancel'\), tone: 'danger'/);
   assert.match(source,/if \(!confirmed \|\| state\.pdf !== currentPdf \|\| state\.exporting\) return;/);
+  assert.doesNotMatch(source,/if \(unsaved \|\| mobileQuery\?\.matches\) \{/);
 });
 test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
   assert.match(workflow,/pull_request:\s*\n\s+types: \[closed\]/);
