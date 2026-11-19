@@ -1017,6 +1017,33 @@
       .signature-pad { height: 96px; }
       .signature-image-drop { min-height: 96px; }
     }
+
+    /* Keep all PDF navigation controls in one row on portrait and landscape phones.
+       The fixed bottom bar still contains Save, so only the page and zoom
+       actions plus Fit / Close need to share this compact top control row. */
+    @media (max-width: 640px), (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+      .pdf-viewer-controls { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 4px; }
+      .pdf-control-group { flex: 0 1 auto; min-width: 0; gap: 2px; }
+      .pdf-control-group + .pdf-control-group { padding-left: 0; border-left: 0; }
+      .pdf-page-indicator { min-width: 0; width: 38px; white-space: nowrap; font-size: 11px; }
+      .pdf-zoom-label { min-width: 38px; padding-inline: 1px; }
+      .pdf-viewer-head .pdf-control-group .icon-button { width: 40px; height: 44px; flex: 0 0 40px; }
+      .pdf-fit-button span, .pdf-close-button span { display: none; }
+      .pdf-viewer-head .pdf-fit-button, .pdf-viewer-head .pdf-close-button {
+        display: inline-grid; place-items: center;
+        flex: 0 0 40px; width: 40px; height: 44px; min-height: 44px; padding: 0;
+      }
+      .pdf-close-button svg { display: block; width: 18px; height: 18px; }
+      .pdf-viewer-head .pdf-fit-button svg { width: 18px; height: 18px; }
+    }
+    @media (max-width: 390px) {
+      .pdf-viewer-controls { gap: 2px; }
+      .pdf-control-group { gap: 2px; }
+      .pdf-page-indicator { width: 28px; font-size: 10px; }
+      .pdf-zoom-label { min-width: 36px; font-size: 10px; }
+      .pdf-viewer-head .pdf-control-group .icon-button { width: 36px; flex-basis: 36px; }
+      .pdf-viewer-head .pdf-fit-button, .pdf-viewer-head .pdf-close-button { width: 36px; flex-basis: 36px; }
+    }
   </style>
 </head>
 <body>
@@ -1107,7 +1134,10 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v6h8V4M8 20v-6h8v6"/></svg>
               <span data-i18n="savePdf">PDFを保存</span>
             </button>
-            <button class="button pdf-close-button" id="closePdfButton" type="button" data-i18n="closePdf">PDFを閉じる</button>
+            <button class="button pdf-close-button" id="closePdfButton" type="button" data-i18n-title="closePdf" data-i18n-aria-label="closePdf" title="PDFを閉じる" aria-label="PDFを閉じる">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13l6 6m0-6-6 6"/></svg>
+              <span data-i18n="closePdf">PDFを閉じる</span>
+            </button>
           </div>
         </div>
         <div class="pdf-edit-toolbar" id="editToolbar" role="toolbar" data-i18n-aria-label="editTools" aria-label="編集ツール">
