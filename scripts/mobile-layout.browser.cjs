@@ -138,7 +138,7 @@ async function checkViewerControlsOneRow(page, width, height, label) {
     assert.ok(Math.abs((item.box.y+item.box.height/2)-(container.y+container.height/2))<=2,
       label+': '+item.selector+' stays in the same horizontal row ('+JSON.stringify(item.box)+')');
     assert.ok(item.box.x>=container.x-1 && item.box.x+item.box.width<=container.x+container.width+1,
-      label+': '+item.selector+' fits horizontally');
+      label+': '+item.selector+' fits horizontally '+JSON.stringify({item,container,all:boxes}));
   }
   for(let index=1;index<boxes.length;index++) {
     assert.ok(boxes[index].box.x >= boxes[index-1].box.x+boxes[index-1].box.width-1,
