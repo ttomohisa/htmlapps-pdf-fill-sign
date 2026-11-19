@@ -137,8 +137,15 @@ async function checkViewerControlsOneRow(page, width, height, label) {
   for (const item of boxes) {
     assert.ok(Math.abs((item.box.y+item.box.height/2)-(container.y+container.height/2))<=2,
       label+': '+item.selector+' stays in the same horizontal row ('+JSON.stringify(item.box)+')');
+    const geometry=await page.evaluate(()=>{
+      const names=['.main','.pdf-workspace','.pdf-viewer-head','.pdf-viewer-controls'];
+      return names.map(name=>{
+        const el=document.querySelector(name),r=el.getBoundingClientRect(),st=getComputedStyle(el);
+        return {name,rect:{x:r.x,width:r.width,right:r.right},padding:st.paddingInlineStart+' '+st.paddingInlineEnd,overflow:st.overflowX};
+      });
+    });
     assert.ok(item.box.x>=container.x-1 && item.box.x+item.box.width<=container.x+container.width+1,
-      label+': '+item.selector+' fits horizontally '+JSON.stringify({item,container,all:boxes}));
+      label+': '+item.selector+' fits horizontally '+JSON.stringify({item,container,geometry,all:boxes}));
   }
   for(let index=1;index<boxes.length;index++) {
     assert.ok(boxes[index].box.x >= boxes[index-1].box.x+boxes[index-1].box.width-1,
