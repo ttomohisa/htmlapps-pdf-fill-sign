@@ -372,11 +372,7 @@ async function main() {
         assert.ok(closeGeometry.height <= (isPhone(width, height) ? 45 : 38),
           label + ': Close PDF button matches toolbar height ' + JSON.stringify(closeGeometry));
         const closeColor = await page.locator('#closePdfButton').evaluate(button => getComputedStyle(button).color);
-        if (isPhone(width, height)) {
-          assert.equal(closeColor, 'rgb(180, 35, 24)', label + ': mobile close X uses red color');
-        } else {
-          assert.notEqual(closeColor, 'rgb(180, 35, 24)', label + ': desktop close control stays neutral');
-        }
+        assert.equal(closeColor, 'rgb(180, 35, 24)', label + ': close control uses red on desktop and phone');
         assert.equal(await hero.isVisible(), false, label + ': hide entire intro when PDF opens');
         assert.equal(await heroHeading.isVisible(), false, label + ': hide hero title when PDF opens');
         assert.equal(await heroDescription.isVisible(), false, label + ': hide intro description when PDF opens');
@@ -459,25 +455,22 @@ async function main() {
           await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
         }
         await page.locator('#closePdfButton').click();
-        if (isPhone(width, height)) {
-          const confirmation = page.locator('#appConfirmDialog');
-          await confirmation.waitFor({state:'visible'});
-          assert.equal((await page.locator('#appConfirmTitle').textContent()).trim(),
-            language === 'ja' ? 'PDFを閉じますか？' : 'Close this PDF?',
-            label + ': clean mobile close asks for confirmation');
-          assert.equal((await page.locator('#appConfirmOk').textContent()).trim(),
-            language === 'ja' ? 'PDFを閉じる' : 'Close PDF',
-            label + ': close confirmation uses a localized action');
-          await page.locator('#appConfirmCancel').click();
-          assert.equal(await confirmation.isVisible(), false, label + ': Cancel dismisses close confirmation');
-          assert.equal(await page.locator('#viewer').isVisible(), true, label + ': cancel preserves open PDF');
-          await page.locator('#closePdfButton').click();
-          await confirmation.waitFor({state:'visible'});
-          await page.locator('#appConfirmOk').click();
-        } else {
-          assert.equal(await page.locator('#appConfirmDialog').isVisible(), false,
-            label + ': unchanged PDF still closes immediately on desktop');
-        }
+        const confirmation = page.locator('#appConfirmDialog');
+        await confirmation.waitFor({state:'visible'});
+        assert.equal((await page.locator('#appConfirmTitle').textContent()).trim(),
+          language === 'ja' ? 'PDFを閉じますか？' : 'Close this PDF?',
+          label + ': clean PDF close asks for confirmation on desktop and phone');
+        assert.equal((await page.locator('#appConfirmOk').textContent()).trim(),
+          language === 'ja' ? 'PDFを閉じる' : 'Close PDF',
+          label + ': close confirmation uses a localized action');
+        assert.equal(await page.locator('#appConfirmOk').evaluate(button => getComputedStyle(button).backgroundColor),
+          'rgb(179, 38, 30)', label + ': Close PDF confirmation is red');
+        await page.locator('#appConfirmCancel').click();
+        assert.equal(await confirmation.isVisible(), false, label + ': Cancel dismisses close confirmation');
+        assert.equal(await page.locator('#viewer').isVisible(), true, label + ': cancel preserves open PDF');
+        await page.locator('#closePdfButton').click();
+        await confirmation.waitFor({state:'visible'});
+        await page.locator('#appConfirmOk').click();
         await page.locator('#emptyView').waitFor({state:'visible'});
         assert.equal(await hero.isVisible(), true, label + ': intro returns when PDF is closed');
         assert.equal(await heroHeading.isVisible(), !isPhone(width,height), label + ': title reappears only on desktop');
