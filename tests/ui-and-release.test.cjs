@@ -80,7 +80,9 @@ test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
   assert.match(workflow,/merge_commit_sha/);
   assert.match(workflow,/\.\/scripts\/check-repository\.ps1/);
   assert.match(workflow,/\$tag = "v\$version"/);
-  assert.match(workflow,/git tag --list/);
+  assert.match(workflow,/\$existingTag = @\(& git tag --list \$tag\)/);
+  assert.match(workflow,/if \(\$existingTag\.Count -gt 0\)/);
+  assert.doesNotMatch(workflow,/\(\[string\]\(& git tag --list \$tag\)\)\.Trim\(\)/);
   assert.match(workflow,/gh release view/);
   assert.match(workflow,/gh release create/);
   assert.match(workflow,/--target \$env:MERGED_COMMIT/);
