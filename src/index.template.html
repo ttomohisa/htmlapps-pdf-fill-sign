@@ -443,11 +443,17 @@
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
 
-    /* Keep the editing workspace immediately available on phone-sized viewports. */
+    /* Once a PDF is open, keep the editing workspace in view on all screen sizes. */
+    body.pdf-has-document .page-intro { display: none; }
+
+    /* On phones, show only the short introduction before opening a PDF.
+       The header scrolls away instead of following the page. */
     @media (max-width: 640px), (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+      .app-header { position: static; }
       .page-intro { padding-bottom: 12px; }
       .page-intro h2, .local-badge { display: none; }
       .page-intro p { margin-top: 0; }
+      .pdf-edit-toolbar, .pdf-inspector, .pdf-thumbnails { scroll-margin-top: 12px; }
       .main { padding-top: 14px; }
     }
 
@@ -1711,6 +1717,7 @@
       function updateMobileUi() {
         const active = Boolean(state.pdf);
         document.body.classList.toggle('pdf-has-mobile-actions', active);
+        document.body.classList.toggle('pdf-has-document', active);
         const bar = $('#mobileActionBar');
         if (bar) bar.hidden = !active;
         const edit = $('#mobileEditButton');
