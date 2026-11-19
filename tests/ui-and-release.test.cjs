@@ -53,6 +53,15 @@ test('PDF control row remains compact and accessible on narrow phones',()=>{
   assert.match(source,/id="fitButton"[^>]+data-i18n-title="fitWidth"/);
   assert.match(source,/id="zoomResetButton"[^>]+data-i18n-aria-label="zoomReset"/);
 });
+test('Close PDF uses a compact cross icon on desktop and keeps phone tap targets',()=>{
+  assert.match(source,/\.pdf-close-button \{ display: inline-flex; align-items: center; justify-content: center; gap: 6px;/);
+  assert.match(source,/\.pdf-close-button svg \{ display: block; flex: none; width: 16px; height: 16px; \}/);
+  assert.match(source,/<button class="button pdf-close-button" id="closePdfButton"[^>]+data-i18n-aria-label="closePdf"/);
+  assert.match(source,/<path d="M18 6 6 18M6 6l12 12"\/>/);
+  assert.doesNotMatch(source,/M14 2H6a2 2 0 0 0-2 2v16/);
+  assert.match(source,/\.pdf-close-button svg \{ display: block; width: 18px; height: 18px; \}/);
+  assert.match(source,/flex: 0 0 40px; width: 40px; height: 44px; min-height: 44px; padding: 0;/);
+});
 test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
   assert.match(workflow,/pull_request:\s*\n\s+types: \[closed\]/);
   assert.match(workflow,/branches: \[main\]/);
