@@ -359,6 +359,18 @@ async function main() {
           assert.ok(box && text && box.x >= 0 && box.x + box.width <= width + 1 && text.x >= box.x && text.x + text.width <= box.x + box.width + 1, label + ': local-processing badge fits');
         }
         await exerciseActions(page, width, height, label);
+        const closeGeometry = await page.locator('#closePdfButton').evaluate(button => {
+          const icon = button.querySelector('svg');
+          const rect = button.getBoundingClientRect();
+          const svgRect = icon.getBoundingClientRect();
+          return {height:rect.height, iconWidth:svgRect.width, iconHeight:svgRect.height};
+        });
+        const expectedIconSize = isPhone(width, height) ? 18 : 16;
+        assert.ok(Math.abs(closeGeometry.iconWidth - expectedIconSize) <= 1 &&
+          Math.abs(closeGeometry.iconHeight - expectedIconSize) <= 1,
+          label + ': Close PDF icon stays compact ' + JSON.stringify(closeGeometry));
+        assert.ok(closeGeometry.height <= (isPhone(width, height) ? 45 : 38),
+          label + ': Close PDF button matches toolbar height ' + JSON.stringify(closeGeometry));
         assert.equal(await hero.isVisible(), false, label + ': hide entire intro when PDF opens');
         assert.equal(await heroHeading.isVisible(), false, label + ': hide hero title when PDF opens');
         assert.equal(await heroDescription.isVisible(), false, label + ': hide intro description when PDF opens');
