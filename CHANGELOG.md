@@ -14,6 +14,7 @@
 - Use a short, distinct heading and description on desktop; before opening a PDF, phones show just the short description. Hide the entire introduction and local-processing badge while a PDF is open, and restore them when it closes. On phone screens, the header scrolls with the document while the bottom action bar stays fixed.
 - Keep PDF navigation, zoom, Fit, and Close on one phone-sized control row by using accessible icon buttons for Fit and Close, including 320px screens.
 - Replace the oversized Close PDF document icon with a compact cross and align the desktop button with the rest of the toolbar; keep the full accessible label on phones.
+- Use a red close cross on phones. Confirm every phone close (including unchanged PDFs), with the existing unsaved-edits warning retained; desktops continue to prompt only for unsaved edits.
 - Replace the file-drop icon and remove redundant bilingual Help text.
 - Create the versioned tag and GitHub Release automatically after a PR is merged into `main` and release checks pass.
 
