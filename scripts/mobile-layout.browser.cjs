@@ -125,6 +125,32 @@ async function checkActions(page, width, height, label) {
     assert.ok(box && box.x >= 0 && box.x + box.width <= width + 1 && box.y >= 0 && box.y + box.height <= height + 1, label + ': action bar stays inside viewport');
   }
 }
+async function checkViewerControlsOneRow(page, width, height, label) {
+  if (!isPhone(width, height)) return;
+  const selectors=['#prevButton','#pageIndicator','#nextButton','#zoomOutButton',
+    '#zoomResetButton','#zoomInButton','#fitButton','#closePdfButton'];
+  const boxes=await Promise.all(selectors.map(async selector=>({
+    selector,box:await page.locator(selector).boundingBox()
+  })));
+  const container=await page.locator('.pdf-viewer-controls').boundingBox();
+  assert.ok(container && boxes.every(item=>item.box),label+': all navigation controls are displayed');
+  for (const item of boxes) {
+    assert.ok(Math.abs((item.box.y+item.box.height/2)-(container.y+container.height/2))<=2,
+      label+': '+item.selector+' stays in the same horizontal row ('+JSON.stringify(item.box)+')');
+    assert.ok(item.box.x>=container.x-1 && item.box.x+item.box.width<=container.x+container.width+1,
+      label+': '+item.selector+' fits horizontally');
+  }
+  for(let index=1;index<boxes.length;index++) {
+    assert.ok(boxes[index].box.x >= boxes[index-1].box.x+boxes[index-1].box.width-1,
+      label+': '+boxes[index].selector+' must not overlap the previous control');
+  }
+  assert.equal(await page.locator('#fitButton svg').isVisible(),true,label+': fit icon is visible');
+  assert.equal(await page.locator('#closePdfButton svg').isVisible(),true,label+': close PDF icon is visible');
+  assert.equal(await page.locator('#closePdfButton span').isVisible(),false,label+': close PDF label is visually compact');
+  assert.ok((await page.locator('#closePdfButton').getAttribute('aria-label'))?.length,
+    label+': close PDF retains an accessible label');
+}
+
 async function exerciseActions(page, width, height, label) {
   await page.locator('#fileInput').setInputFiles({name:'synthetic.pdf', mimeType:'application/pdf', buffer:syntheticPdf()});
   await page.locator('#viewer').waitFor();
@@ -143,6 +169,7 @@ async function exerciseActions(page, width, height, label) {
     await page.locator('#mobileToolsButton').click();
   }
   await checkActions(page, width, height, label);
+  await checkViewerControlsOneRow(page, width, height, label);
 }
 
 // Exercise the actual embedded PDF.js save and reopen path, not just DOM source guards.
@@ -324,18 +351,21 @@ async function main() {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');
         // Responsive changes must not leave the informational footer in a stale state.
         await page.setViewportSize({width:PHONE_WIDTH + 1, height});
+        await checkViewerControlsOneRow(page, PHONE_WIDTH + 1, height, label + ': wider resize');
         assert.equal(await page.locator('body > footer').isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': wider resize');
         assert.equal(await hero.isVisible(), false, label + ': intro hidden after wider resize');
         assert.equal(await badge.isVisible(), false, label + ': badge hidden after wider resize');
         assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
           isPhone(PHONE_WIDTH + 1, height) ? 'static' : 'sticky', label + ': header breakpoint after wider resize');
         await page.setViewportSize({width:PHONE_WIDTH, height});
+        await checkViewerControlsOneRow(page, PHONE_WIDTH, height, label + ': phone resize');
         assert.equal(await page.locator('body > footer').isVisible(), false, label + ': phone resize');
         assert.equal(await hero.isVisible(), false, label + ': intro hidden after phone resize');
         assert.equal(await badge.isVisible(), false, label + ': badge hidden after phone resize');
         assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
           'static', label + ': header does not stick after phone resize');
         await page.setViewportSize({width,height});
+        await checkViewerControlsOneRow(page,width,height,label + ': restored viewport');
         assert.equal(await hero.isVisible(), false, label + ': intro remains hidden at original viewport');
         assert.equal(await badge.isVisible(), false, label + ': badge remains hidden at original viewport');
         assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
