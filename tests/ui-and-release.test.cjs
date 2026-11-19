@@ -43,6 +43,15 @@ test('phone header scrolls normally while desktop header stays sticky',()=>{
   assert.match(source,/body \.pdf-edit-toolbar, body \.pdf-inspector, body \.pdf-thumbnails \{ scroll-margin-top: 12px; \}/);
   assert.match(source,/\.pdf-mobile-action-bar:not\(\[hidden\]\) \{/);
 });
+test('PDF control row remains compact and accessible on narrow phones',()=>{
+  assert.match(source,/\.pdf-viewer-controls \{ width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 4px; \}/);
+  assert.match(source,/\.pdf-fit-button span, \.pdf-close-button span \{ display: none; \}/);
+  assert.match(source,/@media \(max-width: 390px\)/);
+  assert.match(source,/<button class="button pdf-close-button" id="closePdfButton"[^>]+data-i18n-aria-label="closePdf"/);
+  assert.match(source,/<span data-i18n="closePdf">PDFを閉じる<\/span>/);
+  assert.match(source,/id="fitButton"[^>]+data-i18n-title="fitWidth"/);
+  assert.match(source,/id="zoomResetButton"[^>]+data-i18n-aria-label="zoomReset"/);
+});
 test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
   assert.match(workflow,/pull_request:\s*\n\s+types: \[closed\]/);
   assert.match(workflow,/branches: \[main\]/);
