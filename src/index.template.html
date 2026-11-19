@@ -537,6 +537,9 @@
     .pdf-zoom-label { min-width: 52px; padding: 0 8px; color: var(--muted); text-align: center; font: inherit; font-size: 11px; font-weight: 720; font-variant-numeric: tabular-nums; cursor: pointer; }
     .pdf-fit-button { display: inline-flex; align-items: center; gap: 6px; }
     .pdf-fit-button svg { width: 16px; height: 16px; }
+    .pdf-close-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); white-space: nowrap; }
+    .pdf-close-button:hover { color: var(--text); }
+    .pdf-close-button svg { display: block; flex: none; width: 16px; height: 16px; }
 
     /* Match the three desktop panes. Keep the v0.9.1 620px minimum, but use
        available viewport height on taller displays without zoom-driven growth. */
@@ -1137,7 +1140,7 @@
               <span data-i18n="savePdf">PDFを保存</span>
             </button>
             <button class="button pdf-close-button" id="closePdfButton" type="button" data-i18n-title="closePdf" data-i18n-aria-label="closePdf" title="PDFを閉じる" aria-label="PDFを閉じる">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13l6 6m0-6-6 6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
               <span data-i18n="closePdf">PDFを閉じる</span>
             </button>
           </div>
