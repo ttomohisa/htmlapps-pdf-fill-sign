@@ -1038,6 +1038,8 @@
         flex: 0 0 40px; width: 40px; height: 44px; min-height: 44px; padding: 0;
       }
       .pdf-close-button svg { display: block; width: 18px; height: 18px; }
+      .pdf-viewer-head .pdf-close-button { color: #b42318; }
+      .pdf-viewer-head .pdf-close-button:hover { color: #912018; border-color: #f2b5b1; background: #fff3f2; }
       .pdf-viewer-head .pdf-fit-button svg { width: 18px; height: 18px; }
     }
     @media (max-width: 390px) {
@@ -1516,6 +1518,7 @@
           contentLabel: '内容', fontSizeLabel: '文字サイズ', colorLabel: '色', colorBlack: '黒', colorBlue: '青', colorRed: '赤', duplicateItem: '選択項目を複製', deleteItem: '選択項目を削除',
           typeText: '文字', typeDate: '日付', typeMark: 'マーク', typeSignature: '署名', typeInitials: 'イニシャル', typeImage: '画像・印影', defaultText: 'テキスト', deleted: '選択項目を削除しました',
           signatureDialogTitle: '署名を追加', initialsDialogTitle: 'イニシャルを追加', signatureDialogNote: '手書きするか、画像を選択してください。', signatureTabDraw: '描く', signatureTabImage: '画像', signatureColorLabel: '色', signaturePadHint: 'マウス・指・ペンで書けます', signatureTransparent: '背景は透明です', signatureClear: '消去', signatureUse: '使用する', signatureEmpty: '手書きするか画像を選択してください。', signatureImagePrompt: 'PNG / JPEG / WebP の画像を選択', chooseImage: '画像を選択', fileFallback: 'ファイルから選択', saveOnDevice: 'この端末に保存する', saveOnDeviceNote: '保存したデータも外部へ送信されません。', useSaved: '保存済みを使う', deleteSaved: '保存済みを削除', savedDeleted: '端末内の保存データを削除しました', invalidImage: '画像を読み込めませんでした。PNG、JPEG、WebPを使用してください。', pageNotReady: 'ページの表示が終わってから配置してください。', exportTitle: 'PDFを保存', exportFilename: 'ファイル名', exportNote: '追加した文字・マーク・署名・画像とフォーム入力内容をPDFへ保存し、新しいPDFを作成します。元のPDFは変更しません。', flattenForms: '入力内容を固定する', flattenFormsNote: 'フォーム欄を操作できない見た目として固定します。OFFでは入力欄を残します。', exportCreate: 'PDFを作成', exporting: 'PDFを作成しています…', exportingNote: 'ページ数や画像の大きさによって時間がかかる場合があります。', exportReady: 'PDFを作成しました', exportReadyNote: '「PDFを保存」を押して端末へ保存してください。', exportBack: 'ファイル名を変更', exportFailed: 'PDFを作成できませんでした', exportFailureMessage: '編集内容はそのまま残っています。もう一度試すか、画像を減らして試してください。', exportUnsupported: 'このブラウザーではPDF保存に必要な画像処理機能を利用できません。ブラウザーを最新版に更新してください。', exportTextOverflow: 'フォームの入力内容が欄に収まりません。内容を短くするか、「入力内容を固定する」をOFFにして保存してください。', retry: 'もう一度試す',
+          closePdfConfirmTitle: 'PDFを閉じますか？', closePdfConfirmMessage: 'ファイルを選ぶ画面に戻ります。',
           discardTitle: '編集内容を破棄しますか？', discardMessage: '現在の編集内容はまだ端末へ保存されていません。PDFを閉じるか別のPDFを開くと失われます。', discardCloseAction: '破棄して閉じる', discardReplaceAction: '破棄して開く',
           confirmTitle: '確認', confirmAction: '実行する', cancel: 'キャンセル',
           footer: '記入と署名はブラウザー内で完結'
@@ -1555,6 +1558,7 @@
           contentLabel: 'Content', fontSizeLabel: 'Font size', colorLabel: 'Color', colorBlack: 'Black', colorBlue: 'Blue', colorRed: 'Red', duplicateItem: 'Duplicate selected item', deleteItem: 'Delete selected item',
           typeText: 'Text', typeDate: 'Date', typeMark: 'Mark', typeSignature: 'Signature', typeInitials: 'Initials', typeImage: 'Image / stamp', defaultText: 'Text', deleted: 'Item deleted',
           signatureDialogTitle: 'Add signature', initialsDialogTitle: 'Add initials', signatureDialogNote: 'Draw it or choose an image from this device.', signatureTabDraw: 'Draw', signatureTabImage: 'Image', signatureColorLabel: 'Color', signaturePadHint: 'Draw with a mouse, finger, or pen', signatureTransparent: 'Transparent background', signatureClear: 'Clear', signatureUse: 'Use', signatureEmpty: 'Draw or choose an image first.', signatureImagePrompt: 'Choose a PNG, JPEG, or WebP image', chooseImage: 'Choose image', fileFallback: 'Choose from files', saveOnDevice: 'Save on this device', saveOnDeviceNote: 'Saved data is not sent anywhere.', useSaved: 'Use saved', deleteSaved: 'Delete saved', savedDeleted: 'Saved data was deleted from this device', invalidImage: 'The image could not be loaded. Use PNG, JPEG, or WebP.', pageNotReady: 'Wait for the current page to finish rendering before placing it.', exportTitle: 'Save PDF', exportFilename: 'File name', exportNote: 'Save added text, marks, signatures, images, and form values into a new PDF. The original PDF is not changed.', flattenForms: 'Fix entered form content', flattenFormsNote: 'Make the form fields non-interactive and preserve their current appearance. Turn this off to keep fields editable.', exportCreate: 'Create PDF', exporting: 'Creating PDF…', exportingNote: 'This may take longer for PDFs with many pages or large images.', exportReady: 'PDF created', exportReadyNote: 'Press Save PDF to save it to your device.', exportBack: 'Change file name', exportFailed: 'Could not create PDF', exportFailureMessage: 'Your edits are still here. Try again or reduce the number or size of images.', exportUnsupported: 'This browser does not provide the image processing features required for PDF export. Update your browser and try again.', exportTextOverflow: 'Some form text does not fit inside its field. Shorten the text, or turn off Fix entered form content before saving.', retry: 'Try again',
+          closePdfConfirmTitle: 'Close this PDF?', closePdfConfirmMessage: 'Return to the file selection screen.',
           discardTitle: 'Discard your edits?', discardMessage: 'The current edits have not been saved to your device. Closing this PDF or opening another one will discard them.', discardCloseAction: 'Discard and close', discardReplaceAction: 'Discard and open',
           confirmTitle: 'Confirm', confirmAction: 'Continue', cancel: 'Cancel',
           footer: 'Filling and signing stay in the browser'
@@ -3030,23 +3034,33 @@
         }
       }
 
+      let closePdfPending = false;
       async function closePdf() {
-        if (state.exporting) return;
-        if (hasUnsavedChanges()) {
-          const confirmed = await AppConfirm.ask({
-            title: translate('discardTitle'), message: translate('discardMessage'),
-            confirmLabel: translate('discardCloseAction'), cancelLabel: translate('cancel'), tone: 'danger'
-          });
-          if (!confirmed) return;
+        if (!state.pdf || state.exporting || closePdfPending) return;
+        closePdfPending = true;
+        const currentPdf = state.pdf;
+        try {
+          const unsaved = hasUnsavedChanges();
+          if (unsaved || mobileQuery?.matches) {
+            const confirmed = await AppConfirm.ask({
+              title: translate(unsaved ? 'discardTitle' : 'closePdfConfirmTitle'),
+              message: translate(unsaved ? 'discardMessage' : 'closePdfConfirmMessage'),
+              confirmLabel: translate(unsaved ? 'discardCloseAction' : 'closePdf'),
+              cancelLabel: translate('cancel'), tone: unsaved ? 'danger' : 'default'
+            });
+            if (!confirmed || state.pdf !== currentPdf || state.exporting) return;
+          }
+          state.openRequestId += 1;
+          await releaseDocument();
+          $('#viewer').hidden = true;
+          $('#emptyView').hidden = false;
+          $('#sidebar').textContent = '';
+          $('#pdfCanvas').width = 1;
+          $('#pdfCanvas').height = 1;
+          hideStage();
+        } finally {
+          closePdfPending = false;
         }
-        state.openRequestId += 1;
-        await releaseDocument();
-        $('#viewer').hidden = true;
-        $('#emptyView').hidden = false;
-        $('#sidebar').textContent = '';
-        $('#pdfCanvas').width = 1;
-        $('#pdfCanvas').height = 1;
-        hideStage();
       }
 
       function cloneOverlayItem(item) {
