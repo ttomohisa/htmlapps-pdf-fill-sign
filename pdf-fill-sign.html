@@ -1023,10 +1023,11 @@
        actions plus Fit / Close need to share this compact top control row. */
     @media (max-width: 640px), (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
       .pdf-viewer-controls { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 4px; }
-      .pdf-control-group { flex: 0 1 auto; min-width: 0; gap: 2px; }
+      .pdf-control-group { flex: 0 0 auto; min-width: 0; gap: 2px; }
       .pdf-control-group + .pdf-control-group { padding-left: 0; border-left: 0; }
       .pdf-page-indicator { min-width: 0; width: 38px; white-space: nowrap; font-size: 11px; }
       .pdf-zoom-label { min-width: 38px; padding-inline: 1px; }
+      .pdf-zoom-control { flex: 0 0 auto; }
       .pdf-viewer-head .pdf-control-group .icon-button { width: 40px; height: 44px; flex: 0 0 40px; }
       .pdf-fit-button span, .pdf-close-button span { display: none; }
       .pdf-viewer-head .pdf-fit-button, .pdf-viewer-head .pdf-close-button {
@@ -1039,9 +1040,9 @@
     @media (max-width: 390px) {
       .pdf-viewer-controls { gap: 2px; }
       .pdf-control-group { gap: 2px; }
-      .pdf-page-indicator { width: 28px; font-size: 10px; }
-      .pdf-zoom-label { min-width: 36px; font-size: 10px; }
-      .pdf-viewer-head .pdf-control-group .icon-button { width: 36px; flex-basis: 36px; }
+      .pdf-page-indicator { width: 30px; flex: 0 0 30px; font-size: 10px; }
+      .pdf-zoom-label { min-width: 32px; font-size: 10px; }
+      .pdf-viewer-head .pdf-control-group .icon-button { width: 34px; flex-basis: 34px; }
       .pdf-viewer-head .pdf-fit-button, .pdf-viewer-head .pdf-close-button { width: 36px; flex-basis: 36px; }
     }
   </style>
