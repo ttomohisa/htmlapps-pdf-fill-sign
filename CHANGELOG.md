@@ -2,6 +2,8 @@
 
 ## 1.0.6 - Unreleased
 
+- Fix the release-on-merge workflow failing when no version tag exists yet (PowerShell null output from `git tag --list`).
+
 - Refuse to flatten form text when it cannot fit instead of truncating entered lines; automatically reduce font size when possible.
 - Avoid painting an invented white form background or border when the source widget provides neither; retain explicit widget colors where provided.
 - Warn on detected digital signatures before saving a modified PDF.
