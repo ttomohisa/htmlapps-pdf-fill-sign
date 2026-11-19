@@ -1,0 +1,69 @@
+name: Publish GitHub Release after PR merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pdf-fill-sign-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout merged commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Verify and build release artifacts
+        shell: pwsh
+        run: ./scripts/check-repository.ps1
+
+      - name: Create version tag and GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGED_COMMIT: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (Get-Content -Raw -Encoding UTF8 app.config.json | ConvertFrom-Json).version
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+            throw "Expected a SemVer release version in app.config.json, got: $version"
+          }
+          $tag = "v$version"
+
+          # Tags are immutable. Never move an existing version tag.
+          $existingTag = ([string](& git tag --list $tag)).Trim()
+          if ($existingTag) {
+            $tagCommit = (& git rev-list -n 1 $tag).Trim()
+            if ($tagCommit -ne $env:MERGED_COMMIT) {
+              Write-Host "$tag is already tagged at $tagCommit. Skipping this PR's release."
+              exit 0
+            }
+          }
+
+          # Reruns should not create duplicate releases.
+          $PSNativeCommandUseErrorActionPreference = $false
+          & gh release view $tag --repo $env:GITHUB_REPOSITORY --json tagName 2>$null | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "$tag already has a GitHub Release. Nothing to do."
+            exit 0
+          }
+
+          & gh release create $tag "dist/index.html#pdf-fill-sign.html" "dist/index.self-extract.html#pdf-fill-sign.self-extract.html" --repo $env:GITHUB_REPOSITORY --target $env:MERGED_COMMIT --title "PDF Fill & Sign $tag" --generate-notes
+          if ($LASTEXITCODE -ne 0) { throw "Failed to publish $tag." }
+          Write-Host "Published $tag for commit $env:MERGED_COMMIT."

@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.6 - Unreleased
+
+- Refuse to flatten form text when it cannot fit instead of truncating entered lines; automatically reduce font size when possible.
+- Avoid painting an invented white form background or border when the source widget provides neither; retain explicit widget colors where provided.
+- Warn on detected digital signatures before saving a modified PDF.
+- Keep added items inside small page bounds; reflect mark font-size changes in exported Ink annotations; style password fields consistently.
+- Release allocated image bitmaps when PDF export fails; permit browsers with createImageBitmap but no OffscreenCanvas.
+- Add a compensated `Math.sumPrecise` fallback to the embedded PDF.js main thread and Worker, fixing save failures on browsers without that API.
+- Add source-level PDF export regressions and a Chromium PDF download/reopen smoke test to CI. Cross-viewer form comparisons remain recommended.
+- Keep resize handles inside the page even near narrow margins and on small or rotated PDF pages.
+- Expand Chromium end-to-end checks to cover editable and flattened form exports (text + checkbox), vector marks, drawn signatures, and image stamps after saving and reopening.
+- Use a short, distinct heading and description on desktop; before opening a PDF, phones show just the short description. Hide the entire introduction and local-processing badge while a PDF is open, and restore them when it closes. On phone screens, the header scrolls with the document while the bottom action bar stays fixed.
+- Keep PDF navigation, zoom, Fit, and Close on one phone-sized control row by using accessible icon buttons for Fit and Close, including 320px screens.
+- Replace the oversized Close PDF document icon with a compact cross and align the desktop button with the rest of the toolbar; keep the full accessible label on phones.
+- Use a red close cross on desktop and phones. Always confirm closing a PDF, including unchanged documents; use a red Close PDF confirmation action and retain the distinct unsaved-edits warning.
+- Replace the file-drop icon and remove redundant bilingual Help text.
+- Create the versioned tag and GitHub Release automatically after a PR is merged into `main` and release checks pass.
+
 ## 1.0.5 - 2026-10-27
 
 - Keep the header version badge visible at narrow widths by truncating only the app title.

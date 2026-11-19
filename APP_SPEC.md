@@ -8,8 +8,8 @@ This file is the product contract for PDF Fill & Sign. Implementation decisions 
 - **Japanese name:** PDF記入・署名
 - **Slug:** `pdf-fill-sign`
 - **Repository:** `ttomohisa/htmlapps-pdf-fill-sign`
-- **Target release:** v1.0.1
-- **Current milestone:** v1.0.5 — Focused bilingual Help
+- **Target release:** v1.0.6
+- **Current milestone:** v1.0.6 — PDF export fidelity and safety
 - **Release artifacts:** `dist/index.html` and `dist/index.self-extract.html`
 - **Primary color:** Browser Kitty `#16624F` for application UI accents. The supplied canonical app icon in `assets/favicon.svg` is used unchanged.
 
@@ -794,7 +794,7 @@ At the end of v0.5.0, the non-form PDF workflow should already work end-to-end.
 
 ### v0.7.0 exit criteria
 
-- Closing or replacing a PDF with unsaved edits asks for confirmation; a saved/unchanged PDF closes without a redundant discard prompt.
+- On both desktop and phones, the red Close PDF control always opens a confirmation dialog (even when saved/unchanged); its Close PDF confirmation action is red. When unsaved edits exist, the dialog uses the more explicit discard warning and action. Cancel preserves the open PDF. Replacing a PDF still requires confirmation when unsaved changes exist.
 - Browser/tab unload warning is present only while unsaved edits exist.
 - Starting the completed-PDF download establishes the saved baseline; subsequent Undo / Redo correctly toggles saved vs unsaved according to content.
 - A corrupt/unsupported replacement PDF does not discard the currently open PDF.

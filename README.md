@@ -24,7 +24,7 @@ GitHub Pages delivers the initial HTML. After it loads, PDF parsing, form editin
 - **Add content anywhere** — Place text, dates, ✓ / × / ○ marks, handwritten signatures, initials, and PNG / JPEG / WebP images over the PDF.
 - **Keep editable additions as vectors where practical** — Text/date additions are saved as PDF FreeText annotations; ✓ / × / ○ and newly drawn signatures/initials are saved as vector Ink annotations.
 - **Keep image assets as images** — Uploaded signature images, stamps, photos, logos, and other image-based assets remain raster annotations.
-- **Work comfortably on desktop and mobile** — Includes thumbnails, zoom, cursor-anchored `Ctrl/Cmd + wheel` zoom, touch panning, pinch zoom, and a phone bottom action bar.
+- **Work comfortably on desktop and mobile** — Includes thumbnails, zoom, cursor-anchored `Ctrl/Cmd + wheel` zoom, touch panning, pinch zoom, and a phone bottom action bar. On phones, the short introduction text remains visible while the large heading and local-processing badge are hidden.
 - **Duplicate additions** — Select an added item and choose **Duplicate selected item** to reuse its content and appearance on the same page. Undo/Redo restores both the edit and selection.
 - **Undo and redo editing** — Browser Kitty additions and supported form-value changes participate in editing history.
 - **Save a completed copy** — Export to a new `-filled.pdf` file without overwriting the source PDF.
@@ -81,6 +81,10 @@ Field controls follow page rotation and zoom. Use **EN / JA** in the header to s
 
 When flattening is disabled, supported form fields remain editable where the source PDF and PDF.js save path allow it.
 
+With flattening enabled, field text is reduced to fit when possible. If the full value still cannot fit, export stops rather than silently omitting text; shorten the value or turn flattening off. The app avoids inventing white backgrounds and borders where the source widget supplies none, but unusual PDF form appearances may not be reproduced exactly.
+
+When existing digital signatures are detected, the app warns that saving an edited PDF may invalidate signature verification. A local precision-summing fallback supports PDF.js export in browsers that do not yet implement `Math.sumPrecise`.
+
 ## Privacy and runtime network protection
 
 PDF files, form values, signatures, images, and edits are processed in the browser. The app does not upload selected PDFs, use analytics or telemetry, load runtime assets from a CDN, fetch remote fonts, or call an external API.
@@ -91,7 +95,7 @@ The selected PDF and editing session are not persisted. Signature or initials as
 
 ## Mobile behavior
 
-At phone widths, the app shows persistent **Tools / Pages / Selected / Save** actions at the bottom of the viewport. **Selected** is enabled only when a Browser Kitty-added item is selected.
+Before a PDF is opened, phones show only the short introduction text without the heading or local-processing badge. When a PDF is open, the entire introduction is hidden on desktop and phone screens, and it returns after closing the PDF. On phones, the header scrolls with the page. PDF page navigation, zoom, Fit to width, and Close PDF share a single compact row; Fit and Close show icons with accessible labels. **Tools / Pages / Selected / Save** actions remain fixed at the bottom. **Selected** is enabled only when a Browser Kitty-added item is selected.
 
 The PDF stage supports one-finger panning and two-finger pinch zoom. Dialogs use viewport limits, internal scrolling, and safe-area padding so signature and save flows remain usable on short and landscape phone screens.
 
@@ -124,7 +128,8 @@ Primary targets are current Chrome and Edge. Firefox, Safari, iOS Safari, and An
 ├─ assets/favicon.svg
 └─ .github/workflows/
    ├─ build-standalone.yml       # Pull request/build validation
-   └─ deploy-pages.yml           # GitHub Pages deployment
+   ├─ deploy-pages.yml           # GitHub Pages deployment
+   └─ release-on-merge.yml       # Tag and release after PR merge
 ```
 
 ## Build
@@ -137,6 +142,8 @@ On Windows PowerShell 7:
 ```
 
 Generated files are written under `dist/`. Do not edit generated HTML manually.
+
+After a pull request is merged into `main`, the release workflow rebuilds and verifies the standalone artifacts, then creates the version tag from `app.config.json` and a GitHub Release with both the readable and self-extracting HTML files. An existing release is not republished. Merging the PR remains a manual step.
 
 ## Dependencies
 
