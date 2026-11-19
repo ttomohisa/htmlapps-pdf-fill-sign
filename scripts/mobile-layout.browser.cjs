@@ -127,6 +127,16 @@ async function checkActions(page, width, height, label) {
 }
 async function checkViewerControlsOneRow(page, width, height, label) {
   if (!isPhone(width, height)) return;
+  // Resizing the viewport commits asynchronously in Chromium. Wait for the
+  // document's actual CSS layout width before measuring item bounds; otherwise
+  // a 320px target may still be observed in the preceding 640px layout.
+  await page.waitForFunction(expectedWidth => {
+    const main=document.querySelector('.main');
+    return Math.abs(innerWidth-expectedWidth)<1 &&
+      main && Math.abs(main.getBoundingClientRect().width-expectedWidth)<1;
+  },width,{timeout:10000});
+  await page.evaluate(() => new Promise(resolve =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const selectors=['#prevButton','#pageIndicator','#nextButton','#zoomOutButton',
     '#zoomResetButton','#zoomInButton','#fitButton','#closePdfButton'];
   const boxes=await Promise.all(selectors.map(async selector=>({
