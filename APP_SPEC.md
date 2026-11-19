@@ -794,7 +794,7 @@ At the end of v0.5.0, the non-form PDF workflow should already work end-to-end.
 
 ### v0.7.0 exit criteria
 
-- Closing or replacing a PDF with unsaved edits asks for confirmation. On desktops, a saved/unchanged PDF closes without a redundant discard prompt. On phones, tapping the red Close PDF cross always shows a confirmation before closing, even when unchanged; the unsaved-edits warning remains distinct.
+- On both desktop and phones, the red Close PDF control always opens a confirmation dialog (even when saved/unchanged); its Close PDF confirmation action is red. When unsaved edits exist, the dialog uses the more explicit discard warning and action. Cancel preserves the open PDF. Replacing a PDF still requires confirmation when unsaved changes exist.
 - Browser/tab unload warning is present only while unsaved edits exist.
 - Starting the completed-PDF download establishes the saved baseline; subsequent Undo / Redo correctly toggles saved vs unsaved according to content.
 - A corrupt/unsupported replacement PDF does not discard the currently open PDF.
