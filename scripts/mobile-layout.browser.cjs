@@ -134,9 +134,12 @@ async function checkViewerControlsOneRow(page, width, height, label) {
   })));
   const container=await page.locator('.pdf-viewer-controls').boundingBox();
   assert.ok(container && boxes.every(item=>item.box),label+': all navigation controls are displayed');
+  // The control container may have extra vertical space at short landscape
+  // sizes. Compare the actual button centers, not the container's center.
+  const rowCenter=boxes[0].box.y+boxes[0].box.height/2;
   for (const item of boxes) {
-    assert.ok(Math.abs((item.box.y+item.box.height/2)-(container.y+container.height/2))<=2,
-      label+': '+item.selector+' stays in the same horizontal row ('+JSON.stringify(item.box)+')');
+    assert.ok(Math.abs((item.box.y+item.box.height/2)-rowCenter)<=2,
+      label+': '+item.selector+' stays in the same horizontal row '+JSON.stringify({rowCenter,item,container,all:boxes}));
     const geometry=await page.evaluate(()=>{
       const names=['.main','.pdf-workspace','.pdf-viewer-head','.pdf-viewer-controls'];
       return names.map(name=>{
