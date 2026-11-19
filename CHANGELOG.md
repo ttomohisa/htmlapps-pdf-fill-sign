@@ -11,7 +11,8 @@
 - Add source-level PDF export regressions and a Chromium PDF download/reopen smoke test to CI. Cross-viewer form comparisons remain recommended.
 - Keep resize handles inside the page even near narrow margins and on small or rotated PDF pages.
 - Expand Chromium end-to-end checks to cover editable and flattened form exports (text + checkbox), vector marks, drawn signatures, and image stamps after saving and reopening.
-- Use a short, distinct heading and description on desktop; on phones show the short description without the heading or local-processing badge, replace the file-drop icon, and remove redundant bilingual Help text.
+- Use a short, distinct heading and description on desktop; before opening a PDF, phones show just the short description. Hide the entire introduction and local-processing badge while a PDF is open, and restore them when it closes. On phone screens, the header scrolls with the document while the bottom action bar stays fixed.
+- Replace the file-drop icon and remove redundant bilingual Help text.
 - Create the versioned tag and GitHub Release automatically after a PR is merged into `main` and release checks pass.
 
 ## 1.0.5 - 2026-10-27
