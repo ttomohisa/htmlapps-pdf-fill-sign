@@ -318,6 +318,9 @@ async function main() {
         assert.equal(await badge.isVisible(), false, label + ': hide processing badge when PDF opens');
         assert.equal(await page.locator('body').evaluate(el => el.classList.contains('pdf-has-document')), true,
           label + ': loaded PDF state');
+        const scrollMargin = await page.locator('#editToolbar').evaluate(el => getComputedStyle(el).scrollMarginTop);
+        assert.equal(scrollMargin === '12px', isPhone(width,height),
+          label + ': scroll target offset accounts for mobile non-sticky header');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');
         // Responsive changes must not leave the informational footer in a stale state.
         await page.setViewportSize({width:PHONE_WIDTH + 1, height});
