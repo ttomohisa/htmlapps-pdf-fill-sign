@@ -29,6 +29,20 @@ test('phone styles retain the short description while hiding the hero heading an
   assert.match(source,/\.pdf-drop-icon/);
   assert.match(source,/<path d="m8 10 4 4 4-4"\/>/);
 });
+test('PDF load state hides the entire introduction and restores it on close',()=>{
+  assert.match(source,/body\.pdf-has-document \.page-intro \{ display: none; \}/);
+  assert.match(source,/document\.body\.classList\.toggle\('pdf-has-document', active\)/);
+  assert.match(source,/function updateMobileUi\(\)/);
+  assert.match(source,/async function releaseDocument\(\)/);
+  assert.match(source,/await releaseDocument\(\)/);
+});
+test('phone header scrolls normally while desktop header stays sticky',()=>{
+  assert.match(source,/\.app-header \{\s*position: sticky;/);
+  assert.match(source,/@media \(max-width: 640px\), \(max-width: 900px\) and \(max-height: 500px\) and \(orientation: landscape\)/);
+  assert.match(source,/\.app-header \{ position: static; \}/);
+  assert.match(source,/\.pdf-edit-toolbar, \.pdf-inspector, \.pdf-thumbnails \{ scroll-margin-top: 12px; \}/);
+  assert.match(source,/\.pdf-mobile-action-bar:not\(\[hidden\]\) \{/);
+});
 test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
   assert.match(workflow,/pull_request:\s*\n\s+types: \[closed\]/);
   assert.match(workflow,/branches: \[main\]/);
