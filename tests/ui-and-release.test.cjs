@@ -40,7 +40,7 @@ test('phone header scrolls normally while desktop header stays sticky',()=>{
   assert.match(source,/\.app-header \{\s*position: sticky;/);
   assert.match(source,/@media \(max-width: 640px\), \(max-width: 900px\) and \(max-height: 500px\) and \(orientation: landscape\)/);
   assert.match(source,/\.app-header \{ position: static; \}/);
-  assert.match(source,/\.pdf-edit-toolbar, \.pdf-inspector, \.pdf-thumbnails \{ scroll-margin-top: 12px; \}/);
+  assert.match(source,/body \.pdf-edit-toolbar, body \.pdf-inspector, body \.pdf-thumbnails \{ scroll-margin-top: 12px; \}/);
   assert.match(source,/\.pdf-mobile-action-bar:not\(\[hidden\]\) \{/);
 });
 test('merged pull requests trigger exactly one versioned GitHub Release',()=>{
