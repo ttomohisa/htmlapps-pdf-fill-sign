@@ -294,7 +294,11 @@ async function main() {
         const heroDescription = page.locator('.page-intro [data-i18n="lead"]');
         assert.equal(await hero.isVisible(), true, label + ': intro description remains available');
         assert.equal(await heroHeading.isVisible(), !isPhone(width, height), label + ': hide hero heading on phones');
-        assert.equal(await heroDescription.isVisible(), true, label + ': keep short description visible on phones');
+        assert.equal(await heroDescription.isVisible(), true, label + ': keep short description visible before opening a PDF');
+        assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
+          isPhone(width, height) ? 'static' : 'sticky', label + ': header position before PDF loading');
+        assert.equal(await page.locator('body').evaluate(el => el.classList.contains('pdf-has-document')), false,
+          label + ': introductory state before PDF loading');
         assert.notEqual((await page.locator('#heroTitle').textContent()).trim(),
           (await page.locator('#brandName').textContent()).trim(), label + ': distinct hero and header titles');
         const lead = (await page.locator('.page-intro [data-i18n="lead"]').textContent()).trim();
@@ -308,22 +312,31 @@ async function main() {
           assert.ok(box && text && box.x >= 0 && box.x + box.width <= width + 1 && text.x >= box.x && text.x + text.width <= box.x + box.width + 1, label + ': local-processing badge fits');
         }
         await exerciseActions(page, width, height, label);
+        assert.equal(await hero.isVisible(), false, label + ': hide entire intro when PDF opens');
+        assert.equal(await heroHeading.isVisible(), false, label + ': hide hero title when PDF opens');
+        assert.equal(await heroDescription.isVisible(), false, label + ': hide intro description when PDF opens');
+        assert.equal(await badge.isVisible(), false, label + ': hide processing badge when PDF opens');
+        assert.equal(await page.locator('body').evaluate(el => el.classList.contains('pdf-has-document')), true,
+          label + ': loaded PDF state');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label + ': page width');
         // Responsive changes must not leave the informational footer in a stale state.
         await page.setViewportSize({width:PHONE_WIDTH + 1, height});
         assert.equal(await page.locator('body > footer').isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': wider resize');
-        assert.equal(await heroHeading.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': heading at wider resize');
-        assert.equal(await heroDescription.isVisible(), true, label + ': description at wider resize');
-        assert.equal(await badge.isVisible(), !isPhone(PHONE_WIDTH + 1, height), label + ': badge at wider resize');
+        assert.equal(await hero.isVisible(), false, label + ': intro hidden after wider resize');
+        assert.equal(await badge.isVisible(), false, label + ': badge hidden after wider resize');
+        assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
+          isPhone(PHONE_WIDTH + 1, height) ? 'static' : 'sticky', label + ': header breakpoint after wider resize');
         await page.setViewportSize({width:PHONE_WIDTH, height});
         assert.equal(await page.locator('body > footer').isVisible(), false, label + ': phone resize');
-        assert.equal(await heroHeading.isVisible(), false, label + ': hide heading after phone resize');
-        assert.equal(await heroDescription.isVisible(), true, label + ': retain description after phone resize');
-        assert.equal(await badge.isVisible(), false, label + ': hide badge after phone resize');
+        assert.equal(await hero.isVisible(), false, label + ': intro hidden after phone resize');
+        assert.equal(await badge.isVisible(), false, label + ': badge hidden after phone resize');
+        assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
+          'static', label + ': header does not stick after phone resize');
         await page.setViewportSize({width,height});
-        assert.equal(await heroHeading.isVisible(), !isPhone(width, height), label + ': heading at original viewport');
-        assert.equal(await heroDescription.isVisible(), true, label + ': description at original viewport');
-        assert.equal(await badge.isVisible(), !isPhone(width, height), label + ': badge restored at original viewport');
+        assert.equal(await hero.isVisible(), false, label + ': intro remains hidden at original viewport');
+        assert.equal(await badge.isVisible(), false, label + ': badge remains hidden at original viewport');
+        assert.equal(await page.locator('.app-header').evaluate(el => getComputedStyle(el).position),
+          isPhone(width, height) ? 'static' : 'sticky', label + ': header breakpoint restored');
         // The existing 120 ms fit-to-page debounce can scroll the selected thumbnail.
         // Finish that native render before testing the modal's background scroll lock.
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -362,6 +375,26 @@ async function main() {
         await page.locator(HELP).click();
         await page.locator('#helpDialog').locator(CLOSE).first().click();
         assert.equal(await page.locator('#helpDialog').isVisible(), false, label + ': Help reopens and closes');
+        // On a phone, verify that the header actually moves out of view on page scroll.
+        if (isPhone(width, height)) {
+          const position = await page.evaluate(() => {
+            window.scrollTo({top: 0, behavior: 'instant'});
+            window.scrollTo({top: 180, behavior: 'instant'});
+            return {y: window.scrollY, headerTop: document.querySelector('.app-header').getBoundingClientRect().top};
+          });
+          assert.ok(position.y > 0, label + ': document can scroll on phone');
+          assert.ok(position.headerTop < -10,
+            label + ': mobile header scrolls offscreen instead of sticking ' + JSON.stringify(position));
+          await page.evaluate(() => window.scrollTo({top: 0, behavior: 'instant'}));
+        }
+        await page.locator('#closePdfButton').click();
+        await page.locator('#emptyView').waitFor({state:'visible'});
+        assert.equal(await hero.isVisible(), true, label + ': intro returns when PDF is closed');
+        assert.equal(await heroHeading.isVisible(), !isPhone(width,height), label + ': title reappears only on desktop');
+        assert.equal(await heroDescription.isVisible(), true, label + ': short description returns after PDF is closed');
+        assert.equal(await badge.isVisible(), !isPhone(width,height), label + ': privacy badge returns on desktop');
+        assert.equal(await page.locator('body').evaluate(el => el.classList.contains('pdf-has-document')), false,
+          label + ': reset loaded-PDF state on close');
         assert.deepEqual(errors, [], label + ': console errors');
         assert.deepEqual(requests, [], label + ': no external runtime requests');
         console.log('PASS ' + label);
