@@ -47,8 +47,10 @@ jobs:
           $tag = "v$version"
 
           # Tags are immutable. Never move an existing version tag.
-          $existingTag = ([string](& git tag --list $tag)).Trim()
-          if ($existingTag) {
+          # On the first release, git tag --list returns no lines. Use an
+          # explicit array so a missing tag cannot become a null-method error.
+          $existingTag = @(& git tag --list $tag)
+          if ($existingTag.Count -gt 0) {
             $tagCommit = (& git rev-list -n 1 $tag).Trim()
             if ($tagCommit -ne $env:MERGED_COMMIT) {
               Write-Host "$tag is already tagged at $tagCommit. Skipping this PR's release."
