@@ -95,7 +95,7 @@ The selected PDF and editing session are not persisted. Signature or initials as
 
 ## Mobile behavior
 
-At phone widths, the app shows persistent **Tools / Pages / Selected / Save** actions at the bottom of the viewport. **Selected** is enabled only when a Browser Kitty-added item is selected.
+Before a PDF is opened, phones show only the short introduction text without the heading or local-processing badge. When a PDF is open, the entire introduction is hidden on desktop and phone screens, and it returns after closing the PDF. On phones, the header scrolls with the page while **Tools / Pages / Selected / Save** actions remain fixed at the bottom. **Selected** is enabled only when a Browser Kitty-added item is selected.
 
 The PDF stage supports one-finger panning and two-finger pinch zoom. Dialogs use viewport limits, internal scrolling, and safe-area padding so signature and save flows remain usable on short and landscape phone screens.
 
